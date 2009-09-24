@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='zeit.import',
+    name='zeit.importer',
     version='0.1dev',
     author='Martin Borho',
     author_email='martin@borho.net',
@@ -21,5 +21,6 @@ setup(
         ],
     entry_points = """
         [console_scripts]  
+        k4import = zeit.importer.k4import:main
         """
 )
