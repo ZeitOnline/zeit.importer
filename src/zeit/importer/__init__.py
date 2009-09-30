@@ -2,7 +2,7 @@
 import logging
 
 logging.basicConfig(level=logging.INFO,
-                format='%(asctime)s %(levelname)-8s %(message)s',
+                format='%(asctime)s [%(levelname)s] %(message)s',
                 datefmt='%a, %d %b %Y %H:%M:%S')
 
 class AboveInfoFilter(logging.Filter):
@@ -11,7 +11,7 @@ class AboveInfoFilter(logging.Filter):
 
 def add_file_logging (logger, logfile):
     logfileHndl = logging.FileHandler(logfile)
-    formatter = logging.Formatter('%(asctime)s %(levelname)-8s %(message)s')
+    formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s')
     logfileHndl.setFormatter(formatter)  
     #logfileHndl.addFilter(AboveInfoFilter())
     logger.addHandler(logfileHndl)
