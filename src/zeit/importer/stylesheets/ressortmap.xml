@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings>
+	<mapping id="Sonstiges">
+		<print_ressort>Verschiedenes</print_ressort>
+		<online_ressort>Verschiedenes</online_ressort>
+		<online_sub_ressort />
+	</mapping>	
+	<mapping id="Bildung &amp; Beruf">
+		<print_ressort>Bildung &amp; Beruf</print_ressort>
+		<online_ressort>Karriere</online_ressort>
+		<online_sub_ressort>Beruf</online_sub_ressort>
+	</mapping>	
+	<mapping id="Bildung &amp; Wissen">
+		<print_ressort>Bildung &amp; Wissen</print_ressort>
+		<online_ressort>Gesellschaft</online_ressort>
+        <online_sub_ressort>Schule</online_sub_ressort>
+	</mapping>	
+	<mapping id="Chancen">
+		<print_ressort>Chancen</print_ressort>
+		<online_ressort>Gesellschaft</online_ressort>
+		<online_sub_ressort>Schule</online_sub_ressort>
+	</mapping>
+	<mapping id="Chancen / für hochschulabsolventen">
+		<print_ressort>Chancen</print_ressort>
+		<online_ressort>Studium</online_ressort>
+		<online_sub_ressort>Hochschule</online_sub_ressort>
+	</mapping>
+	<mapping id="Chancen / spezial für hochschulabsolventen">
+		<print_ressort>Chancen</print_ressort>
+		<online_ressort>Studium</online_ressort>
+		<online_sub_ressort>Hochschule</online_sub_ressort>
+	</mapping>
+	<mapping id="Chancen spezial">
+		<print_ressort>Chancen</print_ressort>
+		<online_ressort>Studium</online_ressort>
+		<online_sub_ressort>Hochschule</online_sub_ressort>
+	</mapping>
+	<mapping id="Chancen spezial hochschul-ranking">
+		<print_ressort>Chancen</print_ressort>
+        <online_ressort>Studium</online_ressort>
+        <online_sub_ressort>Hochschule</online_sub_ressort>
+	</mapping>
+	<mapping id="Chancenbeilage">
+		<print_ressort>Chancen</print_ressort>
+        <online_ressort>Studium</online_ressort>
+        <online_sub_ressort>Hochschule</online_sub_ressort>
+	</mapping>
+	<mapping id="computer">
+		<print_ressort>Computer</print_ressort>
+		<online_ressort>Digital</online_ressort>
+		<online_sub_ressort />
+	</mapping>
+	<mapping id="Computer">
+		<print_ressort>Computer</print_ressort>
+        <online_ressort>Digital</online_ressort>
+        <online_sub_ressort />
+	</mapping>
+	<mapping id="Computer &amp; Medien">
+		<print_ressort>Computer</print_ressort>
+        <online_ressort>Digital</online_ressort>
+        <online_sub_ressort />
+	</mapping>
+	<mapping id="Das leben im gespräch / spezial">
+		<print_ressort>Leben</print_ressort>
+		<online_ressort>Gesellschaft</online_ressort>
+		<online_sub_ressort />
+	</mapping>
+	<mapping id="default">
+		<print_ressort>Verschiedenes</print_ressort>
+		<online_ressort>Verschiedenes</online_ressort>
+		<online_sub_ressort />
+	</mapping>	
+	<mapping id="Deutschland">
+		<print_ressort>Deutschland</print_ressort>
+		<online_ressort>Politik</online_ressort>
+		<online_sub_ressort>Deutschland</online_sub_ressort>
+	</mapping>	
+	<mapping id="Dossier">
+		<print_ressort>Dossier</print_ressort>
+        <online_ressort>Politik</online_ressort>
+		<online_sub_ressort />
+	</mapping>	
+	<mapping id="dossier">
+		<print_ressort>Dossier</print_ressort>
+        <online_ressort>Politik</online_ressort>
+		<online_sub_ressort />
+	</mapping>	
+	<mapping id="eben">
+		<print_ressort>Leben</print_ressort>
+		<online_ressort>Lebensart</online_ressort>
+		<online_sub_ressort />
+	</mapping>
+	<mapping id="feu">
+		<print_ressort>Feuilleton</print_ressort>
+		<online_ressort>Kultur</online_ressort>
+		<online_sub_ressort />
+	</mapping>
+	<mapping id="Feuilleton">
+		<print_ressort>Feuilleton</print_ressort>
+		<online_ressort>Kultur</online_ressort>
+		<online_sub_ressort/>
+	</mapping>
+	<mapping id="Feuilleton musik">
+		<print_ressort>Feuilleton</print_ressort>
+		<online_ressort>Kultur</online_ressort>
+		<online_sub_ressort>Musik</online_sub_ressort>
+	</mapping>
+	<mapping id="Feuilletonbeilage">
+		<print_ressort>Feuilletonbeilage</print_ressort>
+		<online_ressort>Kultur</online_ressort>
+		<online_sub_ressort />
+	</mapping>
+	<mapping id="FreiZEIT">
+		<print_ressort>Leben</print_ressort>
+		<online_ressort>Lebensart</online_ressort>
+		<online_sub_ressort />
+	</mapping>
+	<mapping id="Fussball">
+		<print_ressort>Fussball</print_ressort>
+		<online_ressort>Sport</online_ressort>
+		<online_sub_ressort>Fussball</online_sub_ressort>
+	</mapping>
+	<mapping id="FUSSBALL">
+		<print_ressort>Fussball</print_ressort>
+        <online_ressort>Sport</online_ressort>
+        <online_sub_ressort>Fussball</online_sub_ressort>
+	</mapping>
+	<mapping id="Fußball">
+		<print_ressort>Fussball</print_ressort>
+        <online_ressort>Sport</online_ressort>
+        <online_sub_ressort>Fussball</online_sub_ressort>
+	</mapping>
+	<mapping id="Gesundheit">
+		<print_ressort>Gesundheit</print_ressort>
+		<online_ressort>Wissen</online_ressort>
+		<online_sub_ressort>Gesundheit</online_sub_ressort>
+	</mapping>
+	<mapping id="Hochschule">
+		<print_ressort>Hochschule</print_ressort>
+		<online_ressort>Studium</online_ressort>
+		<online_sub_ressort>Hochschule</online_sub_ressort>
+	</mapping>
+	<mapping id="inhalt">
+		<print_ressort>Inhalt</print_ressort>
+		<online_ressort>Homepage</online_ressort>
+		<online_sub_ressort>Archiv</online_sub_ressort>
+	</mapping>
+	<mapping id="International">
+		<print_ressort>International</print_ressort>
+		<online_ressort>Politik</online_ressort>
+		<online_sub_ressort>Ausland</online_sub_ressort>
+	</mapping>	
+	<mapping id="issen">
+		<print_ressort>Wissen</print_ressort>
+		<online_ressort>Wissen</online_ressort>
+		<online_sub_ressort />
+	</mapping>	
+	<mapping id="Jugend">
+		<print_ressort>Jugend</print_ressort>
+		<online_ressort>Zuender</online_ressort>
+		<online_sub_ressort />
+	</mapping>	
+	<mapping id="Kinder- und jugendbuch">
+		<print_ressort>Literatur</print_ressort>
+		<online_ressort>Kultur</online_ressort>
+		<online_sub_ressort>Literatur</online_sub_ressort>
+	</mapping>
+	<mapping id="Kinder+Jugendbuch">
+		<print_ressort>Literatur</print_ressort>
+		<online_ressort>Kultur</online_ressort>
+		<online_sub_ressort>Literatur</online_sub_ressort>
+	</mapping>
+	<mapping id="Kultur">
+		<print_ressort>Kultur</print_ressort>
+		<online_ressort>Kultur</online_ressort>
+		<online_sub_ressort />
+	</mapping>	
+	<mapping id="Kultur &amp; Gesellschaft">
+		<print_ressort>Kultur</print_ressort>
+		<online_ressort>Kultur</online_ressort>
+		<online_sub_ressort />
+	</mapping>	
+	<mapping id="Länderspiegel">
+		<print_ressort>Länderspiegel</print_ressort>
+		<online_ressort>Politik</online_ressort>
+		<online_sub_ressort>Deutschland</online_sub_ressort>
+	</mapping>	
+	<mapping id="Leben">
+		<print_ressort>ZEIT MAGAZIN</print_ressort>
+		<online_ressort>Lebensart</online_ressort>
+		<online_sub_ressort>Leben-Magazin</online_sub_ressort>
+	</mapping>
+	<mapping id="Leben spezial dunkelheit">
+		<print_ressort>Leben</print_ressort>
+		<online_ressort>Lebensart</online_ressort>
+		<online_sub_ressort />
+	</mapping>
+	<mapping id="Leben spezial fußballweltmeisterschaft">
+		<print_ressort>Leben</print_ressort>
+		<online_ressort>Sport</online_ressort>
+		<online_sub_ressort>Fussball</online_sub_ressort>
+	</mapping>
+	<mapping id="Leben spezial mode">
+		<print_ressort>Leben</print_ressort>
+		<online_ressort>Lebensart</online_ressort>
+		<online_sub_ressort>Mode</online_sub_ressort>
+	</mapping>
+	<mapping id="Lebenbeilage">
+		<print_ressort>Lebenbeilage</print_ressort>
+		<online_ressort>Lebensart</online_ressort>
+		<online_sub_ressort />
+	</mapping>
+	<mapping id="Leserbriefe">
+		<print_ressort>Leserbriefe</print_ressort>
+		<online_ressort>Verschiedenes</online_ressort>
+		<online_sub_ressort>Leserbriefe</online_sub_ressort>
+	</mapping>
+	<mapping id="Liebste SMS!">
+		<print_ressort>Verschiedenes</print_ressort>
+		<online_ressort>Verschiedenes</online_ressort>
+		<online_sub_ressort>Liebste SMS!</online_sub_ressort>
+	</mapping>
+	<mapping id="Literatur">
+		<print_ressort>Literatur</print_ressort>
+		<online_ressort>Kultur</online_ressort>
+		<online_sub_ressort>Literatur</online_sub_ressort>
+	</mapping>
+	<mapping id="Literaturbeilage">
+		<print_ressort>Literaturbeilage</print_ressort>
+		<online_ressort>Kultur</online_ressort>
+		<online_sub_ressort>Literatur</online_sub_ressort>
+	</mapping>
+	<mapping id="Literaturbeilage kinder- und jugendbuch">
+		<print_ressort>Literaturbeilage</print_ressort>
+		<online_ressort>Kultur</online_ressort>
+		<online_sub_ressort>Literatur</online_sub_ressort>
+	</mapping>
+	<mapping id="Literaturbeilage/literatur">
+		<print_ressort>Literaturbeilage</print_ressort>
+		<online_ressort>Kultur</online_ressort>
+		<online_sub_ressort>Literatur</online_sub_ressort>
+	</mapping>
+	<mapping id="Literaturbeilage/politisches buch">
+		<print_ressort>Literaturbeilage</print_ressort>
+		<online_ressort>Kultur</online_ressort>
+		<online_sub_ressort>Literatur</online_sub_ressort>
+	</mapping>
+	<mapping id="Literaturbeilage/sachbuch">
+		<print_ressort>Literaturbeilage</print_ressort>
+		<online_ressort>Kultur</online_ressort>
+		<online_sub_ressort>Literatur</online_sub_ressort>
+	</mapping>
+	<mapping id="Media">
+		<print_ressort>Media</print_ressort>
+		<online_ressort>Kultur</online_ressort>
+		<online_sub_ressort />
+	</mapping>
+	<mapping id="Medien">
+		<print_ressort>Medien</print_ressort>
+        <online_ressort>Kultur</online_ressort>
+        <online_sub_ressort />
+	</mapping>
+	<mapping id="medien">
+		<print_ressort>Medien</print_ressort>
+        <online_ressort>Kultur</online_ressort>
+        <online_sub_ressort />
+	</mapping>
+	<mapping id="Medienseite">
+		<print_ressort>Medien</print_ressort>
+        <online_ressort>Kultur</online_ressort>
+        <online_sub_ressort />
+	</mapping>
+	<mapping id="Mensch &amp; Geschichte">
+		<print_ressort>Mensch &amp; Geschichte</print_ressort>
+		<online_ressort>Gesellschaft</online_ressort>
+		<online_sub_ressort />
+	</mapping>
+	<mapping id="ml">
+		<print_ressort>Modernes Leben</print_ressort>
+		<online_ressort>Lebensart</online_ressort>
+        <online_sub_ressort />
+	</mapping>
+	<mapping id="Modernes leben">
+		<print_ressort>Modernes leben</print_ressort>
+		<online_ressort>Lebensart</online_ressort>
+        <online_sub_ressort />
+	</mapping>
+	<mapping id="Modernes Leben">
+		<print_ressort>Modernes Leben</print_ressort>
+		<online_ressort>Lebensart</online_ressort>
+		<online_sub_ressort>Gesellschaft</online_sub_ressort>
+	</mapping>
+	<mapping id="Musik">
+		<print_ressort>Musik</print_ressort>
+		<online_ressort>Kultur</online_ressort>
+		<online_sub_ressort>Musik</online_sub_ressort>
+	</mapping>
+	<mapping id="News">
+		<print_ressort>News</print_ressort>
+		<online_ressort>News</online_ressort>
+		<online_sub_ressort />
+	</mapping>
+	<mapping id="Online">
+		<print_ressort>Online</print_ressort>
+		<online_ressort>Digital</online_ressort>
+		<online_sub_ressort />
+	</mapping>
+	<mapping id="pol">
+		<print_ressort>Politik</print_ressort>
+		<online_ressort>Politik</online_ressort>
+		<online_sub_ressort />
+	</mapping>	
+	<mapping id="Politik">
+		<print_ressort>Politik</print_ressort>
+        <online_ressort>Politik</online_ressort>
+        <online_sub_ressort />
+	</mapping>	
+	<mapping id="Politik &amp; Wirtschaft">
+		<print_ressort>Politik</print_ressort>
+        <online_ressort>Politik</online_ressort>
+        <online_sub_ressort />
+	</mapping>	
+	<mapping id="Politik für österreich">
+		<print_ressort>Politik</print_ressort>
+        <online_ressort>Politik</online_ressort>
+        <online_sub_ressort>Ausland</online_sub_ressort>
+	</mapping>	
+	<mapping id="Politik länderspiegel">
+		<print_ressort>Politik</print_ressort>
+		<online_ressort>Politik</online_ressort>
+		<online_sub_ressort>Deutschland</online_sub_ressort>
+	</mapping>	
+	<mapping id="Produktion">
+		<print_ressort>Verschiedenes</print_ressort>
+		<online_ressort>Produktion</online_ressort>
+		<online_sub_ressort />
+	</mapping>	
+	<mapping id="Reden">
+		<print_ressort>Reden</print_ressort>
+		<online_ressort>Politik</online_ressort>
+		<online_sub_ressort />
+	</mapping>	
+	<mapping id="Reformwerkstatt">
+		<print_ressort>Reformwerkstatt</print_ressort>
+		<online_ressort>Wissen</online_ressort>
+		<online_sub_ressort />
+	</mapping>
+	<mapping id="reise">
+		<print_ressort>Reisen</print_ressort>
+		<online_ressort>Reisen</online_ressort>
+		<online_sub_ressort />
+	</mapping>
+	<mapping id="Reise">
+		<print_ressort>Reisen</print_ressort>
+        <online_ressort>Reisen</online_ressort>
+        <online_sub_ressort />
+	</mapping>
+	<mapping id="Reise sonderbeilage passagen">
+		<print_ressort>Reisen</print_ressort>
+        <online_ressort>Reisen</online_ressort>
+        <online_sub_ressort />
+	</mapping>
+	<mapping id="Reise/wein-spezial">
+		<print_ressort>Reisen</print_ressort>
+        <online_ressort>Reisen</online_ressort>
+        <online_sub_ressort />
+	</mapping>
+	<mapping id="Reisebeilage">
+		<print_ressort>Reisebeilage</print_ressort>
+        <online_ressort>Reisen</online_ressort>
+        <online_sub_ressort />
+	</mapping>
+	<mapping id="Reisen">
+		<print_ressort>Reisen</print_ressort>
+        <online_ressort>Reisen</online_ressort>
+        <online_sub_ressort />
+	</mapping>
+	<mapping id="Reisen spezial">
+		<print_ressort>Reisen</print_ressort>
+        <online_ressort>Reisen</online_ressort>
+        <online_sub_ressort />
+	</mapping>
+	<mapping id="Sachbuch">
+		<print_ressort>Sachbuch</print_ressort>
+		<online_ressort>Kultur</online_ressort>
+		<online_sub_ressort>Literatur</online_sub_ressort>
+	</mapping>
+	<mapping id="Sonstiges">
+		<print_ressort>Verschiedenes</print_ressort>
+		<online_ressort>Verschiedenes</online_ressort>
+		<online_sub_ressort />
+	</mapping>	
+	<mapping id="Spezial">
+		<print_ressort>Spezial</print_ressort>
+		<online_ressort>Verschiedenes</online_ressort>
+		<online_sub_ressort />
+	</mapping>	
+	<mapping id="Spielen">
+		<print_ressort>Spielen</print_ressort>
+		<online_ressort>Spiele</online_ressort>
+		<online_sub_ressort/>
+	</mapping>
+	<mapping id="Sport">
+		<print_ressort>Sport</print_ressort>
+		<online_ressort>Sport</online_ressort>
+		<online_sub_ressort />
+	</mapping>
+	<mapping id="Technik &amp; Weltraum">
+		<print_ressort>Technik &amp; Weltraum</print_ressort>
+		<online_ressort>Wissen</online_ressort>
+		<online_sub_ressort />
+	</mapping>
+	<mapping id="Themen der zeit">
+		<print_ressort>Verschiedenes</print_ressort>
+		<online_ressort>Politik</online_ressort>
+		<online_sub_ressort>Deutschland</online_sub_ressort>
+	</mapping>
+	<mapping id="Themen der zeit / reformwerkstatt">
+		<print_ressort>Verschiedenes</print_ressort>
+		<online_ressort>Wissen</online_ressort>
+		<online_sub_ressort />
+	</mapping>
+	<mapping id="Tribüne">
+		<print_ressort>Tribüne</print_ressort>
+		<online_ressort>Kultur</online_ressort>
+		<online_sub_ressort />
+	</mapping>
+	<mapping id="Unbekannt">
+		<print_ressort>Verschiedenes</print_ressort>
+		<online_ressort>Verschiedenes</online_ressort>
+		<online_sub_ressort />
+	</mapping>	
+	<mapping id="Weinspezial2003">
+		<print_ressort>Verschiedenes</print_ressort>
+		<online_ressort>Lebensart</online_ressort>
+		<online_sub_ressort>Geniessen</online_sub_ressort>
+	</mapping>
+	<mapping id="wirt">
+		<print_ressort>Wirtschaft</print_ressort>
+		<online_ressort>Wirtschaft</online_ressort>
+		<online_sub_ressort />
+	</mapping>	
+	<mapping id="Wirtschaft">
+		<print_ressort>Wirtschaft</print_ressort>
+		<online_ressort>Wirtschaft</online_ressort>
+		<online_sub_ressort />
+	</mapping>	
+	<mapping id="Wirtschaft / geld spezial">
+		<print_ressort>Wirtschaft</print_ressort>
+		<online_ressort>Wirtschaft</online_ressort>
+		<online_sub_ressort>Geldanlage</online_sub_ressort>
+	</mapping>
+	<mapping id="Wirtschaft / spezial">
+		<print_ressort>Wirtschaft</print_ressort>
+		<online_ressort>Wirtschaft</online_ressort>
+		<online_sub_ressort />
+	</mapping>	
+	<mapping id="Wissen">
+		<print_ressort>Wissen</print_ressort>
+		<online_ressort>Wissen</online_ressort>
+		<online_sub_ressort />
+	</mapping>	
+	<mapping id="wissen">
+		<print_ressort>Wissen</print_ressort>
+		<online_ressort>Wissen</online_ressort>
+		<online_sub_ressort />
+	</mapping>	
+	<mapping id="Wissen / auto spezial">
+		<print_ressort>Wissen</print_ressort>
+		<online_ressort>Auto</online_ressort>
+		<online_sub_ressort/>
+	</mapping>
+	<mapping id="Wissen / spezial">
+		<print_ressort>Wissen</print_ressort>
+		<online_ressort>Wissen</online_ressort>
+		<online_sub_ressort />
+	</mapping>	
+	<mapping id="Wissen spezial cebit">
+		<print_ressort>Wissen</print_ressort>
+		<online_ressort>Digital</online_ressort>
+		<online_sub_ressort />
+	</mapping>
+	<mapping id="Wochenschau">
+		<print_ressort>Wochenschau</print_ressort>
+		<online_ressort>Lebensart</online_ressort>
+		<online_sub_ressort />
+	</mapping>	
+	<mapping id="Zeit musik">
+		<print_ressort>Kultur</print_ressort>
+		<online_ressort>Kultur</online_ressort>
+		<online_sub_ressort>Musik</online_sub_ressort>
+	</mapping>
+	<mapping id="Zeit-chancen">
+		<print_ressort>Chancen</print_ressort>
+		<online_ressort>Studium</online_ressort>
+		<online_sub_ressort />
+	</mapping>
+	<mapping id="Zeitl?ufte">
+		<print_ressort>Zeitläufte</print_ressort>
+		<online_ressort>Wissen</online_ressort>
+		<online_sub_ressort>Geschichte</online_sub_ressort>
+	</mapping>	
+	<mapping id="Zeitlaeufte">
+		<print_ressort>Zeitläufte</print_ressort>
+        <online_ressort>Wissen</online_ressort>
+        <online_sub_ressort>Geschichte</online_sub_ressort>
+	</mapping>	
+	<mapping id="Zeitläufte">
+		<print_ressort>Zeitläufte</print_ressort>
+        <online_ressort>Wissen</online_ressort>
+        <online_sub_ressort>Geschichte</online_sub_ressort>
+	</mapping>	
+	<mapping id="zm">
+		<print_ressort>Leben</print_ressort>
+		<online_ressort>Lebensart</online_ressort>
+		<online_sub_ressort />
+	</mapping>
+</mappings>
