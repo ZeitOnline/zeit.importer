@@ -2,10 +2,15 @@
 import sys
 import os
 import re
-from optparse import OptionParser
 import logging
-from zeit.importer import add_file_logging
+import StringIO
+from optparse import OptionParser
 from lxml import etree
+
+from zeit.importer import add_file_logging
+from zeit.connector.resource import Resource
+import zeit.connector.connector
+
 
 
 logger = logging.getLogger(__name__) 
@@ -18,10 +23,8 @@ CONNECTOR_URL = 'http://zip6.zeit.de:9000/cms/'
 CMS_ROOT='http://xml.zeit.de/'
 IMPORT_ROOT = CMS_ROOT+'archiv-wf/archiv/'
 IMPORT_ROOT_IN = CMS_ROOT+'archiv-wf/archiv-in/'
-
 K4_EXPORT_DIR = '/var/cms/import/k4incoming/'
 K4_ARCHIVE_DIR = '/var/cms/import/old/'
-
 K4_STYLESHEET = os.path.dirname(__file__)+'/stylesheets/k4import.xslt'
 
 products = {
@@ -45,12 +48,29 @@ product_map = {
         '1144226254' : 'ZTGS',
          }
 
+p_pattern = re.compile('<p>([a-z0-9])</p>\s*<p>', re.M|re.I) # <p>V</p>
+
 def sanitizeDoc(xml):
     '''
         cleans the doc from dirty k4markup
     '''
     xml = p_pattern.sub('<p>\\1', xml)
     return xml
+
+def indent(elem, level=0):
+    i = "\n" + level*"  "
+    if len(elem):
+        if not elem.text or not elem.text.strip():
+            elem.text = i + "  "
+        for e in elem:
+            indent(e, level+1)
+            if not e.tail or not e.tail.strip():
+                e.tail = i + "  "
+        if not e.tail or not e.tail.strip():
+            e.tail = i
+    else:
+        if level and (not elem.tail or not elem.tail.strip()):
+            elem.tail = i
     
 def mangleQPSName(qps_name):
     #- [ ] ersetzt werden ä,ö,ü,ß in ae,oe,ue,ss
@@ -136,6 +156,31 @@ def getAttributeValue(metadata, ns, name):
     except:
         return None
 
+def addAttributesToDoc(doc, product_id, year, volume, cname):
+    '''
+        adds additional attributes to the document head
+    '''
+    head = doc.xpath('//article/head')[0]
+    attributes = [
+        '<attribute ns="%s" name="id">%s-%s-%s-%s</attribute>' % (WORKFLOW_NS, product_id, year, volume, cname),
+        '<attribute ns="%s" name="running-volume">%s-%s-%s</attribute>' % (WORKFLOW_NS, product_id, year, volume),
+        '<attribute ns="%s" name="product-id">%s</attribute>' % (WORKFLOW_NS, product_id),
+        '<attribute ns="%s" name="product-name">%s</attribute>' % (WORKFLOW_NS, products.get(product_id,'')),
+        '<attribute ns="%s" name="export_cds">%s</attribute>' % (DOC_NS,'no')
+    ]
+    for attr in attributes:
+        head.append(etree.fromstring(attr))
+    return doc
+
+def doc_to_string(doc):
+    """
+        serializes xmldoc-object to string
+    """
+    indent(doc.getroot())
+    xml = etree.tostring(doc, encoding="utf-8", xml_declaration=True)
+    xml = sanitizeDoc(xml) #<p>V</p> etc
+    return xml
+
 def run_dir(input_dir, product_id):
 
     if not os.path.isdir(input_dir):
@@ -143,6 +188,7 @@ def run_dir(input_dir, product_id):
 
     imported_docs = 0
     cnames = []
+    connector = getConnector()
 
     k4_files = os.listdir(input_dir)
     for(k4_filename, k4_filepath) in [ (f, os.path.join(input_dir, f)) for f in k4_files ]:
@@ -217,10 +263,23 @@ def run_dir(input_dir, product_id):
             else:
                 sys.exit('ERROR: Metadaten fehlen!!')
 
+            # add attributes to output document
+            new_doc = addAttributesToDoc(new_doc, product_id, year, volume, cname)
+          
+            new_xml = doc_to_string(new_doc)
+            print new_xml
+
         except Exception, e:
             logger.exception(e)
             sys.exit()
-            continue
+            continue        
+
+def getConnector():
+    import zeit.connector.mock
+    connector = zeit.connector.mock.Connector()
+    return connector
+    #connector = zeit.connector.connector.Connector({'default': CONNECTOR_URL})
+    #return connector
 
 def main():
     usage = "usage: %prog [options] arg"
