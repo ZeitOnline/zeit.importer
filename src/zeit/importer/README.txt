@@ -11,15 +11,15 @@ then we need a module which will do the work for us
 >>> k4import
 <module 'zeit.importer.k4import'...>
 
-Check for generating proper filenames 
+Check for generating proper filenames, name ar in unicode
 
->>> k4import.mangleQPSName('Streitgespr‰ch_Vitakasten')
+>>> k4import.mangleQPSName('Streitgespr‰ch_Vitakasten'.decode('utf-8'))
 'Streitgespraech-Vitakasten'
->>> k4import.mangleQPSName('Kˆpfe der Zeit')
+>>> k4import.mangleQPSName('Kˆpfe der Zeit'.decode('utf-8'))
 'Koepfe-der-Zeit'
->>> k4import.mangleQPSName('÷-Scharinger')
+>>> k4import.mangleQPSName('÷-Scharinger'.decode('utf-8'))
 'Oe-Scharinger'
->>> k4import.mangleQPSName('HfjS_Portr‰t')
+>>> k4import.mangleQPSName('HfjS_Portr‰t'.decode('utf-8'))
 'HfjS-Portraet'
 
 Remove ugly print layout 
@@ -72,7 +72,7 @@ Build collections for import
 
 Add additional attributes to head/attributes
 
->>> cname = k4import.mangleQPSName(jobname.encode('utf-8'))
+>>> cname = k4import.mangleQPSName(jobname)
 >>> new_doc = k4import.addAttributesToDoc(new_doc, product_id, year, volume, cname)
 >>> new_xml = k4import.doc_to_string(new_doc)
 >>> print new_xml

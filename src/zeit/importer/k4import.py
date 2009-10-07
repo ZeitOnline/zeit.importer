@@ -78,6 +78,7 @@ def mangleQPSName(qps_name):
     #- [ ] doppelte sonderzeichen entfernen
     #- [ ] der rest per regexp- alphabet
     #qps_name = qps_name.lower()
+    qps_name = qps_name.encode('utf-8')
     qps_name = qps_name.replace("ƒ","Ae") #Ä
     qps_name = qps_name.replace("‹","Ue") #Ü
     qps_name = qps_name.replace("÷","Oe") #Ö
@@ -142,7 +143,7 @@ def getAttributesFromDoc(doc):
       for m in metas:
         ns = m.get('ns')
         name = m.get('name')
-        value = m.text
+        value = m.text if m.text is not None else ''
         props.append((ns,name,value))
 
     return props
@@ -198,7 +199,7 @@ def run_dir(input_dir, product_id):
             if (os.path.isdir(k4_filepath)):
                 continue
 
-            logger.info(k4_filename)
+            logger.info('**** STARTING %s ****' % k4_filename)
             new_doc = transform_k4(k4_filepath)
 
             # get metadata
@@ -212,7 +213,7 @@ def run_dir(input_dir, product_id):
             logger.info('k4name '+jobname)
 
             # hier neue cname generierung ff
-            cname = jobname.encode('utf-8')
+            cname = jobname
             # strip .xml-suffix:
             if cname.endswith('.xml'):
                 cname = cname[:-4]
@@ -255,11 +256,11 @@ def run_dir(input_dir, product_id):
 
             cms_paths = []
             if year and volume and print_ressort:
-                print_ressort = mangleQPSName(print_ressort.encode('utf-8')).lower()
+                print_ressort = mangleQPSName(print_ressort).lower()
                 cms_paths.append(IMPORT_ROOT + '%s/%s/%s/%s/%s' % (product_id, year, volume, print_ressort, cname))
                 cms_paths.append(IMPORT_ROOT_IN + '%s/%s/%s/%s/%s' % (product_id, year, volume, print_ressort,cname))
                 logging.info('%s, %s, %s, %s' % (product_id, year, volume, print_ressort))
-                #prepareColl(connector, product_id, year, volume, print_ressort)
+                prepareColl(connector, product_id, year, volume, print_ressort)
             else:
                 sys.exit('ERROR: Metadaten fehlen!!')
 
@@ -267,7 +268,31 @@ def run_dir(input_dir, product_id):
             new_doc = addAttributesToDoc(new_doc, product_id, year, volume, cname)
           
             new_xml = doc_to_string(new_doc)
-            print new_xml
+
+            logger.info("SPEICHERN ins CMS ...")
+            for cms_id in cms_paths:
+                check_resource = None                
+                try:
+                    check_resource= connector[cms_id]#CMSClient.CMS.Resource(cmslocation + cname, logger=logger)
+                except KeyError, e:
+                    logger.info(e)
+
+                if check_resource:
+                    logger.info(cms_id + "... wurde _nicht_ neu importiert")
+                    continue
+
+                if new_xml:
+                    res = Resource( cms_id,
+                        cname,
+                        'article',
+                        StringIO.StringIO(new_xml),
+                        contentType = 'text/xml')
+                    for prop in metadata: # add metadata
+                        prop_val = re.sub(r'\&','+',prop[2])
+                        res.properties[(prop[1],prop[0])] = (prop_val)
+                    connector.add(res)
+                    logger.info("GESPEICHERT: %s" % (cms_id,))
+            logger.info("IMPORT Dokument \"%s\" fertig\n" % (cname))
 
         except Exception, e:
             logger.exception(e)
@@ -277,9 +302,8 @@ def run_dir(input_dir, product_id):
 def getConnector():
     import zeit.connector.mock
     connector = zeit.connector.mock.Connector()
-    return connector
     #connector = zeit.connector.connector.Connector({'default': CONNECTOR_URL})
-    #return connector
+    return connector    
 
 def main():
     usage = "usage: %prog [options] arg"
@@ -298,7 +322,6 @@ def main():
         logger.info('using default indir %s' % options.input_dir)
 
     if options.logfile:
-        logging.error('TODO logfile handling')
         add_file_logging(logger, options.logfile) 
 
     try:
