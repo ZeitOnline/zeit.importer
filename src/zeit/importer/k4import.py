@@ -28,6 +28,8 @@ K4_ARCHIVE_DIR = '/var/cms/import/old/'
 K4_STYLESHEET = os.path.dirname(__file__)+'/stylesheets/k4import.xslt'
 
 products = {
+        'ZCH': 'Die Zeit / Schweiz',
+        'ZEA': 'Die Zeit / Österreich',
         'ZEI': 'Die Zeit',
         'ZMLB': 'Zeit Magazin',
         'TEST': 'Test/Development',
@@ -41,6 +43,8 @@ products = {
          }
 
 product_map = {
+        '1111111111' : 'ZCH',
+        '2222222222' : 'ZEA',
         '1133533088' : 'ZEI',
         '104518514'  : 'ZMLB',
         '1153836019' : 'ZTCS',
@@ -157,6 +161,28 @@ def getAttributeValue(metadata, ns, name):
     except:
         return None
 
+def get_product_id(product_id_in, filename, metadata):
+    product_id = None
+    if product_id_in is None:
+        if filename.startswith('CH-'):                    
+            product_id = 'ZCH'
+        elif filename.startswith('A-'):
+            product_id = 'ZEA'
+        else:
+            # no product_id was given as command line argument
+            # get publciation-id for print_ressort
+            publication_id = getAttributeValue(metadata, PRINT_NS,'publication-id')
+            if not publication_id:
+                raise "PublicationId not found '%s'" % (filename)
+
+            # detect the Produktid
+            product_id = product_map.get(publication_id)
+            if not product_id:
+                logger.error('PublicationId ', publication_id, '>>>>> kein Produktmapping moeglich.')
+    else:
+        product_id = product_id_in
+    return product_id
+
 def addAttributesToDoc(doc, product_id, year, volume, cname):
     '''
         adds additional attributes to the document head
@@ -182,7 +208,7 @@ def doc_to_string(doc):
     xml = sanitizeDoc(xml) #<p>V</p> etc
     return xml
 
-def run_dir(input_dir, product_id):
+def run_dir(input_dir, product_id_in):
 
     if not os.path.isdir(input_dir):
         raise IOError("No such directory '%s'" % (input_dir,))
@@ -194,7 +220,6 @@ def run_dir(input_dir, product_id):
     k4_files = os.listdir(input_dir)
     for(k4_filename, k4_filepath) in [ (f, os.path.join(input_dir, f)) for f in k4_files ]:
         try:
-        
             ## skip dirs
             if (os.path.isdir(k4_filepath)):
                 continue
@@ -239,19 +264,7 @@ def run_dir(input_dir, product_id):
             volume = getAttributeValue(metadata, DOC_NS,'volume')
             print_ressort = getAttributeValue(metadata, PRINT_NS, 'ressort')
         
-            if product_id is None:
-                # no product_id was given as command line argument
-                # get publciation-id for print_ressort
-                publication_id = getAttributeValue(metadata, PRINT_NS,'publication-id')
-                if not publication_id:
-                    raise "PublicationId not found '%s%s'" % (dirname, file[0])
-
-                # detect the Produktid
-                product_id = product_map.get(publication_id)
-                if not product_id:
-                    print 'PublicationId ', publication_id, '>>>>> kein Produktmapping moeglich.'
-                    continue
-
+            product_id = get_product_id(product_id_in, k4_filename, metadata)
             logging.info("ProductId: "+ product_id)
 
             cms_paths = []

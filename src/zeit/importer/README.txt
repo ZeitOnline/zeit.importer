@@ -51,6 +51,15 @@ get a single value from the metadata
 >>> jobname
 u'Sp\u2030te Flucht 89'
 
+check product id for DACH
+
+>>> k4import.get_product_id(None, 'A-Test', metadata)
+'ZEA'
+>>> k4import.get_product_id(None, 'CH-Teäst', metadata)
+'ZCH'
+>>> k4import.get_product_id(None, 'ACH-Test', metadata)
+'ZEI'
+
 get publication id
 
 >>> publication_id = k4import.getAttributeValue(metadata, 'http://namespaces.zeit.de/CMS/print','publication-id')
