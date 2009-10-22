@@ -53,6 +53,7 @@ product_map = {
          }
 
 p_pattern = re.compile('<p>([a-z0-9])</p>\s*<p>', re.M|re.I) # <p>V</p>
+extrafile_pattern = re.compile('^(kasten|titel)-', re.I)
 
 def sanitizeDoc(xml):
     '''
@@ -119,6 +120,36 @@ def prepareColl(connector, product_id, year, volume, print_ressort):
                     StringIO.StringIO(''))
                 connector.add(col)
                 logger.info("collection %s created" % coll_path)
+
+class ArticleExtras(object):
+    def __init__(self, file_path):
+        self.directory = os.path.dirname(file_path)
+        self.file_article = os.path.basename(file_path)
+        self.file_title = os.path.join(self.directory, 'titel-'+self.file_article)
+        self.file_box = os.path.join(self.directory, 'kasten-'+self.file_article)
+        
+        # results in here
+        self.title = self.get_title()
+        self.box =  self.get_box()
+
+    def get_title(self):
+        result = None
+        if os.path.isfile(self.file_title):
+            tree = etree.parse(self.file_title)
+            r = tree.xpath('//STORY/p[position() = 1]')
+            if r:
+                result = r[0].text
+        return result
+
+    def get_box(self):
+        result = None
+        if os.path.isfile(self.file_box):
+            tree = etree.parse(self.file_box)
+            print doc_to_string(tree)
+            r = tree.xpath('//STORY/p[position() = 1]')
+            if r:
+                result = r[0].text
+        return result
 
 
 def transform_k4(k4xml_path):    
@@ -224,6 +255,9 @@ def run_dir(input_dir, product_id_in):
             if (os.path.isdir(k4_filepath)):
                 continue
 
+            if extrafile_pattern.match(k4_filename):
+                    logger.info('**** EXCLUDE %s ****\n' % k4_filename)
+            
             logger.info('**** STARTING %s ****' % k4_filename)
             new_doc = transform_k4(k4_filepath)
 
@@ -294,7 +328,7 @@ def run_dir(input_dir, product_id_in):
                     logger.info(cms_id + "... wurde _nicht_ neu importiert")
                     continue
 
-                if new_xml:
+                if new_xml:                    
                     res = Resource( cms_id,
                         cname,
                         'article',

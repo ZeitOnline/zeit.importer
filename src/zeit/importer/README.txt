@@ -104,3 +104,16 @@ Add additional attributes to head/attributes
     <attribute ns="http://namespaces.zeit.de/CMS/document" name="export_cds">no</attribute>
 ...
 
+#Lookup for articel extra files. "titel" and "kasten"
+
+#>>> extras = k4import.ArticleExtras(os.path.dirname(__file__)+'/testdocs/Begleitschutz.xml')
+#>>> print extras.title
+#Ich will ein Dorn im Auge sein
+#>> print extras.box
+#None
+
+#>>> extras = k4import.ArticleExtras(os.path.dirname(__file__)+'/testdocs/P-Weber.xml')
+#>>> print extras.box
+#Die
+#>>> print extras.title
+#None
