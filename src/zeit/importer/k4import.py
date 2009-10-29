@@ -129,26 +129,14 @@ class ArticleExtras(object):
         self.file_box = os.path.join(self.directory, 'kasten-'+self.file_article)
         
         # results in here
-        self.title = self.get_title()
-        self.box =  self.get_box()
+        self.title_elems = self.get_additional_elements(self.file_title)
+        self.box_elems =  self.get_additional_elements(self.file_box)
 
-    def get_title(self):
-        result = None
-        if os.path.isfile(self.file_title):
-            tree = etree.parse(self.file_title)
-            r = tree.xpath('//STORY/p[position() = 1]')
-            if r:
-                result = r[0].text
-        return result
-
-    def get_box(self):
-        result = None
-        if os.path.isfile(self.file_box):
-            tree = etree.parse(self.file_box)
-            print doc_to_string(tree)
-            r = tree.xpath('//STORY/p[position() = 1]')
-            if r:
-                result = r[0].text
+    def get_additional_elements(self, file_path):
+        result = []
+        if os.path.isfile(file_path):
+            new_doc = transform_k4(file_path)
+            result = new_doc.xpath('//body/*')
         return result
 
 
@@ -230,6 +218,21 @@ def addAttributesToDoc(doc, product_id, year, volume, cname):
         head.append(etree.fromstring(attr))
     return doc
 
+def addTitleToDoc(doc, elems):
+    if len(elems) > 0:
+        body = doc.xpath('//article/body')
+        elems.reverse()
+        for e in elems:
+            body[0].insert(0, e)
+    return doc
+
+def addBoxToDoc(doc, elems):
+    if len(elems) > 0:
+        body = doc.xpath('//article/body')
+        for e in elems:
+            body[0].append(e)
+    return doc
+
 def doc_to_string(doc):
     """
         serializes xmldoc-object to string
@@ -244,7 +247,7 @@ def run_dir(input_dir, product_id_in):
     if not os.path.isdir(input_dir):
         raise IOError("No such directory '%s'" % (input_dir,))
 
-    imported_docs = 0
+    count = 0
     cnames = []
     connector = getConnector()
 
@@ -281,7 +284,7 @@ def run_dir(input_dir, product_id_in):
             # print "current: " + cmslocation + cname
             if cname[0] == '_':
                 cname=cname[1:]
-
+            
             # no duplicate filenames
             if cname in cnames:
                 cname = cname + str(count)
@@ -291,6 +294,7 @@ def run_dir(input_dir, product_id_in):
             metadata.append(('http://namespaces.zeit.de/CMS/document','file-name',cname))
             metadata.append(('http://namespaces.zeit.de/CMS/document','export_cds','no'))   
 
+            # create the new resource
             logger.info('urlified '+cname)
 
             # get infos for archive paths
@@ -339,6 +343,7 @@ def run_dir(input_dir, product_id_in):
                         res.properties[(prop[1],prop[0])] = (prop_val)
                     connector.add(res)
                     logger.info("GESPEICHERT: %s" % (cms_id,))
+            count = count +1
             logger.info("IMPORT Dokument \"%s\" fertig\n" % (cname))
 
         except Exception, e:

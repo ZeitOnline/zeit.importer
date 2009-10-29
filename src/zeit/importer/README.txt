@@ -104,16 +104,28 @@ Add additional attributes to head/attributes
     <attribute ns="http://namespaces.zeit.de/CMS/document" name="export_cds">no</attribute>
 ...
 
-#Lookup for articel extra files. "titel" and "kasten"
+Lookup for articel extra files. "titel" and "kasten"
 
-#>>> extras = k4import.ArticleExtras(os.path.dirname(__file__)+'/testdocs/Begleitschutz.xml')
-#>>> print extras.title
-#Ich will ein Dorn im Auge sein
-#>> print extras.box
-#None
+>>> extras = k4import.ArticleExtras(os.path.dirname(__file__)+'/testdocs/Begleitschutz.xml')
+>>> print [e.tag for e in extras.title_elems]
+['title', 'subtitle', 'p']
+>>> print extras.box_elems
+[]
 
-#>>> extras = k4import.ArticleExtras(os.path.dirname(__file__)+'/testdocs/P-Weber.xml')
-#>>> print extras.box
-#Die
-#>>> print extras.title
-#None
+Add title to main doc
+>>> main_doc = k4import.transform_k4(os.path.dirname(__file__)+'/testdocs/Begleitschutz.xml')
+>>> main_doc = k4import.addTitleToDoc(main_doc, extras.title_elems)
+>>> main_doc.xpath('//body')[0].getchildren()[0:4]
+[<Element title at ...>, <Element subtitle at ...>, <Element p at ...>, <Element caption at ...>]
+
+>>> extras = k4import.ArticleExtras(os.path.dirname(__file__)+'/testdocs/P-Weber.xml')
+>>> print [e.tag for e in extras.box_elems]
+['title', 'p', 'p']
+>>> print extras.title_elems
+[]
+
+Add box to main doc
+>>> main_doc = k4import.transform_k4(os.path.dirname(__file__)+'/testdocs/P-Weber.xml')
+>>> main_doc = k4import.addBoxToDoc(main_doc, extras.box_elems)
+>>> main_doc.xpath('//body')[0].getchildren()[-4:]
+[<Element p at ...>, <Element title at ...>, <Element p at ...>, <Element p at ...>]
