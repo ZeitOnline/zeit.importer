@@ -28,8 +28,8 @@ K4_ARCHIVE_DIR = '/var/cms/import/old/'
 K4_STYLESHEET = os.path.dirname(__file__)+'/stylesheets/k4import.xslt'
 
 products = {
-        'ZCH': 'Die Zeit / Schweiz',
-        'ZEA': 'Die Zeit / Österreich',
+        'ZECH': 'Die Zeit / Schweiz',
+        'ZEOE': 'Die Zeit / Österreich',
         'ZEI': 'Die Zeit',
         'ZMLB': 'Zeit Magazin',
         'TEST': 'Test/Development',
@@ -43,8 +43,8 @@ products = {
          }
 
 product_map = {
-        '1111111111' : 'ZCH',
-        '2222222222' : 'ZEA',
+        '1111111111' : 'ZECH',
+        '2222222222' : 'ZEOE',
         '1133533088' : 'ZEI',
         '104518514'  : 'ZMLB',
         '1153836019' : 'ZTCS',
@@ -183,10 +183,10 @@ def getAttributeValue(metadata, ns, name):
 def get_product_id(product_id_in, filename, metadata):
     product_id = None
     if product_id_in is None:
-        if filename.startswith('CH-'):                    
-            product_id = 'ZCH'
+        if filename.startswith('CH-'):    
+            product_id = 'ZECH'
         elif filename.startswith('A-'):
-            product_id = 'ZEA'
+            product_id = 'ZEOE'
         else:
             # no product_id was given as command line argument
             # get publciation-id for print_ressort
