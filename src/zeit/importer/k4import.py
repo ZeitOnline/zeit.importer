@@ -4,6 +4,8 @@ import os
 import re
 import logging
 import StringIO
+import shutil
+import datetime
 from optparse import OptionParser
 from lxml import etree
 
@@ -76,7 +78,7 @@ def indent(elem, level=0):
     else:
         if level and (not elem.tail or not elem.tail.strip()):
             elem.tail = i
-    
+
 def mangleQPSName(qps_name):
     #- [ ] ersetzt werden ä,ö,ü,ß in ae,oe,ue,ss
     #- [ ] ersetzt wird _ . : ; # + * / in -
@@ -242,6 +244,30 @@ def doc_to_string(doc):
     xml = sanitizeDoc(xml) #<p>V</p> etc
     return xml
 
+def moveExportToArchive(input_dir):
+    ''' copies files to local archive '''
+    today = datetime.datetime.today()
+    archive_path = os.path.normpath('%s/%s/%s' % (K4_ARCHIVE_DIR,  today.strftime("%Y"), today.strftime("%m-%d-%a")))
+    if os.path.isdir(archive_path):
+        for i in range(1,10):
+            tmp_path = '%s-%d' % (archive_path, i)
+            if os.path.isdir(tmp_path):
+                continue
+            else:
+                archive_path = tmp_path
+                break    
+
+    shutil.copytree(input_dir, archive_path)
+    logger.info("Input articles copied to  %s ..." % archive_path)
+
+    if input_dir == K4_EXPORT_DIR:
+        # when standard input dir, do some cleanup in that dir
+        for f in [os.path.normpath('%s/%s' % (K4_EXPORT_DIR, f)) for f in os.listdir(K4_EXPORT_DIR)]:
+            if os.path.isfile(f):
+                os.remove(f)
+        logger.info("Input dir %s cleaned...." % archive_path)
+  
+
 def run_dir(connector, input_dir, product_id_in):
 
     if not os.path.isdir(input_dir):
@@ -350,8 +376,8 @@ def run_dir(connector, input_dir, product_id_in):
 
         except Exception, e:
             logger.exception(e)
-            sys.exit()
-            continue        
+            continue
+    moveExportToArchive(input_dir) #moves xml files to local archive
 
 def getConnector(dev=None):
     import zeit.connector.mock
