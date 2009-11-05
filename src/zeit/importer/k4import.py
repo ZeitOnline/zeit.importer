@@ -377,7 +377,10 @@ def run_dir(connector, input_dir, product_id_in):
         except Exception, e:
             logger.exception(e)
             continue
-    moveExportToArchive(input_dir) #moves xml files to local archive
+    if count > 0:
+        moveExportToArchive(input_dir) #moves xml files to local archive
+    else:
+        logger.info('No documents to import found "%s" !' % input_dir )
 
 def getConnector(dev=None):
     import zeit.connector.mock
