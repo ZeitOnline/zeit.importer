@@ -242,14 +242,16 @@ def doc_to_string(doc):
     xml = sanitizeDoc(xml) #<p>V</p> etc
     return xml
 
-def run_dir(input_dir, product_id_in):
+def run_dir(connector, input_dir, product_id_in):
 
     if not os.path.isdir(input_dir):
         raise IOError("No such directory '%s'" % (input_dir,))
 
+    if not connector:
+        raise EnvironmentError("No connector given")
+
     count = 0
     cnames = []
-    connector = getConnector()
 
     k4_files = os.listdir(input_dir)
     for(k4_filename, k4_filepath) in [ (f, os.path.join(input_dir, f)) for f in k4_files ]:
@@ -351,10 +353,12 @@ def run_dir(input_dir, product_id_in):
             sys.exit()
             continue        
 
-def getConnector():
+def getConnector(dev=None):
     import zeit.connector.mock
-    connector = zeit.connector.mock.Connector()
-    #connector = zeit.connector.connector.Connector({'default': CONNECTOR_URL})
+    if dev:
+        connector = zeit.connector.mock.Connector()
+    else:
+        connector = zeit.connector.connector.Connector({'default': CONNECTOR_URL})            
     return connector    
 
 def main():
@@ -366,6 +370,8 @@ def main():
                       help="Productid")
     parser.add_option("-l", "--log", dest="logfile",
                       help="logfile for errors")
+    parser.add_option("-d", "--dev", action="store_true", dest="dev",
+                      help="use dev connector")
 
     (options, args) = parser.parse_args()
 
@@ -378,7 +384,8 @@ def main():
 
     try:
         logger.info("Import: " +  options.input_dir + " to: " +  os.path.normpath(CMS_ROOT+IMPORT_ROOT))
-        run_dir(options.input_dir, options.product_id)        
+        connector = getConnector(options.dev)
+        run_dir(connector, options.input_dir, options.product_id)        
     except KeyboardInterrupt,e:
         logger.info('SCRIPT STOPPED')
         sys.exit()

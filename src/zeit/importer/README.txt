@@ -54,9 +54,9 @@ u'Sp\u2030te Flucht 89'
 check product id for DACH
 
 >>> k4import.get_product_id(None, 'A-Test', metadata)
-'ZEA'
+'ZEOE'
 >>> k4import.get_product_id(None, 'CH-Teäst', metadata)
-'ZCH'
+'ZECH'
 >>> k4import.get_product_id(None, 'ACH-Test', metadata)
 'ZEI'
 
