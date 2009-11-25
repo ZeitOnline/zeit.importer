@@ -396,8 +396,9 @@ def main():
     parser = OptionParser(usage)
     parser.add_option("-i", "--indir", dest="input_dir",
                       help="directory with the k4 export files")
+    product_str = "\n".join([k+'='+products[k]+", " for k in products])
     parser.add_option("-p", "--productid", dest="product_id",
-                      help="Productid")
+                      help="%s" % product_str.decode('utf-8'))
     parser.add_option("-l", "--log", dest="logfile",
                       help="logfile for errors")
     parser.add_option("-d", "--dev", action="store_true", dest="dev",
