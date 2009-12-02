@@ -5,6 +5,7 @@ def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(doctest.DocFileSuite(
         'README.txt',       
+        'ipoolconfig.txt',
         optionflags=doctest.ELLIPSIS
         ))
 

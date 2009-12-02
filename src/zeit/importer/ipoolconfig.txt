@@ -1,0 +1,35 @@
+At first, we need a connector for our beloved importer.
+
+>>> import zeit.connector.mock
+>>> connector = zeit.connector.mock.Connector()
+>>> connector
+<zeit.connector.mock.Connector object at 0x...>
+
+
+First of all, build us a ressource for ipoolconfig.xml
+>>> import os.path
+>>> from zeit.connector.resource import Resource
+>>> conf_id = 'http://xml.zeit.de/forms/importexport.xml'
+>>> conf_file = open(os.path.dirname(__file__)+'/testdocs/ipool/importexport.xml')
+>>> res = Resource(conf_id,
+...                'importexport.xml',
+...                'text',
+...                conf_file,
+...                contentType = 'text/xml')
+>>> connector.add(res)  
+>>> connector[conf_id].contentType
+'text/xml'
+>>> connector[conf_id].data.read()
+'<?xml version="1.0" encoding="UTF-8"?>\n<config>...'
+
+Then we need our ipool class
+>>> from zeit.importer.ipoolconfig import IPoolConfig
+>>> IPoolConfig
+<class 'zeit.importer.ipoolconfig.IPoolConfig'>
+
+Ok, read the data
+>>> ipool = IPoolConfig(connector[conf_id])
+>>> ipool.products['1153836019']
+'ZTCS'
+>>> ipool.product_map['ZMLB']
+'ZEIT MAGAZIN'
