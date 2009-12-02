@@ -32,6 +32,7 @@ K4_STYLESHEET = os.path.dirname(__file__)+'/stylesheets/k4import.xslt'
 products = {
         'ZECH': 'Die Zeit / Schweiz',
         'ZEOE': 'Die Zeit / Österreich',
+        'ZESA': 'Die Zeit / Sachsen',
         'ZEI': 'Die Zeit',
         'ZMLB': 'Zeit Magazin',
         'TEST': 'Test/Development',
@@ -47,6 +48,7 @@ products = {
 product_map = {
         '1111111111' : 'ZECH',
         '2222222222' : 'ZEOE',
+        '3333333333' : 'ZESA',
         '1133533088' : 'ZEI',
         '104518514'  : 'ZMLB',
         '1153836019' : 'ZTCS',
@@ -189,6 +191,8 @@ def get_product_id(product_id_in, filename, metadata):
             product_id = 'ZECH'
         elif filename.startswith('A-'):
             product_id = 'ZEOE'
+        elif filename.startswith('S-'):
+            product_id = 'ZESA'
         else:
             # no product_id was given as command line argument
             # get publciation-id for print_ressort

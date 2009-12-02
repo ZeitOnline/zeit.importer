@@ -59,6 +59,8 @@ check product id for DACH
 'ZECH'
 >>> k4import.get_product_id(None, 'ACH-Test', metadata)
 'ZEI'
+>>> k4import.get_product_id(None, 'S-Test', metadata)
+'ZESA'
 
 get publication id
 
