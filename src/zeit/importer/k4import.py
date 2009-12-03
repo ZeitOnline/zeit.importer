@@ -290,8 +290,8 @@ def run_dir(connector, input_dir, product_id_in):
             if (os.path.isdir(k4_filepath)):
                 continue
 
-            if extrafile_pattern.match(k4_filename):
-                    logger.info('**** EXCLUDE %s ****\n' % k4_filename)
+            #if extrafile_pattern.match(k4_filename):
+                    #logger.info('**** EXCLUDE %s ****\n' % k4_filename)
             
             logger.info('**** STARTING %s ****' % k4_filename)
             new_doc = transform_k4(k4_filepath)
