@@ -11,7 +11,6 @@ from lxml import etree
 
 from zeit.importer import add_file_logging
 from zeit.connector.resource import Resource
-import zeit.connector.connector
 
 
 
@@ -187,11 +186,11 @@ def getAttributeValue(metadata, ns, name):
 def get_product_id(product_id_in, filename, metadata):
     product_id = None
     if product_id_in is None:
-        if filename.startswith('CH-'):    
+        if filename.startswith('CH-') or filename.startswith('CH_'):    
             product_id = 'ZECH'
-        elif filename.startswith('A-'):
+        elif filename.startswith('A-') or filename.startswith('A_'):
             product_id = 'ZEOE'
-        elif filename.startswith('S-'):
+        elif filename.startswith('S-') or filename.startswith('S_'):
             product_id = 'ZESA'
         else:
             # no product_id was given as command line argument
@@ -391,8 +390,9 @@ def getConnector(dev=None):
     if dev:
         import zeit.connector.mock
         connector = zeit.connector.mock.Connector()
-    else:
-        connector = zeit.connector.connector.Connector({'default': CONNECTOR_URL})            
+    else:       
+        import zeit.connector.connector 
+        connector = zeit.connector.connector.Connector({'default': CONNECTOR_URL})                       
     return connector    
 
 def main():
