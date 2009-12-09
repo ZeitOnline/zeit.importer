@@ -29,7 +29,7 @@ Then we need our ipool class
 
 Ok, read the data
 >>> ipool = IPoolConfig(connector[conf_id])
->>> ipool.products['1153836019']
+>>> ipool.product_map['1153836019']
 'ZTCS'
->>> ipool.product_map['ZMLB']
-'ZEIT MAGAZIN'
+>>> ipool.products['ZMLB']
+'ZEIT Magazin'

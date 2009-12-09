@@ -7,78 +7,24 @@ import StringIO
 import shutil
 import datetime
 from optparse import OptionParser
-from lxml import etree
 
+from zeit.importer.ipoolconfig import IPoolConfig
+from zeit.importer.article import TransformedArticle, transform_k4
 from zeit.importer import add_file_logging
+from zeit.importer import DOC_NS, PRINT_NS, WORKFLOW_NS
 from zeit.connector.resource import Resource
-
-
 
 logger = logging.getLogger(__name__) 
 
-QUARK_NS = 'http://namespaces.zeit.de/QPS/attributes'
-DOC_NS = 'http://namespaces.zeit.de/CMS/document'
-PRINT_NS = 'http://namespaces.zeit.de/CMS/print'
-WORKFLOW_NS = 'http://namespaces.zeit.de/CMS/workflow'
 CONNECTOR_URL = 'http://zip6.zeit.de:9000/cms/'
 CMS_ROOT='http://xml.zeit.de/'
 IMPORT_ROOT = CMS_ROOT+'archiv-wf/archiv/'
 IMPORT_ROOT_IN = CMS_ROOT+'archiv-wf/archiv-in/'
 K4_EXPORT_DIR = '/var/cms/import/k4incoming/'
 K4_ARCHIVE_DIR = '/var/cms/import/old/'
-K4_STYLESHEET = os.path.dirname(__file__)+'/stylesheets/k4import.xslt'
+IPOOL_CONF = CMS_ROOT+'forms/importexport.xml'
 
-products = {
-        'ZECH': 'Die Zeit / Schweiz',
-        'ZEOE': 'Die Zeit / Österreich',
-        'ZESA': 'Die Zeit / Sachsen',
-        'ZEI': 'Die Zeit',
-        'ZMLB': 'Zeit Magazin',
-        'TEST': 'Test/Development',
-        'ZTCS' : 'Zeit Campus',
-        'ZTWI' : 'Zeit Wissen',
-        'ZEDE' : 'Zeit.de',
-        'ZTGS' : 'Zeit Geschichte',
-        'tdb' : 'Zeit Schweiz',
-        'tbd' : 'Zeit Oesterreich',
-        'KINZ': 'Kinderzeit Magazin',
-         }
-
-product_map = {
-        '1111111111' : 'ZECH',
-        '2222222222' : 'ZEOE',
-        '3333333333' : 'ZESA',
-        '1133533088' : 'ZEI',
-        '104518514'  : 'ZMLB',
-        '1153836019' : 'ZTCS',
-        '1160501943' : 'ZTWI',
-        '1144226254' : 'ZTGS',
-         }
-
-p_pattern = re.compile('<p>([a-z0-9])</p>\s*<p>', re.M|re.I) # <p>V</p>
 extrafile_pattern = re.compile('^(kasten|titel)-', re.I)
-
-def sanitizeDoc(xml):
-    '''
-        cleans the doc from dirty k4markup
-    '''
-    xml = p_pattern.sub('<p>\\1', xml)
-    return xml
-
-def indent(elem, level=0):
-    i = "\n" + level*"  "
-    if len(elem):
-        if not elem.text or not elem.text.strip():
-            elem.text = i + "  "
-        for e in elem:
-            indent(e, level+1)
-            if not e.tail or not e.tail.strip():
-                e.tail = i + "  "
-        if not e.tail or not e.tail.strip():
-            e.tail = i
-    else:
-        if level and (not elem.tail or not elem.tail.strip()):
-            elem.tail = i
 
 def mangleQPSName(qps_name):
     #- [ ] ersetzt werden ä,ö,ü,ß in ae,oe,ue,ss
@@ -104,6 +50,9 @@ def mangleQPSName(qps_name):
     return cname
 
 def prepareColl(connector, product_id, year, volume, print_ressort):
+    '''
+        if target collection does not exist, it will be created
+    '''
     for d in [IMPORT_ROOT, IMPORT_ROOT_IN]:
         coll_path = d
         parts = [product_id, year, volume, print_ressort]
@@ -124,141 +73,21 @@ def prepareColl(connector, product_id, year, volume, print_ressort):
                 connector.add(col)
                 logger.info("collection %s created" % coll_path)
 
-class ArticleExtras(object):
-    def __init__(self, file_path):
-        self.directory = os.path.dirname(file_path)
-        self.file_article = os.path.basename(file_path)
-        self.file_title = os.path.join(self.directory, 'titel-'+self.file_article)
-        self.file_box = os.path.join(self.directory, 'kasten-'+self.file_article)
-        
-        # results in here
-        self.title_elems = self.get_additional_elements(self.file_title)
-        self.box_elems =  self.get_additional_elements(self.file_box)
-
-    def get_additional_elements(self, file_path):
-        result = []
-        if os.path.isfile(file_path):
-            new_doc = transform_k4(file_path)
-            result = new_doc.xpath('//body/*')
-        return result
-
-
-def transform_k4(k4xml_path):    
-    '''
-        transforms k4xml to zeit article format
-    '''
-    if not os.path.isfile(k4xml_path):
-        raise IOError('%s does not exists' % k4xml_path)
-
-    xslt_doc = etree.parse(K4_STYLESHEET)
-    transform = etree.XSLT(xslt_doc)
-
-    doc = etree.parse(k4xml_path)
-    result = transform(doc)
-
-    return  result
-
-def getAttributesFromDoc(doc):
-    '''
-        extract metadata from /head/attributes/attribute
-    '''
-    metas = doc.xpath('//head/attribute')  
-
-    props = []
-    if metas:
-      for m in metas:
-        ns = m.get('ns')
-        name = m.get('name')
-        value = m.text if m.text is not None else ''
-        props.append((ns,name,value))
-
-    return props
-
-def getAttributeValue(metadata, ns, name):
-    """
-    extract single metadata value from dict
-    """
-    try:
-        return [m[2] for m in metadata if m[0] == ns and m[1] == name][0]
-    except:
-        return None
-
-def get_product_id(product_id_in, filename, metadata):
-    product_id = None
-    if product_id_in is None:
-        if filename.startswith('CH-') or filename.startswith('CH_'):    
-            product_id = 'ZECH'
-        elif filename.startswith('A-') or filename.startswith('A_'):
-            product_id = 'ZEOE'
-        elif filename.startswith('S-') or filename.startswith('S_'):
-            product_id = 'ZESA'
-        else:
-            # no product_id was given as command line argument
-            # get publciation-id for print_ressort
-            publication_id = getAttributeValue(metadata, PRINT_NS,'publication-id')
-            if not publication_id:
-                raise "PublicationId not found '%s'" % (filename)
-
-            # detect the Produktid
-            product_id = product_map.get(publication_id)
-            if not product_id:
-                logger.error('PublicationId ', publication_id, '>>>>> kein Produktmapping moeglich.')
-    else:
-        product_id = product_id_in
-    return product_id
-
-def addAttributesToDoc(doc, product_id, year, volume, cname):
-    '''
-        adds additional attributes to the document head
-    '''
-    head = doc.xpath('//article/head')[0]
-    attributes = [
-        '<attribute ns="%s" name="id">%s-%s-%s-%s</attribute>' % (WORKFLOW_NS, product_id, year, volume, cname),
-        '<attribute ns="%s" name="running-volume">%s-%s-%s</attribute>' % (WORKFLOW_NS, product_id, year, volume),
-        '<attribute ns="%s" name="product-id">%s</attribute>' % (WORKFLOW_NS, product_id),
-        '<attribute ns="%s" name="product-name">%s</attribute>' % (WORKFLOW_NS, products.get(product_id,'')),
-        '<attribute ns="%s" name="export_cds">%s</attribute>' % (DOC_NS,'no')
-    ]
-    for attr in attributes:
-        head.append(etree.fromstring(attr))
-    return doc
-
-def addTitleToDoc(doc, elems):
-    if len(elems) > 0:
-        body = doc.xpath('//article/body')
-        elems.reverse()
-        for e in elems:
-            body[0].insert(0, e)
-    return doc
-
-def addBoxToDoc(doc, elems):
-    if len(elems) > 0:
-        body = doc.xpath('//article/body')
-        for e in elems:
-            body[0].append(e)
-    return doc
-
-def doc_to_string(doc):
-    """
-        serializes xmldoc-object to string
-    """
-    indent(doc.getroot())
-    xml = etree.tostring(doc, encoding="utf-8", xml_declaration=True)
-    xml = sanitizeDoc(xml) #<p>V</p> etc
-    return xml
-
 def moveExportToArchive(input_dir):
-    ''' copies files to local archive '''
+    ''' 
+        copies files to local archive 
+    '''
     today = datetime.datetime.today()
-    archive_path = os.path.normpath('%s/%s/%s' % (K4_ARCHIVE_DIR,  today.strftime("%Y"), today.strftime("%m-%d-%a")))
-    if os.path.isdir(archive_path):
-        for i in range(1,10):
+    archive_path = os.path.normpath('%s/%s/%s' % (K4_ARCHIVE_DIR,  today.strftime("%Y"), today.strftime("%m-%d-%a")))    
+    if os.path.isdir(archive_path):        
+        for i in range(1,20):
             tmp_path = '%s-%d' % (archive_path, i)
             if os.path.isdir(tmp_path):
                 continue
             else:
                 archive_path = tmp_path
                 break    
+
 
     shutil.copytree(input_dir, archive_path)
     logger.info("Input articles copied to  %s ..." % archive_path)
@@ -279,9 +108,14 @@ def run_dir(connector, input_dir, product_id_in):
     if not connector:
         raise EnvironmentError("No connector given")
 
+    try:
+        ipool = IPoolConfig(connector[IPOOL_CONF])
+    except:
+        raise EnvironmentError("Infopool config missing")
+
     count = 0
     cnames = []
-
+    
     k4_files = os.listdir(input_dir)
     for(k4_filename, k4_filepath) in [ (f, os.path.join(input_dir, f)) for f in k4_files ]:
         try:
@@ -295,11 +129,11 @@ def run_dir(connector, input_dir, product_id_in):
             logger.info('**** STARTING %s ****' % k4_filename)
             new_doc = transform_k4(k4_filepath)
 
-            # get metadata
-            metadata = getAttributesFromDoc(new_doc)
+            # here we have a new document to work with
+            doc = TransformedArticle(new_doc, ipool, logger)
 
             # get original name
-            jobname = getAttributeValue(metadata, DOC_NS,'jobname')
+            jobname = doc.getAttributeValue(DOC_NS,'jobname')
             if not jobname:
                 raise Exception("Original name not found '%s'" % k4_filepath)
 
@@ -322,18 +156,18 @@ def run_dir(connector, input_dir, product_id_in):
             cnames.append(cname)
 
             # set extra metadata
-            metadata.append(('http://namespaces.zeit.de/CMS/document','file-name',cname))
-            metadata.append(('http://namespaces.zeit.de/CMS/document','export_cds','no'))   
+            doc.metadata.append(('http://namespaces.zeit.de/CMS/document','file-name',cname))
+            doc.metadata.append(('http://namespaces.zeit.de/CMS/document','export_cds','no'))   
 
             # create the new resource
             logger.info('urlified '+cname)
 
             # get infos for archive paths
-            year = getAttributeValue(metadata, DOC_NS,'year')
-            volume = getAttributeValue(metadata, DOC_NS,'volume')
-            print_ressort = getAttributeValue(metadata, PRINT_NS, 'ressort')
-        
-            product_id = get_product_id(product_id_in, k4_filename, metadata)
+            year = doc.getAttributeValue(DOC_NS,'year')
+            volume = doc.getAttributeValue(DOC_NS,'volume')
+            print_ressort = doc.getAttributeValue(PRINT_NS, 'ressort')
+
+            product_id = doc.get_product_id(product_id_in, k4_filename)
             logging.info("ProductId: "+ product_id)
 
             cms_paths = []
@@ -347,15 +181,15 @@ def run_dir(connector, input_dir, product_id_in):
                 sys.exit('ERROR: Metadaten fehlen!!')
 
             # add attributes to output document
-            new_doc = addAttributesToDoc(new_doc, product_id, year, volume, cname)
-          
-            new_xml = doc_to_string(new_doc)
+            doc.addAttributesToDoc(product_id, year, volume, cname)
+            # get the new doc as XML String
+            new_xml = doc.to_string()
 
             logger.info("SPEICHERN ins CMS ...")
             for cms_id in cms_paths:
                 check_resource = None                
                 try:
-                    check_resource= connector[cms_id]#CMSClient.CMS.Resource(cmslocation + cname, logger=logger)
+                    check_resource= connector[cms_id]
                 except KeyError, e:
                     logger.info(e)
 
@@ -369,7 +203,7 @@ def run_dir(connector, input_dir, product_id_in):
                         'article',
                         StringIO.StringIO(new_xml),
                         contentType = 'text/xml')
-                    for prop in metadata: # add metadata
+                    for prop in doc.metadata: # add metadata
                         prop_val = re.sub(r'\&','+',prop[2])
                         res.properties[(prop[1],prop[0])] = (prop_val)
                     connector.add(res)
@@ -390,6 +224,15 @@ def getConnector(dev=None):
     if dev:
         import zeit.connector.mock
         connector = zeit.connector.mock.Connector()
+        # add mock config
+        conf_id = 'http://xml.zeit.de/forms/importexport.xml'
+        conf_file = open(os.path.dirname(__file__)+'/testdocs/ipool/importexport.xml')
+        res = Resource(conf_id,
+                'importexport.xml',
+                'text',
+                conf_file,
+        contentType = 'text/xml')
+        connector.add(res)  
     else:       
         import zeit.connector.connector 
         connector = zeit.connector.connector.Connector({'default': CONNECTOR_URL})                       
@@ -400,9 +243,8 @@ def main():
     parser = OptionParser(usage)
     parser.add_option("-i", "--indir", dest="input_dir",
                       help="directory with the k4 export files")
-    product_str = "\n".join([k+'='+products[k]+", " for k in products])
     parser.add_option("-p", "--productid", dest="product_id",
-                      help="%s" % product_str.decode('utf-8'))
+                      help="product id to be used with every article")
     parser.add_option("-l", "--log", dest="logfile",
                       help="logfile for errors")
     parser.add_option("-d", "--dev", action="store_true", dest="dev",
@@ -418,7 +260,7 @@ def main():
         add_file_logging(logger, options.logfile) 
 
     try:
-        logger.info("Import: " +  options.input_dir + " to: " +  os.path.normpath(CMS_ROOT+IMPORT_ROOT))
+        logger.info("Import: " +  options.input_dir + " to: " +  IMPORT_ROOT)
         connector = getConnector(options.dev)
         run_dir(connector, options.input_dir, options.product_id)        
     except KeyboardInterrupt,e:

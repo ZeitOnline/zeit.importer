@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 import logging
 
+QUARK_NS = 'http://namespaces.zeit.de/QPS/attributes'
+DOC_NS = 'http://namespaces.zeit.de/CMS/document'
+PRINT_NS = 'http://namespaces.zeit.de/CMS/print'
+WORKFLOW_NS = 'http://namespaces.zeit.de/CMS/workflow'
+
 logging.basicConfig(level=logging.INFO,
                 format='%(asctime)s [%(levelname)s] %(message)s',
                 datefmt='%a, %d %b %Y %H:%M:%S')

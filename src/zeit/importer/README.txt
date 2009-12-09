@@ -1,15 +1,12 @@
-At first, we need a connector for our beloved importer.
-
->>> import zeit.connector.mock
->>> connector = zeit.connector.mock.Connector()
->>> connector
-<zeit.connector.mock.Connector object at 0x...>
-
-then we need a module which will do the work for us
+first we need a module which will do the work for us
 
 >>> from zeit.importer import k4import
 >>> k4import
 <module 'zeit.importer.k4import'...>
+
+>>> connector = k4import.getConnector(dev=True)
+>>> connector
+<zeit.connector.mock.Connector object at 0x...>
 
 Check for generating proper filenames, name ar in unicode
 
@@ -22,16 +19,19 @@ Check for generating proper filenames, name ar in unicode
 >>> k4import.mangleQPSName('HfjS_Portr‰t'.decode('utf-8'))
 'HfjS-Portraet'
 
+
 Remove ugly print layout 
 
+>>> from zeit.importer.article import sanitizeDoc
 >>> xml = "<p>E</p>\r\n<p>in Test"
->>> k4import.sanitizeDoc(xml)
+>>> sanitizeDoc(xml)
 '<p>Ein Test'
 
 Convert k4.xml to zeit-article.xml
 
 >>> import os.path
->>> new_doc = k4import.transform_k4(os.path.dirname(__file__)+'/testdocs/Sp_te_Flucht_89.xml')
+>>> from zeit.importer.article import transform_k4
+>>> new_doc = transform_k4(os.path.dirname(__file__)+'/testdocs/Sp_te_Flucht_89.xml')
 >>> print new_doc
 <?xml version="1.0" encoding="UTF-8"?>
 <article>
@@ -39,41 +39,61 @@ Convert k4.xml to zeit-article.xml
     <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="status">import</attribute>
 ...
 
-get the attributes from the new document
+We need the settings for infopool
 
->>> metadata = k4import.getAttributesFromDoc(new_doc)
->>> metadata[3]
-('http://namespaces.zeit.de/CMS/workflow', 'last-modified-by', 'import')
+>>> from zeit.importer.ipoolconfig import IPoolConfig
+>>> ipool = IPoolConfig( connector['http://xml.zeit.de/forms/importexport.xml'])
+
+now with the infopool data and the new doc, we will treat them right
+
+>>> from zeit.importer.article import TransformedArticle
+>>> doc = TransformedArticle(new_doc, ipool)
+>>> doc
+<zeit.importer.article.TransformedArticle object at 0...>
+
+we have metadata
+
+>>> print doc.metadata
+[('http://namespaces.zeit.de/CMS/workflow', 'status', 'import')...
+
 
 get a single value from the metadata
 
->>> jobname = k4import.getAttributeValue(metadata, 'http://namespaces.zeit.de/CMS/document','jobname')
+>>> jobname = doc.getAttributeValue('http://namespaces.zeit.de/CMS/document','jobname')
 >>> jobname
 u'Sp\u2030te Flucht 89'
 
 check product id for DACH
 
->>> k4import.get_product_id(None, 'A-Test', metadata)
+>>> doc.get_product_id(None, 'A-Test')
 'ZEOE'
->>> k4import.get_product_id(None, 'CH-Teäst', metadata)
+>>> doc.get_product_id(None, 'A_Test')
+'ZEOE'
+>>> doc.get_product_id(None, 'CH-Teäst')
 'ZECH'
->>> k4import.get_product_id(None, 'ACH-Test', metadata)
+>>> doc.get_product_id(None, 'CH_Teäst')
+'ZECH'
+>>> doc.get_product_id(None, 'ACH-Test')
 'ZEI'
->>> k4import.get_product_id(None, 'S-Test', metadata)
+>>> doc.get_product_id(None, 'ACH_Test')
+'ZEI'
+>>> doc.get_product_id(None, 'S-Test')
+'ZESA'
+>>> doc.get_product_id(None, 'S_Test')
 'ZESA'
 
 get publication id
 
->>> publication_id = k4import.getAttributeValue(metadata, 'http://namespaces.zeit.de/CMS/print','publication-id')
->>> product_id = k4import.product_map.get(publication_id)
+>>> publication_id = doc.getAttributeValue('http://namespaces.zeit.de/CMS/print','publication-id')
+>>> product_id = ipool.product_map.get(publication_id)
 >>> product_id
 'ZEI'
 
 Build collections for import 
 
->>> year = k4import.getAttributeValue(metadata, 'http://namespaces.zeit.de/CMS/document','year')
->>> volume = k4import.getAttributeValue(metadata, 'http://namespaces.zeit.de/CMS/document','volume')
->>> print_ressort = k4import.getAttributeValue(metadata, 'http://namespaces.zeit.de/CMS/print', 'ressort')
+>>> year = doc.getAttributeValue('http://namespaces.zeit.de/CMS/document','year')
+>>> volume = doc.getAttributeValue('http://namespaces.zeit.de/CMS/document','volume')
+>>> print_ressort = doc.getAttributeValue('http://namespaces.zeit.de/CMS/print', 'ressort')
 >>> print_ressort = k4import.mangleQPSName(print_ressort).lower()
 >>> k4import.prepareColl(connector, product_id, year, volume, print_ressort)
 >>> connector['http://xml.zeit.de/archiv-wf/archiv/ZEI/2009/40/feuilleton'].type
@@ -84,8 +104,8 @@ Build collections for import
 Add additional attributes to head/attributes
 
 >>> cname = k4import.mangleQPSName(jobname)
->>> new_doc = k4import.addAttributesToDoc(new_doc, product_id, year, volume, cname)
->>> new_xml = k4import.doc_to_string(new_doc)
+>>> doc.addAttributesToDoc(product_id, year, volume, cname)
+>>> new_xml = doc.to_string()
 >>> print new_xml
 <?xml version='1.0' encoding='utf-8'?>
 <article>
@@ -102,32 +122,36 @@ Add additional attributes to head/attributes
     <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="id">ZEI-2009-40-Spaete-Flucht-89</attribute>
     <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="running-volume">ZEI-2009-40</attribute>
     <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="product-id">ZEI</attribute>
-    <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="product-name">Die Zeit</attribute>
+    <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="product-name">DIE ZEIT</attribute>
     <attribute ns="http://namespaces.zeit.de/CMS/document" name="export_cds">no</attribute>
 ...
 
 Lookup for articel extra files. "titel" and "kasten"
 
->>> extras = k4import.ArticleExtras(os.path.dirname(__file__)+'/testdocs/Begleitschutz.xml')
+>>> from zeit.importer.article import ArticleExtras
+>>> extras = ArticleExtras(os.path.dirname(__file__)+'/testdocs/Begleitschutz.xml')
 >>> print [e.tag for e in extras.title_elems]
 ['title', 'subtitle', 'p']
 >>> print extras.box_elems
 []
 
 Add title to main doc
->>> main_doc = k4import.transform_k4(os.path.dirname(__file__)+'/testdocs/Begleitschutz.xml')
->>> main_doc = k4import.addTitleToDoc(main_doc, extras.title_elems)
->>> main_doc.xpath('//body')[0].getchildren()[0:4]
+>>> new_doc = transform_k4(os.path.dirname(__file__)+'/testdocs/Begleitschutz.xml')
+>>> main_doc = TransformedArticle(new_doc, ipool)
+>>> main_doc.addTitleToDoc(extras.title_elems)
+>>> main_doc.doc.xpath('//body')[0].getchildren()[0:4]
 [<Element title at ...>, <Element subtitle at ...>, <Element p at ...>, <Element caption at ...>]
 
->>> extras = k4import.ArticleExtras(os.path.dirname(__file__)+'/testdocs/P-Weber.xml')
+>>> extras = ArticleExtras(os.path.dirname(__file__)+'/testdocs/P-Weber.xml')
 >>> print [e.tag for e in extras.box_elems]
 ['title', 'p', 'p']
 >>> print extras.title_elems
 []
 
 Add box to main doc
->>> main_doc = k4import.transform_k4(os.path.dirname(__file__)+'/testdocs/P-Weber.xml')
->>> main_doc = k4import.addBoxToDoc(main_doc, extras.box_elems)
->>> main_doc.xpath('//body')[0].getchildren()[-4:]
+>>> new_doc = transform_k4(os.path.dirname(__file__)+'/testdocs/P-Weber.xml')
+>>> main_doc = TransformedArticle(new_doc, ipool)
+>>> main_doc.addBoxToDoc(extras.box_elems)
+>>> main_doc.doc.xpath('//body')[0].getchildren()[-4:]
 [<Element p at ...>, <Element title at ...>, <Element p at ...>, <Element p at ...>]
+

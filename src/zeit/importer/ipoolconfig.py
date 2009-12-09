@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from lxml import etree
-#IPOOL_FILE = CMS_ROOT+'forms/importexport.xml'
 
 class IPoolConfig(object):
     def __init__(self, ressource):
@@ -18,7 +17,7 @@ class IPoolConfig(object):
                 label = p.findtext('label')
                 id = p.get('id')
                 if k4_id:
-                    self.product_map[id] = label
-                    self.products[k4_id] = id
+                    self.products[id] = label
+                    self.product_map[k4_id] = id
 
         

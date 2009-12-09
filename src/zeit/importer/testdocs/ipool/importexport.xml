@@ -1,74 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
     <scheme>article.rng</scheme>
-    
-    <product id="ZECH">
-        <k4id>1111111111</k4id>
-        <infid>ZECH</infid>
-        <gjid>ZECH</gjid>
-        <label>Die Zeit / Schweiz</label>
-    </product>
-    
-    <product id="ZEOE">
-        <k4id>2222222222</k4id>
-        <infid>ZEOE</infid>
-        <gjid>ZEOE</gjid>
-        <label>Die Zeit / Österreich</label>
-    </product>
-    
-    <product id="ZESA">
-        <k4id>3333333333</k4id>
-        <infid>ZESA</infid>
-        <gjid>ZESA</gjid>
-        <label>Die Zeit / Sachsen</label>
-    </product>
-    
     <product id="ZEI">
         <k4id>1133533088</k4id>
         <infid>ZEI</infid>
         <gjid>ZEI</gjid>
-        <label>Die ZEIT</label>
+        <label>DIE ZEIT</label>
     </product>
 
     <product id="ZMLB">
         <k4id>104518514</k4id>
         <infid>ZMLB</infid>
         <gjid>ZMLB</gjid>
-        <label>ZEIT MAGAZIN</label>
+        <label>ZEIT Magazin</label>
     </product>
 
     <product id="ZEIZMLB" type="cluster">
         <label>Die ZEIT und Zeit Magazin</label>
         <idref>ZEI</idref>
         <idref>ZMLB</idref>
+        <idref>ZESA</idref>
+        <idref>ZECH</idref>
+        <idref>ZEOE</idref>
+    </product>
+
+    
+    <product id="ZEISACHOE" type="cluster">
+        <label>Die ZEIT (alle Seiten)</label>
+        <idref>ZEI</idref>
+        <idref>ZESA</idref>
+        <idref>ZECH</idref>
+        <idref>ZEOE</idref>
     </product>
 
     <product id="ZTWI">
         <k4id>1160501943</k4id>
         <infid>ZTWI</infid>
         <gjid>ZTWI</gjid>
-        <label>Zeit Wissen</label>
+        <label>ZEIT Wissen</label>
+    </product>
+
+    <product id="ZESA">
+        <k4id>3333333333</k4id>
+        <infid>ZESA</infid>
+        <gjid>ZESA</gjid>
+        <label>ZEIT Sachsen</label>
+    </product>
+    
+    <product id="ZECH">
+        <k4id>1111111111</k4id>
+        <infid>ZECH</infid>
+        <gjid>ZECH</gjid>
+        <label>ZEIT Schweiz</label>
+    </product>
+
+    <product id="ZEOE">
+        <k4id>2222222222</k4id>
+        <infid>ZEOE</infid>
+        <gjid>ZEOE</gjid>
+        <label>ZEIT Österreich</label>
     </product>
 
     <product id="ZTCS">
         <k4id>1153836019</k4id>
         <infid>ZTCS</infid>
         <gjid>ZTCS</gjid>
-        <label>Zeit Campus</label>
+        <label>ZEIT Campus</label>
     </product>
 
     <product id="ZTGS">
         <k4id>1144226254</k4id>
         <infid>ZTGS</infid>
         <gjid>ZTGS</gjid>
-        <label>Zeit Geschichte</label>
+        <label>ZEIT Geschichte</label>
     </product>
 
     <product id="ZSF">
         <k4id />
         <infid>ZSF</infid>
         <gjid>ZSF</gjid>
-        <label>Zeit Studienführer</label>
+        <label>ZEIT Studienführer</label>
     </product>
 
     <product id="KINZ">
@@ -94,17 +105,11 @@
         <datetype_id>ddMMyyyy</datetype_id>
         <encoding>ISO-8859-1</encoding>
 
-        <!-- <con_url>145.243.189.1</con_url>
+        <con_url>145.243.189.1</con_url>
         <login>IP_von_Zeit</login>
         <pass>!7832jkd-</pass>
         <suffix>xml</suffix>
-        <destdir>[product_id]/_ARTIKEL_</destdir>-->
-
-        <con_url>eden1.netclusive.de</con_url>
-        <login>ncd249</login>
-        <pass>dKdlr-SaA</pass>
-        <suffix>xml</suffix>
-        <destdir>html/[product_id]/_ARTIKEL_</destdir>
+        <destdir>[product_id]/_ARTIKEL_</destdir>
 
         <allowed>ZEI</allowed>        
         <allowed>ZMLB</allowed>
@@ -115,7 +120,7 @@
         <allowed>ZSF</allowed>
         <allowed>ZECH</allowed>
         <allowed>ZEOE</allowed>
-        
+        <allowed>ZESA</allowed>
 
     </receiver>
      <receiver id="guj">
@@ -125,7 +130,7 @@
  
          
         <name>Gruner und Jahr</name>         
-        <description>erhält keine Magazine</description>
+        <description>erhält nur Die Zeit (alle Seiten) und das Magazin</description>
         <checked>true</checked>
         <subfolder>false</subfolder>
 
@@ -139,7 +144,7 @@
         <pass>URET5ggKaD</pass>
         <suffix>xml</suffix>
 
-        <allowed>ZEI</allowed>        
+        <allowed>ZEISACHOE</allowed>        
         <allowed>ZMLB</allowed>
 
 
