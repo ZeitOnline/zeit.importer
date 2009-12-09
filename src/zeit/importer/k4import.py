@@ -97,7 +97,7 @@ def moveExportToArchive(input_dir):
         for f in [os.path.normpath('%s/%s' % (K4_EXPORT_DIR, f)) for f in os.listdir(K4_EXPORT_DIR)]:
             if os.path.isfile(f):
                 os.remove(f)
-        logger.info("Input dir %s cleaned...." % archive_path)
+        logger.info("Input dir %s cleaned...." % input_dir)
   
 
 def run_dir(connector, input_dir, product_id_in):
