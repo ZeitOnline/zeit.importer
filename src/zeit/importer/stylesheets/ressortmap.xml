@@ -130,11 +130,21 @@
         <online_ressort>Sport</online_ressort>
         <online_sub_ressort>Fussball</online_sub_ressort>
 	</mapping>
+    <mapping id="Geschichte">
+        <print_ressort>Geschichte</print_ressort>
+        <online_ressort>Wissen</online_ressort>
+        <online_sub_ressort>Geschichte</online_sub_ressort>
+    </mapping>
 	<mapping id="Gesundheit">
 		<print_ressort>Gesundheit</print_ressort>
 		<online_ressort>Wissen</online_ressort>
 		<online_sub_ressort>Gesundheit</online_sub_ressort>
 	</mapping>
+    <mapping id="Glauben und Zweifeln">
+        <print_ressort>Glauben und Zweifeln</print_ressort>
+        <online_ressort>Gesellschaft</online_ressort>
+        <online_sub_ressort />
+    </mapping>
 	<mapping id="Hochschule">
 		<print_ressort>Hochschule</print_ressort>
 		<online_ressort>Studium</online_ressort>
