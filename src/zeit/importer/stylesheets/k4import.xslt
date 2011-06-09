@@ -17,6 +17,11 @@
 	<xsl:template match="HEADER">
 		<head>
             <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="status">import</attribute>
+            <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="ipad_template"><xsl:value-of select="substring-after(//iPad/@value,'_')" /></attribute>
+            <attribute ns="http://namespaces.zeit.de/CMS/print" name="article_id">
+	 	<xsl:value-of select="id/@value" />
+	    </attribute>
+
             <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="importsource">k4</attribute>
             <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="published">no</attribute><!-- noch zu klaren -->
             <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="last-modified-by">import</attribute>
@@ -88,6 +93,9 @@
 
 	<xsl:template match="HEADER/name">
 		<attribute ns="http://namespaces.zeit.de/CMS/document" name="jobname">
+			<xsl:value-of select="@value"/>
+		</attribute>
+		<attribute ns="http://namespaces.zeit.de/CMS/document" name="origname">
 			<xsl:value-of select="@value"/>
 		</attribute>
 	</xsl:template>
