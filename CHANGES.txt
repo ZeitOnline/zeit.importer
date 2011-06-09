@@ -1,0 +1,8 @@
+zeit.importer changes
+=================
+
+0.1 (unreleased)
+----------------
+
+- works with k4export-XML and transforms and puts it into webdavlocation of
+  choice
