@@ -1,7 +1,7 @@
 zeit.importer changes
 =================
 
-0.1 (unreleased)
+0.1 (2011-07-12)
 ----------------
 
 - works with k4export-XML and transforms and puts it into webdavlocation of
