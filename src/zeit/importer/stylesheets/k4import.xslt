@@ -147,7 +147,7 @@
             <xsl:apply-templates select="p" mode="subtitle"/>
             <xsl:apply-templates select="p" mode="blocker"/>
             <xsl:apply-templates select="p" mode="bu"/>
-            <xsl:apply-templates/>
+            <xsl:apply-templates />
             <xsl:apply-templates select="p" mode="bib-title"/>
             <xsl:apply-templates select="p" mode="bib-info"/>
         </body>
@@ -218,6 +218,11 @@
 					<xsl:apply-templates/>
 				</intertitle>
 			</xsl:when>
+            <xsl:when test="contains(@pstyle,'Bildnachweis')">
+                <image-credits>
+                    <xsl:apply-templates />
+                </image-credits>
+            </xsl:when>
 			<xsl:when test="contains(@pstyle,'BU') or contains(@pstyle,'Blocker')"/>
 			<xsl:when test="contains(@pstyle, 'Dachzeile')" />
 			<xsl:when test="contains(@pstyle, 'Bibliografie+Kleintexte fett')" />
@@ -227,8 +232,8 @@
 			</xsl:when>
 			<xsl:otherwise>
 				<p>
-                                    <xsl:apply-templates/>
-                                </p>
+                         <xsl:apply-templates/>
+                </p>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
