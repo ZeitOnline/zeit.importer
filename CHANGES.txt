@@ -1,6 +1,12 @@
 zeit.importer changes
 =================
 
+0.2 (unreleased)
+----------------
+
+- Nothing changed yet.
+
+
 0.1 (2011-07-12)
 ----------------
 
