@@ -18,9 +18,7 @@
 		<head>
             <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="status">import</attribute>
             <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="ipad_template"><xsl:value-of select="substring-after(//iPad/@value,'_')" /></attribute>
-            <attribute ns="http://namespaces.zeit.de/CMS/print" name="article_id">
-	 	<xsl:value-of select="id/@value" />
-	    </attribute>
+            <attribute ns="http://namespaces.zeit.de/CMS/print" name="article_id"><xsl:value-of select="id/@value" /></attribute>
 
             <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="importsource">k4</attribute>
             <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="published">no</attribute><!-- noch zu klaren -->
@@ -30,8 +28,11 @@
 			<attribute ns="http://namespaces.zeit.de/CMS/document" name="type">article</attribute>
             <attribute ns="http://namespaces.zeit.de/CMS/document" name="comments">yes</attribute>
             <attribute ns="http://namespaces.zeit.de/CMS/document" name="paragraphsperpage">7</attribute>
-			<!--attribute ns="http://namespaces.zeit.de/CMS/workflow" name="revision">42</attribute-->
-			<xsl:apply-templates/>
+            <attribute ns="http://namespaces.zeit.de/CMS/document" name="show_commentthread">yes</attribute>
+            <attribute ns="http://namespaces.zeit.de/CMS/document" name="in_rankings">yes</attribute>
+
+            <xsl:apply-templates/>
+
             <xsl:apply-templates mode="ressort"/>
 		</head>
 	</xsl:template>

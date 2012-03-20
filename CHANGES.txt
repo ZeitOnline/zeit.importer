@@ -4,7 +4,7 @@ zeit.importer changes
 0.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- change default values for some attributes
 
 
 0.1 (2011-07-12)
