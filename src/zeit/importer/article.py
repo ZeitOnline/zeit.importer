@@ -4,8 +4,9 @@ import re
 from lxml import etree
 from zeit.importer import PRINT_NS, DOC_NS, WORKFLOW_NS
 
-K4_STYLESHEET = os.path.dirname(__file__)+'/stylesheets/k4import.xslt'
-p_pattern = re.compile('<p>([a-z0-9])</p>\s*<p>', re.M|re.I) # <p>V</p>
+K4_STYLESHEET = os.path.dirname(__file__) + '/stylesheets/k4import.xslt'
+p_pattern = re.compile('<p>([a-z0-9])</p>\s*<p>', re.M | re.I)  # <p>V</p>
+
 
 def sanitizeDoc(xml):
     '''
@@ -14,13 +15,14 @@ def sanitizeDoc(xml):
     xml = p_pattern.sub('<p>\\1', xml)
     return xml
 
+
 def indent(elem, level=0):
-    i = "\n" + level*"  "
+    i = "\n" + level * "  "
     if len(elem):
         if not elem.text or not elem.text.strip():
             elem.text = i + "  "
         for e in elem:
-            indent(e, level+1)
+            indent(e, level + 1)
             if not e.tail or not e.tail.strip():
                 e.tail = i + "  "
         if not e.tail or not e.tail.strip():
@@ -29,7 +31,8 @@ def indent(elem, level=0):
         if level and (not elem.tail or not elem.tail.strip()):
             elem.tail = i
 
-def transform_k4(k4xml_path):    
+
+def transform_k4(k4xml_path):
     '''
         transforms k4xml to zeit article format
     '''
@@ -42,7 +45,7 @@ def transform_k4(k4xml_path):
     doc = etree.parse(k4xml_path)
     result = transform(doc)
 
-    return  result
+    return result
 
 
 class TransformedArticle(object):
@@ -58,7 +61,7 @@ class TransformedArticle(object):
         '''
             extract metadata from /head/attributes/attribute
         '''
-        metas = self.doc.xpath('//head/attribute')  
+        metas = self.doc.xpath('//head/attribute')
 
         props = []
         if metas:
@@ -66,7 +69,7 @@ class TransformedArticle(object):
                 ns = m.get('ns')
                 name = m.get('name')
                 value = m.text if m.text is not None else ''
-                props.append((ns,name,value))
+                props.append((ns, name, value))
 
         return props
 
@@ -75,17 +78,18 @@ class TransformedArticle(object):
         extract single metadata value from dict
         """
         try:
-            return [m[2] for m in self.metadata if m[0] == ns and m[1] == name][0]
+            return [m[2] for m in self.metadata
+                    if m[0] == ns and m[1] == name][0]
         except:
             return None
 
     def get_product_id(self, product_id_in, filename):
         '''
-            detects product id of the document. 
+            detects product id of the document.
             by file-pattern matching or by doc-attribute
         '''
         if product_id_in is None:
-            if filename.startswith('CH-') or filename.startswith('CH_'):    
+            if filename.startswith('CH-') or filename.startswith('CH_'):
                 self.product_id = 'ZECH'
             elif filename.startswith('A-') or filename.startswith('A_'):
                 self.product_id = 'ZEOE'
@@ -94,14 +98,17 @@ class TransformedArticle(object):
             else:
                 # no product_id was given as command line argument
                 # get publciation-id for print_ressort
-                publication_id = self.getAttributeValue(PRINT_NS,'publication-id')
+                publication_id = self.getAttributeValue(
+                    PRINT_NS, 'publication-id')
                 if not publication_id:
                     raise "PublicationId not found '%s'" % (filename)
 
                 # detect the Produktid
-                self.product_id = self.ipool.product_map.get(publication_id)                
+                self.product_id = self.ipool.product_map.get(publication_id)
                 if not self.product_id:
-                    self.logger.error('PublicationId %s >>>>> kein Produktmapping moeglich.' % str(publication_id))
+                    self.logger.error(
+                        'PublicationId %s >>>>> kein Produktmapping moeglich.',
+                        str(publication_id))
         else:
             self.product_id = product_id_in
         return self.product_id
@@ -112,11 +119,16 @@ class TransformedArticle(object):
         '''
         head = self.doc.xpath('//article/head')[0]
         attributes = [
-            '<attribute ns="%s" name="id">%s-%s-%s-%s</attribute>' % (WORKFLOW_NS, product_id, year, volume, cname),
-            '<attribute ns="%s" name="running-volume">%s-%s-%s</attribute>' % (WORKFLOW_NS, product_id, year, volume),
-            '<attribute ns="%s" name="product-id">%s</attribute>' % (WORKFLOW_NS, product_id),
-            '<attribute ns="%s" name="product-name">%s</attribute>' % (WORKFLOW_NS, self.ipool.products.get(product_id,'')),
-            '<attribute ns="%s" name="export_cds">%s</attribute>' % (DOC_NS,'no')
+            '<attribute ns="%s" name="id">%s-%s-%s-%s</attribute>' % (
+                WORKFLOW_NS, product_id, year, volume, cname),
+            '<attribute ns="%s" name="running-volume">%s-%s-%s</attribute>' % (
+                WORKFLOW_NS, product_id, year, volume),
+            '<attribute ns="%s" name="product-id">%s</attribute>' % (
+                WORKFLOW_NS, product_id),
+            '<attribute ns="%s" name="product-name">%s</attribute>' % (
+                WORKFLOW_NS, self.ipool.products.get(product_id, '')),
+            '<attribute ns="%s" name="export_cds">%s</attribute>' % (
+                DOC_NS, 'no')
         ]
         for attr in attributes:
             head.append(etree.fromstring(attr))
@@ -146,7 +158,7 @@ class TransformedArticle(object):
         """
         indent(self.doc.getroot())
         xml = etree.tostring(self.doc, encoding="utf-8", xml_declaration=True)
-        xml = sanitizeDoc(xml) #<p>V</p> etc
+        xml = sanitizeDoc(xml)  # <p>V</p> etc
         return xml
 
 
@@ -154,12 +166,14 @@ class ArticleExtras(object):
     def __init__(self, file_path):
         self.directory = os.path.dirname(file_path)
         self.file_article = os.path.basename(file_path)
-        self.file_title = os.path.join(self.directory, 'titel-'+self.file_article)
-        self.file_box = os.path.join(self.directory, 'kasten-'+self.file_article)
-        
+        self.file_title = os.path.join(
+            self.directory, 'titel-' + self.file_article)
+        self.file_box = os.path.join(
+            self.directory, 'kasten-' + self.file_article)
+
         # results in here
         self.title_elems = self.get_additional_elements(self.file_title)
-        self.box_elems =  self.get_additional_elements(self.file_box)
+        self.box_elems = self.get_additional_elements(self.file_box)
 
     def get_additional_elements(self, file_path):
         result = []
