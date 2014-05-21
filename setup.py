@@ -20,7 +20,7 @@ setup(
         'pytz',
         ],
     entry_points = """
-        [console_scripts]  
+        [console_scripts]
         k4import = zeit.importer.k4import:main
         """
 )
