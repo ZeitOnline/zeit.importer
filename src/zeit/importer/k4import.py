@@ -15,13 +15,14 @@ import sys
 
 logger = logging.getLogger(__name__)
 
+# XXX: Could be refactores to something smarter than globals
 CONNECTOR_URL = 'http://zip6.zeit.de:9000/cms/'
 CMS_ROOT='http://xml.zeit.de/'
-IMPORT_ROOT = CMS_ROOT + 'archiv-wf/archiv/'
-IMPORT_ROOT_IN = CMS_ROOT + 'archiv-wf/archiv-in/'
+IMPORT_ROOT = 'http://xml.zeit.de/archiv-wf/archiv/'
+IMPORT_ROOT_IN = 'http://xml.zeit.de/archiv-wf/archiv-in/'
 K4_EXPORT_DIR = '/var/cms/import/k4incoming/'
 K4_ARCHIVE_DIR = '/var/cms/import/old/'
-IPOOL_CONF = CMS_ROOT + 'forms/importexport.xml'
+IPOOL_CONF = 'http://xml.zeit.de/forms/importexport.xml'
 
 extrafile_pattern = re.compile('^(kasten|titel)-', re.I)
 
@@ -245,7 +246,11 @@ def getConnector(dev=None):
     return connector
 
 
-def main():
+def main(**kwargs):
+    # XXX Refactor and do  not rely on globals here
+    for name, value in kwargs.items():
+        globals()[name] = value
+
     usage = "usage: %prog [options] arg"
     parser = OptionParser(usage)
     parser.add_option("-i", "--indir", dest="input_dir",
@@ -262,6 +267,9 @@ def main():
     if not options.input_dir:
         options.input_dir = K4_EXPORT_DIR
         logger.info('using default indir %s' % options.input_dir)
+
+    if 'LOGFILE' in globals():
+        add_file_logging(logger, globals()['LOGFILE'])
 
     if options.logfile:
         add_file_logging(logger, options.logfile)
