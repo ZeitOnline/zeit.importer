@@ -45,6 +45,12 @@
 		</attribute>
 	</xsl:template>
 
+    <xsl:template match="Frames">
+        <xsl:copy-of select="." />
+    </xsl:template>
+    
+    <xsl:template match="Frames" mode="ressort" />
+
 	<xsl:template match="HEADER/Ressort" mode="ressort">
 
 		<xsl:variable name="ressort">
