@@ -4,7 +4,9 @@ zeit.importer changes
 0.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Add processing of <Frames> from input XML
+- Make k4import configurable from deployment
+- repair tests
 
 
 0.1 (2011-07-12)
