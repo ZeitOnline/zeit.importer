@@ -230,7 +230,7 @@ def run_dir(connector, input_dir, product_id_in):
 def getConnector(dev=None):
     if dev:
         import zeit.connector.mock
-        connector = zeit.connector.mock.Connector()
+        connector = zeit.connector.mock.Connector('http://xml.zeit.de/')
         # add mock config
         conf_id = 'http://xml.zeit.de/forms/importexport.xml'
         conf_file = open(os.path.dirname(__file__)

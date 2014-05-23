@@ -1,7 +1,7 @@
 At first, we need a connector for our beloved importer.
 
 >>> import zeit.connector.mock
->>> connector = zeit.connector.mock.Connector()
+>>> connector = zeit.connector.mock.Connector('http://xml.zeit.de/')
 >>> connector
 <zeit.connector.mock.Connector object at 0x...>
 

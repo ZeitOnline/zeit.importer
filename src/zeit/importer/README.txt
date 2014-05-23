@@ -111,6 +111,8 @@ Add additional attributes to head/attributes
 <article>
   <head>
     <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="status">import</attribute>
+    <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="ipad_template"/>
+    <attribute ns="http://namespaces.zeit.de/CMS/print" name="article_id">254475</attribute>
     <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="importsource">k4</attribute>
     ...
     <attribute ns="http://namespaces.zeit.de/CMS/document" name="erscheint">24.09.2009</attribute>
@@ -131,7 +133,7 @@ Lookup for articel extra files. "titel" and "kasten"
 >>> from zeit.importer.article import ArticleExtras
 >>> extras = ArticleExtras(os.path.dirname(__file__)+'/testdocs/Begleitschutz.xml')
 >>> print [e.tag for e in extras.title_elems]
-['title', 'subtitle', 'p']
+['title', 'subtitle', 'image-credits']
 >>> print extras.box_elems
 []
 
@@ -140,7 +142,7 @@ Add title to main doc
 >>> main_doc = TransformedArticle(new_doc, ipool)
 >>> main_doc.addTitleToDoc(extras.title_elems)
 >>> main_doc.doc.xpath('//body')[0].getchildren()[0:4]
-[<Element title at ...>, <Element subtitle at ...>, <Element p at ...>, <Element caption at ...>]
+[<Element title at ...>, <Element subtitle at ...>, <Element image-credits at ...>, <Element caption at ...>]
 
 >>> extras = ArticleExtras(os.path.dirname(__file__)+'/testdocs/P-Weber.xml')
 >>> print [e.tag for e in extras.box_elems]
@@ -153,5 +155,4 @@ Add box to main doc
 >>> main_doc = TransformedArticle(new_doc, ipool)
 >>> main_doc.addBoxToDoc(extras.box_elems)
 >>> main_doc.doc.xpath('//body')[0].getchildren()[-4:]
-[<Element p at ...>, <Element title at ...>, <Element p at ...>, <Element p at ...>]
-
+[<Element image-credits at ...>, <Element title at ...>, <Element p at ...>, <Element p at ...>]
