@@ -4,7 +4,8 @@ zeit.importer changes
 0.3 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Don't write publish timestamp into date_first_released, since that's
+  semantically untrue (WEB-302).
 
 
 0.2 (2014-05-23)

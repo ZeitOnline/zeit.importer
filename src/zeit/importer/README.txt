@@ -116,7 +116,6 @@ Add additional attributes to head/attributes
     <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="importsource">k4</attribute>
     ...
     <attribute ns="http://namespaces.zeit.de/CMS/document" name="erscheint">24.09.2009</attribute>
-    <attribute ns="http://namespaces.zeit.de/CMS/document" name="date_first_released">2009-09-24T06:00:00+00:00</attribute>
     <attribute ns="http://namespaces.zeit.de/CMS/document" name="copyrights">DIE ZEIT, 24.09.2009 Nr. 40</attribute>
     <attribute ns="http://namespaces.zeit.de/CMS/document" name="page">55-55</attribute>
     <attribute ns="http://namespaces.zeit.de/CMS/document" name="ressort">Kultur</attribute>
