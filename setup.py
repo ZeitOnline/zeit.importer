@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='zeit.importer',
-    version='0.3.dev0',
+    version='0.2.1',
     author='Martin Borho',
     author_email='martin@borho.net',
     url='http://trac.gocept.com/zeit',
