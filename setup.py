@@ -9,18 +9,18 @@ setup(
     description="""\
 """,
     packages=find_packages('src'),
-    package_dir = {'': 'src'},
-    include_package_data = True,
+    package_dir={'': 'src'},
+    include_package_data=True,
     zip_safe=False,
     license='gocept proprietary',
-    namespace_packages = ['zeit'],
+    namespace_packages=['zeit'],
     install_requires=[
         'zeit.connector',
         'setuptools',
         'pytz',
-        ],
-    entry_points = """
+    ],
+    entry_points="""
         [console_scripts]
-        k4import = zeit.importer.k4import:main
+        k4import=zeit.importer.k4import:main
         """
 )

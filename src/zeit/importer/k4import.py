@@ -28,11 +28,11 @@ extrafile_pattern = re.compile('^(kasten|titel)-', re.I)
 
 
 def mangleQPSName(qps_name):
-    #- [ ] ersetzt werden ä,ö,ü,ß in ae,oe,ue,ss
-    #- [ ] ersetzt wird _ . : ; # + * / in -
-    #- [ ] doppelte sonderzeichen entfernen
-    #- [ ] der rest per regexp- alphabet
-    #qps_name = qps_name.lower()
+    # - [ ] ersetzt werden ä,ö,ü,ß in ae,oe,ue,ss
+    # - [ ] ersetzt wird _ . : ; # + * / in -
+    # - [ ] doppelte sonderzeichen entfernen
+    # - [ ] der rest per regexp- alphabet
+    # qps_name = qps_name.lower()
     qps_name = qps_name.encode('utf-8')
     qps_name = qps_name.replace("ƒ", "Ae")  # Ä
     qps_name = qps_name.replace("‹", "Ue")  # Ü
@@ -46,7 +46,7 @@ def mangleQPSName(qps_name):
     qps_name = qps_name.strip('_- ')
     cname = re.compile('[\ \_.:;#+*/\']').sub('-', qps_name)
     cname = re.compile('[^A-Za-z0-9\-]').sub('', cname)
-    #cname = mangleName(urllib.unquote_plus(cname))
+    # cname = mangleName(urllib.unquote_plus(cname))
     cname = re.compile('-+').sub('-', cname)
     return cname
 
@@ -122,12 +122,12 @@ def run_dir(connector, input_dir, product_id_in):
     for (k4_filename, k4_filepath) in [
             (f, os.path.join(input_dir, f)) for f in k4_files]:
         try:
-            ## skip dirs
+            # skip dirs
             if (os.path.isdir(k4_filepath)):
                 continue
 
-            #if extrafile_pattern.match(k4_filename):
-                    #logger.info('**** EXCLUDE %s ****\n' % k4_filename)
+            # if extrafile_pattern.match(k4_filename):
+            #   logger.info('**** EXCLUDE %s ****\n' % k4_filename)
 
             logger.info('**** STARTING %s ****' % k4_filename)
             new_doc = transform_k4(k4_filepath)
