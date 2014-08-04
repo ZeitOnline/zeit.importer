@@ -133,6 +133,12 @@
 			</xsl:call-template>
 		</attribute>
 
+                <attribute ns="http://namespaces.zeit.de/CMS/document" name="date_first_released">
+                        <xsl:call-template name="convert_date_iso">
+                                <xsl:with-param name="in" select="@value"/>
+                        </xsl:call-template>
+                </attribute>
+
 		<attribute ns="http://namespaces.zeit.de/CMS/document" name="copyrights">DIE ZEIT, <xsl:call-template name="convert_date">
 				<xsl:with-param name="in" select="@value"/>
 			</xsl:call-template> Nr. <xsl:value-of select="substring-before(/EXPORT/HEADER/Ausgabe/@value,'/')"/>

@@ -4,7 +4,7 @@ zeit.importer changes
 0.2.2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Restore date_first_released that was wrongly removed in 0.2.1.
 
 
 0.2.1 (2014-07-17)
