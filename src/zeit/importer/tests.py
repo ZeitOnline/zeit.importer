@@ -7,6 +7,6 @@ def test_suite():
     suite.addTest(doctest.DocFileSuite(
         'README.txt',
         'ipoolconfig.txt',
-        optionflags=doctest.ELLIPSIS
+        optionflags=doctest.ELLIPSIS + doctest.REPORT_NDIFF,
     ))
     return suite
