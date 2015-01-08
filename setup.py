@@ -1,18 +1,18 @@
 from setuptools import setup, find_packages
 
+
 setup(
     name='zeit.importer',
     version='0.2.4.dev0',
-    author='Martin Borho',
-    author_email='martin@borho.net',
-    url='http://trac.gocept.com/zeit',
-    description="""\
-""",
+    author='Martin Borho, gocept, Zeit Online',
+    author_email='zon-backend@zeit.de',
+    url='http://www.zeit.de/',
+    description=" Convert print XML to vivi format (Phase 1/2)",
     packages=find_packages('src'),
     package_dir={'': 'src'},
     include_package_data=True,
     zip_safe=False,
-    license='gocept proprietary',
+    license='BSD',
     namespace_packages=['zeit'],
     install_requires=[
         'zeit.connector',
