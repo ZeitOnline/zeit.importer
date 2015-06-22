@@ -75,19 +75,6 @@
                 <attribute ns="http://namespaces.zeit.de/CMS/print" name="ressort">
                     <xsl:value-of select="$map-doc/print_ressort"/>
                 </attribute>
-
-                <xsl:choose>
-                  <xsl:when test="$map-doc/online_sub_ressort != ''">
-                    <attribute ns="http://namespaces.zeit.de/CMS/document" name="channels">
-                        <xsl:value-of select="concat($map-doc/online_ressort, ' ', $map-doc/online_sub_ressort)"/>
-                    </attribute>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <attribute ns="http://namespaces.zeit.de/CMS/document" name="channels">
-                        <xsl:value-of select="$map-doc/online_ressort"/>
-                    </attribute>
-                  </xsl:otherwise>
-                </xsl:choose>
             </xsl:when>
             <xsl:otherwise>
                 <attribute ns="http://namespaces.zeit.de/CMS/print" name="ressort"><xsl:value-of select="$ressort" /></attribute>
