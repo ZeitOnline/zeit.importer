@@ -1,7 +1,7 @@
 zeit.importer changes
 =================
 
-0.2.4 (unreleased)
+0.2.4 (2015-06-23)
 ------------------
 
 - Revert setting ``channels`` (DEV-768).
