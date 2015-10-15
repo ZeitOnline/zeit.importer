@@ -7,6 +7,7 @@ class IPoolConfig(object):
         self.products = {}
         self.product_map = {}
         self.ressource = ressource
+        self.ressort_map = {}
         self.parse_config()
 
     def parse_config(self):
@@ -20,3 +21,6 @@ class IPoolConfig(object):
                 if k4_id:
                     self.products[id] = label
                     self.product_map[k4_id] = id
+
+                for ressort in p.xpath('ressort'):
+                    self.ressort_map[(k4_id, ressort.get('name'))] = ressort.get('id')
