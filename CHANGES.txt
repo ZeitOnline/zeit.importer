@@ -1,10 +1,10 @@
 zeit.importer changes
 =================
 
-0.2.5 (2015-10-20)
+0.2.5 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- ressorts can be configured as product ids
 
 
 0.2.4 (2015-06-23)
