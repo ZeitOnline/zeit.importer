@@ -1,7 +1,7 @@
 zeit.importer changes
 =================
 
-0.2.5 (unreleased)
+0.2.5 (2015-10-20)
 ------------------
 
 - Nothing changed yet.
