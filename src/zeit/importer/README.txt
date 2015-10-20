@@ -121,7 +121,6 @@ Add additional attributes to head/attributes
     <attribute ns="http://namespaces.zeit.de/CMS/document" name="page">55-55</attribute>
     <attribute ns="http://namespaces.zeit.de/CMS/document" name="ressort">Kultur</attribute>
     <attribute ns="http://namespaces.zeit.de/CMS/print" name="ressort">Feuilleton</attribute>
-    <attribute ns="http://namespaces.zeit.de/CMS/document" name="channels">Kultur</attribute>
     <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="id">ZEI-2009-40-Spaete-Flucht-89</attribute>
     <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="running-volume">ZEI-2009-40</attribute>
     <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="product-id">ZEI</attribute>
