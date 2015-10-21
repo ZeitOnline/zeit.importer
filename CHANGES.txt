@@ -1,10 +1,10 @@
 zeit.importer changes
 =================
 
-0.2.6 (unreleased)
+0.2.6 (2015-10-21)
 ------------------
 
-- Nothing changed yet.
+- HOTFIX: typo
 
 
 0.2.5 (2015-10-20)
