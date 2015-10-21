@@ -83,7 +83,7 @@ class TransformedArticle(object):
         except:
             return None
 
-    def get_product_id_by_ressort(self, publication_id, ressort):
+    def get_publication_id_by_ressort(self, publication_id, ressort):
         if not ressort:
             return publication_id
 
