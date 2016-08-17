@@ -40,6 +40,14 @@ We need the settings for infopool
 >>> from zeit.importer.ipoolconfig import IPoolConfig
 >>> ipool = IPoolConfig( connector['http://xml.zeit.de/forms/importexport.xml'])
 
+Check it:
+
+>>> ipool.product_map['1153836019']
+'ZTCS'
+>>> ipool.products['ZMLB']
+'ZEIT Magazin'
+
+
 now with the infopool data and the new doc, we will treat them right
 
 >>> from zeit.importer.article import TransformedArticle
