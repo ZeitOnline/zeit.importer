@@ -1,4 +1,4 @@
-from zeit.importer import PRINT_NS, DOC_NS, WORKFLOW_NS
+from zeit.importer.interfaces import PRINT_NS, DOC_NS, WORKFLOW_NS
 import lxml.etree
 import logging
 import os.path

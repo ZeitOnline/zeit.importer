@@ -1,7 +1,7 @@
 # coding: utf-8
 from zeit.connector.resource import Resource
-from zeit.importer import DOC_NS, PRINT_NS
 from zeit.importer.article import TransformedArticle, transform_k4
+from zeit.importer.interfaces import DOC_NS, PRINT_NS
 import ConfigParser
 import StringIO
 import datetime
