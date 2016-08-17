@@ -71,7 +71,7 @@ def prepareColl(connector, product_id, year, volume, print_ressort):
                 col = Resource(coll_path, coll_name, 'collection',
                                StringIO.StringIO(''))
                 connector.add(col)
-                log.info("collection %s created" % coll_path)
+                log.debug('Created collection %s', coll_path)
 
 
 def moveExportToArchive(input_dir):
@@ -91,15 +91,15 @@ def moveExportToArchive(input_dir):
                 break
 
     shutil.copytree(input_dir, archive_path)
-    log.info("Input articles copied to  %s ..." % archive_path)
+    log.info('Copied input articles from %s to %s', input_dir, archive_path)
 
     if input_dir == K4_EXPORT_DIR:
+        log.info('Cleaning input directory %s', input_dir)
         # when standard input dir, do some cleanup in that dir
         for f in [os.path.normpath('%s/%s' % (K4_EXPORT_DIR, f))
                   for f in os.listdir(K4_EXPORT_DIR)]:
             if os.path.isfile(f):
                 os.remove(f)
-        log.info("Input dir %s cleaned...." % input_dir)
 
 
 def run_dir(connector, input_dir, product_id_in):
@@ -129,7 +129,7 @@ def run_dir(connector, input_dir, product_id_in):
             # if extrafile_pattern.match(k4_filename):
             #   log.info('**** EXCLUDE %s ****\n' % k4_filename)
 
-            log.info('**** STARTING %s ****' % k4_filename)
+            log.info('Importing %s', k4_filename)
             new_doc = transform_k4(k4_filepath)
 
             # here we have a new document to work with
@@ -140,7 +140,7 @@ def run_dir(connector, input_dir, product_id_in):
             if not jobname:
                 raise Exception("Original name not found '%s'" % k4_filepath)
 
-            log.info('k4name ' + jobname)
+            log.debug('k4name %s', jobname)
 
             # hier neue cname generierung ff
             cname = jobname
@@ -165,7 +165,7 @@ def run_dir(connector, input_dir, product_id_in):
                 ('http://namespaces.zeit.de/CMS/document', 'export_cds', 'no'))
 
             # create the new resource
-            log.info('urlified ' + cname)
+            log.debug('urlified %s', cname)
 
             # get infos for archive paths
             year = doc.getAttributeValue(DOC_NS, 'year')
@@ -173,7 +173,7 @@ def run_dir(connector, input_dir, product_id_in):
             print_ressort = doc.getAttributeValue(PRINT_NS, 'ressort')
 
             product_id = doc.get_product_id(product_id_in, k4_filename)
-            log.info("ProductId: " + product_id)
+            log.debug('product_id %s ', product_id)
 
             cms_paths = []
             if year and volume and print_ressort:
@@ -182,7 +182,7 @@ def run_dir(connector, input_dir, product_id_in):
                     product_id, year, volume, print_ressort, cname))
                 cms_paths.append(IMPORT_ROOT_IN + '%s/%s/%s/%s/%s' % (
                     product_id, year, volume, print_ressort, cname))
-                log.info(
+                log.debug(
                     '%s, %s, %s, %s', product_id, year, volume, print_ressort)
                 prepareColl(connector, product_id, year, volume, print_ressort)
             else:
@@ -193,8 +193,8 @@ def run_dir(connector, input_dir, product_id_in):
             # get the new doc as XML String
             new_xml = doc.to_string()
 
-            log.info("SPEICHERN ins CMS ...")
             for cms_id in cms_paths:
+                log.info('Storing in CMS as %s/%s', cms_id, cname)
                 check_resource = None
                 try:
                     check_resource = connector[cms_id]
@@ -213,9 +213,8 @@ def run_dir(connector, input_dir, product_id_in):
                         prop_val = re.sub(r'\&', ' + ', prop[2])
                         res.properties[(prop[1], prop[0])] = (prop_val)
                     connector.add(res)
-                    log.info("GESPEICHERT: %s" % (cms_id,))
             count = count + 1
-            log.info("IMPORT Dokument \"%s\" fertig\n" % (cname))
+            log.info('Done importing %s', cname)
 
         except Exception:
             log.error('Error', exc_info=True)
@@ -224,7 +223,7 @@ def run_dir(connector, input_dir, product_id_in):
     if count > 0:
         moveExportToArchive(input_dir)  # moves xml files to local archive
     else:
-        log.info('No documents to import found "%s" !' % input_dir)
+        log.warning('No documents to import found in %s', input_dir)
 
 
 def getConnector(dev=None):
@@ -275,7 +274,7 @@ def main(**kwargs):
         add_file_logging(log, options.logfile)
 
     try:
-        log.info("Import: " + options.input_dir + " to: " + IMPORT_ROOT)
+        log.info('Start import of %s to %s', options.input_dir, IMPORT_ROOT)
         connector = getConnector(options.dev)
         run_dir(connector, options.input_dir, options.product_id)
     except Exception:

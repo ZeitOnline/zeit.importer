@@ -118,9 +118,8 @@ class TransformedArticle(object):
                 # detect the Produktid
                 self.product_id = self.ipool.product_map.get(publication_id)
                 if not self.product_id:
-                    self.logger.error(
-                        'PublicationId %s >>>>> kein Produktmapping moeglich.',
-                        str(publication_id))
+                    self.logger.warning(
+                        'PublicationId %s cannot be mapped.', publication_id)
         else:
             self.product_id = product_id_in
         return self.product_id
