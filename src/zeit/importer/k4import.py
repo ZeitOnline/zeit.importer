@@ -24,15 +24,8 @@ K4_EXPORT_DIR = '/var/cms/import/k4incoming/'
 K4_ARCHIVE_DIR = '/var/cms/import/old/'
 IPOOL_CONF = 'http://xml.zeit.de/forms/importexport.xml'
 
-extrafile_pattern = re.compile('^(kasten|titel)-', re.I)
-
 
 def mangleQPSName(qps_name):
-    # - [ ] ersetzt werden ä,ö,ü,ß in ae,oe,ue,ss
-    # - [ ] ersetzt wird _ . : ; # + * / in -
-    # - [ ] doppelte sonderzeichen entfernen
-    # - [ ] der rest per regexp- alphabet
-    # qps_name = qps_name.lower()
     qps_name = qps_name.encode('utf-8')
     qps_name = qps_name.replace("ƒ", "Ae")  # Ä
     qps_name = qps_name.replace("‹", "Ue")  # Ü
@@ -46,15 +39,12 @@ def mangleQPSName(qps_name):
     qps_name = qps_name.strip('_- ')
     cname = re.compile('[\ \_.:;#+*/\']').sub('-', qps_name)
     cname = re.compile('[^A-Za-z0-9\-]').sub('', cname)
-    # cname = mangleName(urllib.unquote_plus(cname))
     cname = re.compile('-+').sub('-', cname)
     return cname
 
 
 def prepareColl(connector, product_id, year, volume, print_ressort):
-    '''
-        if target collection does not exist, it will be created
-    '''
+    """If the target collection does not exist, it will be created."""
     for d in [IMPORT_ROOT, IMPORT_ROOT_IN]:
         coll_path = d
         parts = [product_id, year, volume, print_ressort]
@@ -74,10 +64,7 @@ def prepareColl(connector, product_id, year, volume, print_ressort):
                 log.debug('Created collection %s', coll_path)
 
 
-def moveExportToArchive(input_dir):
-    '''
-        copies files to local archive
-    '''
+def copyExportToArchive(input_dir):
     today = datetime.datetime.today()
     archive_path = os.path.normpath('%s/%s/%s' % (
         K4_ARCHIVE_DIR, today.strftime("%Y"), today.strftime("%m-%d-%a")))
@@ -122,38 +109,25 @@ def run_dir(connector, input_dir, product_id_in):
     for (k4_filename, k4_filepath) in [
             (f, os.path.join(input_dir, f)) for f in k4_files]:
         try:
-            # skip dirs
             if (os.path.isdir(k4_filepath)):
                 continue
 
-            # if extrafile_pattern.match(k4_filename):
-            #   log.info('**** EXCLUDE %s ****\n' % k4_filename)
-
             log.info('Importing %s', k4_filename)
             new_doc = transform_k4(k4_filepath)
-
-            # here we have a new document to work with
             doc = TransformedArticle(new_doc, ipool, log)
 
-            # get original name
             jobname = doc.getAttributeValue(DOC_NS, 'jobname')
             if not jobname:
                 raise Exception("Original name not found '%s'" % k4_filepath)
-
             log.debug('k4name %s', jobname)
 
-            # hier neue cname generierung ff
             cname = jobname
-            # strip .xml-suffix:
             if cname.endswith('.xml'):
                 cname = cname[:-4]
-
             cname = mangleQPSName(cname)
-            # print "current: " + cmslocation + cname
             if cname[0] == '_':
                 cname = cname[1:]
-
-            # no duplicate filenames
+            # Deduplicate filenames
             if cname in cnames:
                 cname = cname + str(count)
             cnames.append(cname)
@@ -188,9 +162,7 @@ def run_dir(connector, input_dir, product_id_in):
             else:
                 sys.exit('ERROR: Metadaten fehlen!!')
 
-            # add attributes to output document
             doc.addAttributesToDoc(product_id, year, volume, cname)
-            # get the new doc as XML String
             new_xml = doc.to_string()
 
             for cms_id in cms_paths:
@@ -209,7 +181,7 @@ def run_dir(connector, input_dir, product_id_in):
                     res = Resource(
                         cms_id, cname, 'article', StringIO.StringIO(new_xml),
                         contentType='text/xml')
-                    for prop in doc.metadata:  # add metadata
+                    for prop in doc.metadata:
                         prop_val = re.sub(r'\&', ' + ', prop[2])
                         res.properties[(prop[1], prop[0])] = (prop_val)
                     connector.add(res)
@@ -221,7 +193,7 @@ def run_dir(connector, input_dir, product_id_in):
             continue
 
     if count > 0:
-        moveExportToArchive(input_dir)  # moves xml files to local archive
+        copyExportToArchive(input_dir)
     else:
         log.warning('No documents to import found in %s', input_dir)
 

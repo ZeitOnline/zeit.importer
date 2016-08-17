@@ -8,9 +8,7 @@ p_pattern = re.compile('<p>([a-z0-9])</p>\s*<p>', re.M | re.I)  # <p>V</p>
 
 
 def sanitizeDoc(xml):
-    '''
-        cleans the doc from dirty k4markup
-    '''
+    """Cleans the doc from dirty k4markup."""
     xml = p_pattern.sub('<p>\\1', xml)
     return xml
 
@@ -32,9 +30,7 @@ def indent(elem, level=0):
 
 
 def transform_k4(k4xml_path):
-    '''
-        transforms k4xml to zeit article format
-    '''
+    """Transforms k4xml to zeit article format."""
     if not os.path.isfile(k4xml_path):
         raise IOError('%s does not exists' % k4xml_path)
 
@@ -57,9 +53,6 @@ class TransformedArticle(object):
         self.product_id = None
 
     def getAttributesFromDoc(self):
-        '''
-            extract metadata from /head/attributes/attribute
-        '''
         metas = self.doc.xpath('//head/attribute')
 
         props = []
@@ -73,9 +66,6 @@ class TransformedArticle(object):
         return props
 
     def getAttributeValue(self, ns, name):
-        """
-        extract single metadata value from dict
-        """
         try:
             return [m[2] for m in self.metadata
                     if m[0] == ns and m[1] == name][0]
@@ -92,10 +82,8 @@ class TransformedArticle(object):
         return publication_id
 
     def get_product_id(self, product_id_in, filename):
-        '''
-            detects product id of the document.
-            by file-pattern matching or by doc-attribute
-        '''
+        """Detects product id of the document, by file-pattern matching or by
+        doc-attribute."""
         if product_id_in is None:
             if filename.startswith('CH-') or filename.startswith('CH_'):
                 self.product_id = 'ZECH'
@@ -125,9 +113,6 @@ class TransformedArticle(object):
         return self.product_id
 
     def addAttributesToDoc(self, product_id, year, volume, cname):
-        '''
-            adds additional attributes to the document head
-        '''
         head = self.doc.xpath('//article/head')[0]
         attributes = [
             '<attribute ns="%s" name="id">%s-%s-%s-%s</attribute>' % (
@@ -145,9 +130,6 @@ class TransformedArticle(object):
             head.append(etree.fromstring(attr))
 
     def addTitleToDoc(self, elems):
-        '''
-            adding title to main doc
-        '''
         if len(elems) > 0:
             body = self.doc.xpath('//article/body')
             elems.reverse()
@@ -155,18 +137,12 @@ class TransformedArticle(object):
                 body[0].insert(0, e)
 
     def addBoxToDoc(self, elems):
-        '''
-            adding info box to main doc
-        '''
         if len(elems) > 0:
             body = self.doc.xpath('//article/body')
             for e in elems:
                 body[0].append(e)
 
     def to_string(self):
-        """
-            serializes the doc-object to a string
-        """
         indent(self.doc.getroot())
         xml = etree.tostring(self.doc, encoding="utf-8", xml_declaration=True)
         xml = sanitizeDoc(xml)  # <p>V</p> etc
@@ -174,6 +150,7 @@ class TransformedArticle(object):
 
 
 class ArticleExtras(object):
+
     def __init__(self, file_path):
         self.directory = os.path.dirname(file_path)
         self.file_article = os.path.basename(file_path)
