@@ -1,5 +1,4 @@
 # coding: utf-8
-from optparse import OptionParser
 from zeit.connector.resource import Resource
 from zeit.importer import DOC_NS, PRINT_NS
 from zeit.importer import add_file_logging
@@ -8,6 +7,7 @@ from zeit.importer.ipoolconfig import IPoolConfig
 import StringIO
 import datetime
 import logging
+import optparse
 import os
 import re
 import shutil
@@ -221,7 +221,7 @@ def main(**kwargs):
         globals()[name] = value
 
     usage = "usage: %prog [options] arg"
-    parser = OptionParser(usage)
+    parser = optparse.OptionParser(usage)
     parser.add_option("-i", "--indir", dest="input_dir",
                       help="directory with the k4 export files")
     parser.add_option("-p", "--productid", dest="product_id",

@@ -1,7 +1,7 @@
+from zeit.importer import PRINT_NS, DOC_NS, WORKFLOW_NS
+import lxml.etree
 import os.path
 import re
-from lxml import etree
-from zeit.importer import PRINT_NS, DOC_NS, WORKFLOW_NS
 
 K4_STYLESHEET = os.path.dirname(__file__) + '/stylesheets/k4import.xslt'
 p_pattern = re.compile('<p>([a-z0-9])</p>\s*<p>', re.M | re.I)  # <p>V</p>
@@ -34,10 +34,10 @@ def transform_k4(k4xml_path):
     if not os.path.isfile(k4xml_path):
         raise IOError('%s does not exists' % k4xml_path)
 
-    xslt_doc = etree.parse(K4_STYLESHEET)
-    transform = etree.XSLT(xslt_doc)
+    xslt_doc = lxml.etree.parse(K4_STYLESHEET)
+    transform = lxml.etree.XSLT(xslt_doc)
 
-    doc = etree.parse(k4xml_path)
+    doc = lxml.etree.parse(k4xml_path)
     result = transform(doc)
 
     return result
@@ -127,7 +127,7 @@ class TransformedArticle(object):
                 DOC_NS, 'no')
         ]
         for attr in attributes:
-            head.append(etree.fromstring(attr))
+            head.append(lxml.etree.fromstring(attr))
 
     def addTitleToDoc(self, elems):
         if len(elems) > 0:
@@ -144,7 +144,8 @@ class TransformedArticle(object):
 
     def to_string(self):
         indent(self.doc.getroot())
-        xml = etree.tostring(self.doc, encoding="utf-8", xml_declaration=True)
+        xml = lxml.etree.tostring(
+            self.doc, encoding="utf-8", xml_declaration=True)
         xml = sanitizeDoc(xml)  # <p>V</p> etc
         return xml
 
