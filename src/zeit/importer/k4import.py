@@ -11,7 +11,6 @@ import logging
 import os
 import re
 import shutil
-import sys
 
 log = logging.getLogger(__name__)
 
@@ -150,17 +149,16 @@ def run_dir(connector, input_dir, product_id_in):
             log.debug('product_id %s ', product_id)
 
             cms_paths = []
-            if year and volume and print_ressort:
-                print_ressort = mangleQPSName(print_ressort).lower()
-                cms_paths.append(IMPORT_ROOT + '%s/%s/%s/%s/%s' % (
-                    product_id, year, volume, print_ressort, cname))
-                cms_paths.append(IMPORT_ROOT_IN + '%s/%s/%s/%s/%s' % (
-                    product_id, year, volume, print_ressort, cname))
-                log.debug(
-                    '%s, %s, %s, %s', product_id, year, volume, print_ressort)
-                prepareColl(connector, product_id, year, volume, print_ressort)
-            else:
-                sys.exit('ERROR: Metadaten fehlen!!')
+            if not all([year, volume, print_ressort]):
+                raise ValueError('Missing metadata in %s', cname)
+            print_ressort = mangleQPSName(print_ressort).lower()
+            cms_paths.append(IMPORT_ROOT + '%s/%s/%s/%s/%s' % (
+                product_id, year, volume, print_ressort, cname))
+            cms_paths.append(IMPORT_ROOT_IN + '%s/%s/%s/%s/%s' % (
+                product_id, year, volume, print_ressort, cname))
+            log.debug(
+                '%s, %s, %s, %s', product_id, year, volume, print_ressort)
+            prepareColl(connector, product_id, year, volume, print_ressort)
 
             doc.addAttributesToDoc(product_id, year, volume, cname)
             new_xml = doc.to_string()
