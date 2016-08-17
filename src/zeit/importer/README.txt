@@ -1,15 +1,11 @@
-first we need a module which will do the work for us
-
->>> from zeit.importer import k4import
->>> k4import
-<module 'zeit.importer.k4import'...>
-
->>> connector = k4import.getConnector(dev=True)
+>>> import zeit.importer.tests
+>>> connector = zeit.importer.tests.getConnector()
 >>> connector
 <zeit.connector.mock.Connector object at 0x...>
 
 Check for generating proper filenames, name ar in unicode
 
+>>> from zeit.importer import k4import
 >>> k4import.mangleQPSName('Streitgespr‰ch_Vitakasten'.decode('utf-8'))
 'Streitgespraech-Vitakasten'
 >>> k4import.mangleQPSName('Kˆpfe der Zeit'.decode('utf-8'))

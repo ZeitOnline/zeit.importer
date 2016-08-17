@@ -11,6 +11,8 @@ import optparse
 import os
 import re
 import shutil
+import zeit.connector.connector
+
 
 log = logging.getLogger(__name__)
 
@@ -196,24 +198,6 @@ def run_dir(connector, input_dir, product_id_in):
         log.warning('No documents to import found in %s', input_dir)
 
 
-def getConnector(dev=None):
-    if dev:
-        import zeit.connector.mock
-        connector = zeit.connector.mock.Connector('http://xml.zeit.de/')
-        # add mock config
-        conf_id = 'http://xml.zeit.de/forms/importexport.xml'
-        conf_file = open(
-            os.path.dirname(__file__) + '/testdocs/ipool/importexport.xml')
-        res = Resource(
-            conf_id, 'importexport.xml', 'text', conf_file,
-            contentType='text/xml')
-        connector.add(res)
-    else:
-        import zeit.connector.connector
-        connector = zeit.connector.connector.Connector(
-            {'default': CONNECTOR_URL})
-    return connector
-
 
 def main(**kwargs):
     # XXX Refactor and do  not rely on globals here
@@ -245,7 +229,8 @@ def main(**kwargs):
 
     try:
         log.info('Start import of %s to %s', options.input_dir, IMPORT_ROOT)
-        connector = getConnector(options.dev)
+        connector = zeit.connector.connector.Connector(
+            {'default': CONNECTOR_URL})
         run_dir(connector, options.input_dir, options.product_id)
     except Exception:
         log.error('Error', exc_info=True)
