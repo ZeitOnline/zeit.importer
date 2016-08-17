@@ -1,11 +1,15 @@
+>>> from zeit.importer import k4import
 >>> import zeit.importer.tests
 >>> connector = zeit.importer.tests.getConnector()
 >>> connector
 <zeit.connector.mock.Connector object at 0x...>
+>>> import zope.component
+>>> zope.component.provideUtility(connector)
+>>> zope.component.provideUtility(
+...     zeit.importer.tests.settings, k4import.ISettings)
 
 Check for generating proper filenames, name ar in unicode
 
->>> from zeit.importer import k4import
 >>> k4import.mangleQPSName('Streitgespr‰ch_Vitakasten'.decode('utf-8'))
 'Streitgespraech-Vitakasten'
 >>> k4import.mangleQPSName('Kˆpfe der Zeit'.decode('utf-8'))
@@ -99,7 +103,7 @@ Build collections for import
 >>> volume = doc.getAttributeValue('http://namespaces.zeit.de/CMS/document','volume')
 >>> print_ressort = doc.getAttributeValue('http://namespaces.zeit.de/CMS/print', 'ressort')
 >>> print_ressort = k4import.mangleQPSName(print_ressort).lower()
->>> k4import.prepareColl(connector, product_id, year, volume, print_ressort)
+>>> k4import.prepareColl(product_id, year, volume, print_ressort)
 >>> connector['http://xml.zeit.de/archiv-wf/archiv/ZEI/2009/40/feuilleton'].type
 'collection'
 >>> connector['http://xml.zeit.de/archiv-wf/archiv-in/ZEI/2009/40/feuilleton'].type

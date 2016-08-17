@@ -18,6 +18,8 @@ setup(
         'zeit.connector',
         'setuptools',
         'pytz',
+        'zope.component',
+        'zope.interface',
     ],
     entry_points="""
         [console_scripts]

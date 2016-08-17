@@ -4,6 +4,15 @@ import unittest
 import zeit.connector.mock
 import zeit.connector.resource
 
+settings = {
+    'connector_url': 'mocked',
+    'k4_export_dir': '/var/cms/import/k4incoming/',
+    'k4_archive_dir': '/var/cms/import/old/',
+    'import_root': 'http://xml.zeit.de/archiv-wf/archiv/',
+    'import_root_in': 'http://xml.zeit.de/archiv-wf/archiv-in/',
+    'ipool_conf': 'http://xml.zeit.de/forms/importexport.xml',
+}
+
 
 def test_suite():
     suite = unittest.TestSuite()

@@ -1,7 +1,11 @@
 from zeit.importer import PRINT_NS, DOC_NS, WORKFLOW_NS
 import lxml.etree
+import logging
 import os.path
 import re
+
+
+log = logging.getLogger(__name__)
 
 K4_STYLESHEET = os.path.dirname(__file__) + '/stylesheets/k4import.xslt'
 p_pattern = re.compile('<p>([a-z0-9])</p>\s*<p>', re.M | re.I)  # <p>V</p>
@@ -45,10 +49,9 @@ def transform_k4(k4xml_path):
 
 class TransformedArticle(object):
 
-    def __init__(self, doc, ipool, logger=False):
+    def __init__(self, doc, ipool):
         self.doc = doc
         self.ipool = ipool
-        self.logger = logger
         self.metadata = self.getAttributesFromDoc()
         self.product_id = None
 
@@ -106,7 +109,7 @@ class TransformedArticle(object):
                 # detect the Produktid
                 self.product_id = self.ipool.product_map.get(publication_id)
                 if not self.product_id:
-                    self.logger.warning(
+                    log.warning(
                         'PublicationId %s cannot be mapped.', publication_id)
         else:
             self.product_id = product_id_in
