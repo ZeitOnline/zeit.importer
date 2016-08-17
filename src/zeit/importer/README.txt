@@ -20,7 +20,7 @@ Check for generating proper filenames, name ar in unicode
 'HfjS-Portraet'
 
 
-Remove ugly print layout 
+Remove ugly print layout
 
 >>> from zeit.importer.article import sanitizeDoc
 >>> xml = "<p>E</p>\r\n<p>in Test"
@@ -89,7 +89,7 @@ get publication id
 >>> product_id
 'ZEI'
 
-Build collections for import 
+Build collections for import
 
 >>> year = doc.getAttributeValue('http://namespaces.zeit.de/CMS/document','year')
 >>> volume = doc.getAttributeValue('http://namespaces.zeit.de/CMS/document','volume')
