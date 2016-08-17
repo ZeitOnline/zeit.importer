@@ -1,15 +1,16 @@
->>> from zeit.importer import k4import
 >>> import zeit.importer.tests
 >>> connector = zeit.importer.tests.getConnector()
 >>> connector
 <zeit.connector.mock.Connector object at 0x...>
 >>> import zope.component
+>>> import zeit.importer.interfaces
 >>> zope.component.provideUtility(connector)
 >>> zope.component.provideUtility(
-...     zeit.importer.tests.settings, k4import.ISettings)
+...     zeit.importer.tests.settings, zeit.importer.interfaces.ISettings)
 
 Check for generating proper filenames, name ar in unicode
 
+>>> from zeit.importer import k4import
 >>> k4import.mangleQPSName('Streitgespr‰ch_Vitakasten'.decode('utf-8'))
 'Streitgespraech-Vitakasten'
 >>> k4import.mangleQPSName('Kˆpfe der Zeit'.decode('utf-8'))
@@ -39,23 +40,21 @@ Convert k4.xml to zeit-article.xml
     <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="status">import</attribute>
 ...
 
-We need the settings for infopool
 
->>> from zeit.importer.ipoolconfig import IPoolConfig
->>> ipool = IPoolConfig( connector['http://xml.zeit.de/forms/importexport.xml'])
+Check product settings:
 
-Check it:
-
->>> ipool.product_map['1153836019']
+>>> k4import.load_configuration()
+>>> settings = zope.component.getUtility(zeit.importer.interfaces.ISettings)
+>>> settings['product_ids']['1153836019']
 'ZTCS'
->>> ipool.products['ZMLB']
+>>> settings['product_names']['ZMLB']
 'ZEIT Magazin'
 
 
 now with the infopool data and the new doc, we will treat them right
 
 >>> from zeit.importer.article import TransformedArticle
->>> doc = TransformedArticle(new_doc, ipool)
+>>> doc = TransformedArticle(new_doc)
 >>> doc
 <zeit.importer.article.TransformedArticle object at 0...>
 
@@ -93,7 +92,7 @@ check product id for DACH
 get publication id
 
 >>> publication_id = doc.getAttributeValue('http://namespaces.zeit.de/CMS/print','publication-id')
->>> product_id = ipool.product_map.get(publication_id)
+>>> product_id = settings['product_ids'].get(publication_id)
 >>> product_id
 'ZEI'
 

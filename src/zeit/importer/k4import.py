@@ -2,20 +2,20 @@
 from zeit.connector.resource import Resource
 from zeit.importer import DOC_NS, PRINT_NS
 from zeit.importer.article import TransformedArticle, transform_k4
-from zeit.importer.ipoolconfig import IPoolConfig
 import ConfigParser
 import StringIO
 import datetime
 import logging
 import optparse
 import logging.config
+import lxml.etree
 import os
 import re
 import shutil
-import zeit.connector.interfaces
 import zeit.connector.connector
+import zeit.connector.interfaces
+import zeit.importer.interfaces
 import zope.component
-import zope.interface
 
 
 log = logging.getLogger(__name__)
@@ -42,7 +42,7 @@ def mangleQPSName(qps_name):
 def prepareColl(product_id, year, volume, print_ressort):
     """If the target collection does not exist, it will be created."""
     connector = zope.component.getUtility(zeit.connector.interfaces.IConnector)
-    settings = zope.component.getUtility(ISettings)
+    settings = zope.component.getUtility(zeit.importer.interfaces.ISettings)
     for d in [settings['import_root'], settings['import_root_in']]:
         coll_path = d
         parts = [product_id, year, volume, print_ressort]
@@ -63,7 +63,7 @@ def prepareColl(product_id, year, volume, print_ressort):
 
 
 def copyExportToArchive(input_dir):
-    settings = zope.component.getUtility(ISettings)
+    settings = zope.component.getUtility(zeit.importer.interfaces.ISettings)
     today = datetime.datetime.today()
     archive_path = os.path.normpath('%s/%s/%s' % (
         settings['k4_archive_dir'],
@@ -94,12 +94,7 @@ def run_dir(input_dir, product_id_in):
         raise IOError("No such directory '%s'" % (input_dir,))
 
     connector = zope.component.getUtility(zeit.connector.interfaces.IConnector)
-    settings = zope.component.getUtility(ISettings)
-
-    try:
-        ipool = IPoolConfig(connector[settings['ipool_conf']])
-    except:
-        raise EnvironmentError("Infopool config missing")
+    settings = zope.component.getUtility(zeit.importer.interfaces.ISettings)
 
     count = 0
     cnames = []
@@ -113,7 +108,7 @@ def run_dir(input_dir, product_id_in):
 
             log.info('Importing %s', k4_filename)
             new_doc = transform_k4(k4_filepath)
-            doc = TransformedArticle(new_doc, ipool, log)
+            doc = TransformedArticle(new_doc)
 
             jobname = doc.getAttributeValue(DOC_NS, 'jobname')
             if not jobname:
@@ -197,8 +192,26 @@ def run_dir(input_dir, product_id_in):
         log.warning('No documents to import found in %s', input_dir)
 
 
-class ISettings(zope.interface.Interface):
-    pass
+def load_configuration():
+    connector = zope.component.getUtility(zeit.connector.interfaces.IConnector)
+    settings = zope.component.getUtility(zeit.importer.interfaces.ISettings)
+    try:
+        resource = connector[settings['import_config']]
+    except KeyError:
+        raise ValueError('Import configuration file %s not found',
+                         settings.get('import_config', ''))
+
+    settings['product_names'] = {}
+    settings['product_ids'] = {}
+
+    tree = lxml.etree.fromstring(resource.data.read())
+    for p in tree.xpath('/config/product'):
+        k4_id = p.findtext('k4id')
+        label = p.findtext('label')
+        id = p.get('id')
+        if k4_id:
+            settings['product_names'][id] = label
+            settings['product_ids'][k4_id] = id
 
 
 def main():
@@ -226,10 +239,10 @@ def main():
             __file__=path, here=os.path.dirname(path)))
 
     settings = dict(config.items('importer'))
-    zope.component.provideUtility(settings, ISettings)
-
+    zope.component.provideUtility(settings, zeit.importer.interfaces.ISettings)
     zope.component.provideUtility(zeit.connector.connector.Connector(
         {'default': settings['connector_url']}))
+    load_configuration()
 
     if not options.input_dir:
         options.input_dir = settings['k4_export_dir']

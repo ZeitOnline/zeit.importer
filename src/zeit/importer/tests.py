@@ -10,7 +10,7 @@ settings = {
     'k4_archive_dir': '/var/cms/import/old/',
     'import_root': 'http://xml.zeit.de/archiv-wf/archiv/',
     'import_root_in': 'http://xml.zeit.de/archiv-wf/archiv-in/',
-    'ipool_conf': 'http://xml.zeit.de/forms/importexport.xml',
+    'import_config': 'http://xml.zeit.de/forms/importexport.xml',
 }
 
 
