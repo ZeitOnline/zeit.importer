@@ -75,15 +75,6 @@ class TransformedArticle(object):
         except:
             return None
 
-    def get_publication_id_by_ressort(self, publication_id, ressort):
-        if not ressort:
-            return publication_id
-
-        if self.ipool.ressort_map.get((publication_id, ressort)):
-            return self.ipool.ressort_map.get((publication_id, ressort))
-
-        return publication_id
-
     def get_product_id(self, product_id_in, filename):
         """Detects product id of the document, by file-pattern matching or by
         doc-attribute."""
@@ -101,10 +92,6 @@ class TransformedArticle(object):
                     PRINT_NS, 'publication-id')
                 if not publication_id:
                     raise "PublicationId not found '%s'" % (filename)
-
-                ressort = self.getAttributeValue(PRINT_NS, 'ressort')
-                publication_id = self.get_publication_id_by_ressort(
-                    publication_id, ressort)
 
                 # detect the Produktid
                 self.product_id = self.ipool.product_map.get(publication_id)
