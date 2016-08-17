@@ -13,7 +13,7 @@ import re
 import shutil
 import sys
 
-logger = logging.getLogger(__name__)
+log = logging.getLogger(__name__)
 
 # XXX: Could be refactores to something smarter than globals
 CONNECTOR_URL = 'http://zip6.zeit.de:9000/cms/'
@@ -71,7 +71,7 @@ def prepareColl(connector, product_id, year, volume, print_ressort):
                 col = Resource(coll_path, coll_name, 'collection',
                                StringIO.StringIO(''))
                 connector.add(col)
-                logger.info("collection %s created" % coll_path)
+                log.info("collection %s created" % coll_path)
 
 
 def moveExportToArchive(input_dir):
@@ -91,7 +91,7 @@ def moveExportToArchive(input_dir):
                 break
 
     shutil.copytree(input_dir, archive_path)
-    logger.info("Input articles copied to  %s ..." % archive_path)
+    log.info("Input articles copied to  %s ..." % archive_path)
 
     if input_dir == K4_EXPORT_DIR:
         # when standard input dir, do some cleanup in that dir
@@ -99,7 +99,7 @@ def moveExportToArchive(input_dir):
                   for f in os.listdir(K4_EXPORT_DIR)]:
             if os.path.isfile(f):
                 os.remove(f)
-        logger.info("Input dir %s cleaned...." % input_dir)
+        log.info("Input dir %s cleaned...." % input_dir)
 
 
 def run_dir(connector, input_dir, product_id_in):
@@ -127,20 +127,20 @@ def run_dir(connector, input_dir, product_id_in):
                 continue
 
             # if extrafile_pattern.match(k4_filename):
-            #   logger.info('**** EXCLUDE %s ****\n' % k4_filename)
+            #   log.info('**** EXCLUDE %s ****\n' % k4_filename)
 
-            logger.info('**** STARTING %s ****' % k4_filename)
+            log.info('**** STARTING %s ****' % k4_filename)
             new_doc = transform_k4(k4_filepath)
 
             # here we have a new document to work with
-            doc = TransformedArticle(new_doc, ipool, logger)
+            doc = TransformedArticle(new_doc, ipool, log)
 
             # get original name
             jobname = doc.getAttributeValue(DOC_NS, 'jobname')
             if not jobname:
                 raise Exception("Original name not found '%s'" % k4_filepath)
 
-            logger.info('k4name ' + jobname)
+            log.info('k4name ' + jobname)
 
             # hier neue cname generierung ff
             cname = jobname
@@ -165,7 +165,7 @@ def run_dir(connector, input_dir, product_id_in):
                 ('http://namespaces.zeit.de/CMS/document', 'export_cds', 'no'))
 
             # create the new resource
-            logger.info('urlified ' + cname)
+            log.info('urlified ' + cname)
 
             # get infos for archive paths
             year = doc.getAttributeValue(DOC_NS, 'year')
@@ -173,7 +173,7 @@ def run_dir(connector, input_dir, product_id_in):
             print_ressort = doc.getAttributeValue(PRINT_NS, 'ressort')
 
             product_id = doc.get_product_id(product_id_in, k4_filename)
-            logging.info("ProductId: " + product_id)
+            log.info("ProductId: " + product_id)
 
             cms_paths = []
             if year and volume and print_ressort:
@@ -182,7 +182,7 @@ def run_dir(connector, input_dir, product_id_in):
                     product_id, year, volume, print_ressort, cname))
                 cms_paths.append(IMPORT_ROOT_IN + '%s/%s/%s/%s/%s' % (
                     product_id, year, volume, print_ressort, cname))
-                logging.info(
+                log.info(
                     '%s, %s, %s, %s', product_id, year, volume, print_ressort)
                 prepareColl(connector, product_id, year, volume, print_ressort)
             else:
@@ -193,16 +193,16 @@ def run_dir(connector, input_dir, product_id_in):
             # get the new doc as XML String
             new_xml = doc.to_string()
 
-            logger.info("SPEICHERN ins CMS ...")
+            log.info("SPEICHERN ins CMS ...")
             for cms_id in cms_paths:
                 check_resource = None
                 try:
                     check_resource = connector[cms_id]
                 except KeyError, e:
-                    logger.info(e)
+                    log.info(e)
 
                 if check_resource:
-                    logger.info(cms_id + "... wurde _nicht_ neu importiert")
+                    log.info(cms_id + "... wurde _nicht_ neu importiert")
                     continue
 
                 if new_xml:
@@ -213,18 +213,18 @@ def run_dir(connector, input_dir, product_id_in):
                         prop_val = re.sub(r'\&', ' + ', prop[2])
                         res.properties[(prop[1], prop[0])] = (prop_val)
                     connector.add(res)
-                    logger.info("GESPEICHERT: %s" % (cms_id,))
+                    log.info("GESPEICHERT: %s" % (cms_id,))
             count = count + 1
-            logger.info("IMPORT Dokument \"%s\" fertig\n" % (cname))
+            log.info("IMPORT Dokument \"%s\" fertig\n" % (cname))
 
-        except Exception, e:
-            logger.exception(e)
+        except Exception:
+            log.error(exc_info=True)
             continue
 
     if count > 0:
         moveExportToArchive(input_dir)  # moves xml files to local archive
     else:
-        logger.info('No documents to import found "%s" !' % input_dir)
+        log.info('No documents to import found "%s" !' % input_dir)
 
 
 def getConnector(dev=None):
@@ -266,20 +266,18 @@ def main(**kwargs):
 
     if not options.input_dir:
         options.input_dir = K4_EXPORT_DIR
-        logger.info('using default indir %s' % options.input_dir)
+        log.info('using default indir %s' % options.input_dir)
 
     if 'LOGFILE' in globals():
-        add_file_logging(logger, globals()['LOGFILE'])
+        add_file_logging(log, globals()['LOGFILE'])
 
     if options.logfile:
-        add_file_logging(logger, options.logfile)
+        add_file_logging(log, options.logfile)
 
     try:
-        logger.info("Import: " + options.input_dir + " to: " + IMPORT_ROOT)
+        log.info("Import: " + options.input_dir + " to: " + IMPORT_ROOT)
         connector = getConnector(options.dev)
         run_dir(connector, options.input_dir, options.product_id)
-    except KeyboardInterrupt:
-        logger.info('SCRIPT STOPPED')
-        sys.exit()
-    except Exception, e:
-        logger.exception(e)
+    except Exception:
+        log.error(exc_info=True)
+        raise
