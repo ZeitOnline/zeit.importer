@@ -2,6 +2,7 @@ from zeit.importer import PRINT_NS, DOC_NS, WORKFLOW_NS
 import lxml.etree
 import logging
 import os.path
+import pkg_resources
 import re
 import zeit.importer.interfaces
 import zope.component
@@ -9,7 +10,8 @@ import zope.component
 
 log = logging.getLogger(__name__)
 
-K4_STYLESHEET = os.path.dirname(__file__) + '/stylesheets/k4import.xslt'
+K4_STYLESHEET = pkg_resources.resource_filename(
+    __name__, '/stylesheets/k4import.xslt')
 p_pattern = re.compile('<p>([a-z0-9])</p>\s*<p>', re.M | re.I)  # <p>V</p>
 
 
