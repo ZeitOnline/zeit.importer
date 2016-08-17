@@ -218,7 +218,7 @@ def run_dir(connector, input_dir, product_id_in):
             log.info("IMPORT Dokument \"%s\" fertig\n" % (cname))
 
         except Exception:
-            log.error(exc_info=True)
+            log.error('Error', exc_info=True)
             continue
 
     if count > 0:
@@ -279,5 +279,5 @@ def main(**kwargs):
         connector = getConnector(options.dev)
         run_dir(connector, options.input_dir, options.product_id)
     except Exception:
-        log.error(exc_info=True)
+        log.error('Error', exc_info=True)
         raise
