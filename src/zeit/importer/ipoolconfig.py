@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
 from lxml import etree
 
 
 class IPoolConfig(object):
+
     def __init__(self, ressource):
         self.products = {}
         self.product_map = {}
@@ -23,4 +23,5 @@ class IPoolConfig(object):
                     self.product_map[k4_id] = id
 
                 for ressort in p.xpath('ressort'):
-                    self.ressort_map[(k4_id, ressort.get('name'))] = ressort.get('id')
+                    self.ressort_map[(
+                        k4_id, ressort.get('name'))] = ressort.get('id')
