@@ -1,14 +1,22 @@
 >>> import zeit.importer.tests
->>> connector = zeit.importer.tests.getConnector()
->>> connector
-<zeit.connector.mock.Connector object at 0x...>
 >>> import zope.component
 >>> import zeit.importer.interfaces
+>>> connector = zeit.importer.tests.getConnector()
 >>> zope.component.provideUtility(connector)
 >>> zope.component.provideUtility(
 ...     zeit.importer.tests.settings, zeit.importer.interfaces.ISettings)
 
-Check for generating proper filenames, name ar in unicode
+Check product settings:
+
+>>> from zeit.importer import k4import
+>>> k4import.load_configuration()
+>>> settings = zope.component.getUtility(zeit.importer.interfaces.ISettings)
+>>> settings['product_ids']['1153836019']
+'ZTCS'
+>>> settings['product_names']['ZMLB']
+'ZEIT Magazin'
+
+Check for generating proper filenames, names are in unicode
 
 >>> from zeit.importer import k4import
 >>> k4import.mangleQPSName('Streitgespr‰ch_Vitakasten'.decode('utf-8'))
@@ -31,34 +39,15 @@ Remove ugly print layout
 Convert k4.xml to zeit-article.xml
 
 >>> import os.path
->>> from zeit.importer.article import transform_k4
->>> new_doc = transform_k4(os.path.dirname(__file__)+'/testdocs/Sp_te_Flucht_89.xml')
->>> print new_doc
+>>> from zeit.importer.article import Article
+>>> doc = Article(
+...     os.path.dirname(__file__)+'/testdocs/Sp_te_Flucht_89.xml')
+>>> print doc.doc
 <?xml version="1.0" encoding="UTF-8"?>
 <article>
   <head>
     <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="status">import</attribute>
 ...
-
-
-Check product settings:
-
->>> k4import.load_configuration()
->>> settings = zope.component.getUtility(zeit.importer.interfaces.ISettings)
->>> settings['product_ids']['1153836019']
-'ZTCS'
->>> settings['product_names']['ZMLB']
-'ZEIT Magazin'
-
-
-now with the infopool data and the new doc, we will treat them right
-
->>> from zeit.importer.article import TransformedArticle
->>> doc = TransformedArticle(new_doc)
->>> doc
-<zeit.importer.article.TransformedArticle object at 0...>
-
-we have metadata
 
 >>> print doc.metadata
 [('http://namespaces.zeit.de/CMS/workflow', 'status', 'import')...

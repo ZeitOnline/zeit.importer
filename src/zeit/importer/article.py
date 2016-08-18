@@ -37,24 +37,18 @@ def indent(elem, level=0):
             elem.tail = i
 
 
-def transform_k4(k4xml_path):
+class Article(object):
     """Transforms k4xml to zeit article format."""
-    if not os.path.isfile(k4xml_path):
-        raise IOError('%s does not exists' % k4xml_path)
 
-    xslt_doc = lxml.etree.parse(K4_STYLESHEET)
-    transform = lxml.etree.XSLT(xslt_doc)
+    def __init__(self, path):
+        if not os.path.isfile(path):
+            raise IOError('%s does not exists' % path)
 
-    doc = lxml.etree.parse(k4xml_path)
-    result = transform(doc)
+        xslt_doc = lxml.etree.parse(K4_STYLESHEET)
+        transform = lxml.etree.XSLT(xslt_doc)
 
-    return result
-
-
-class TransformedArticle(object):
-
-    def __init__(self, doc):
-        self.doc = doc
+        self.k4_xml = lxml.etree.parse(path)
+        self.doc = transform(self.k4_xml)
         self.metadata = self.getAttributesFromDoc()
         self.product_id = None
 

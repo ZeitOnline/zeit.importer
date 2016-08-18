@@ -1,6 +1,6 @@
 # coding: utf-8
 from zeit.connector.resource import Resource
-from zeit.importer.article import TransformedArticle, transform_k4
+from zeit.importer.article import Article
 from zeit.importer.interfaces import DOC_NS, PRINT_NS
 import ConfigParser
 import StringIO
@@ -107,8 +107,7 @@ def run_dir(input_dir, product_id_in):
                 continue
 
             log.info('Importing %s', k4_filename)
-            new_doc = transform_k4(k4_filepath)
-            doc = TransformedArticle(new_doc)
+            doc = Article(k4_filepath)
 
             jobname = doc.getAttributeValue(DOC_NS, 'jobname')
             if not jobname:
