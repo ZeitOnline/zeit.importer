@@ -6,10 +6,11 @@ import ConfigParser
 import StringIO
 import datetime
 import logging
-import optparse
 import logging.config
 import lxml.etree
+import optparse
 import os
+import pkg_resources
 import re
 import shutil
 import zeit.connector.connector
@@ -194,6 +195,7 @@ def run_dir(input_dir, product_id_in):
 def load_configuration():
     connector = zope.component.getUtility(zeit.connector.interfaces.IConnector)
     settings = zope.component.getUtility(zeit.importer.interfaces.ISettings)
+
     try:
         resource = connector[settings['import_config']]
     except KeyError:
@@ -202,7 +204,6 @@ def load_configuration():
 
     settings['product_names'] = {}
     settings['product_ids'] = {}
-
     tree = lxml.etree.fromstring(resource.data.read())
     for p in tree.xpath('/config/product'):
         k4_id = p.findtext('k4id')
@@ -211,6 +212,10 @@ def load_configuration():
         if k4_id:
             settings['product_names'][id] = label
             settings['product_ids'][k4_id] = id
+
+    settings['k4_stylesheet'] = lxml.etree.XSLT(lxml.etree.parse(
+        pkg_resources.resource_filename(
+            __name__, 'stylesheets/k4import.xslt')))
 
 
 def main():

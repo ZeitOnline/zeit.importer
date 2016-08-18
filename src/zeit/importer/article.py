@@ -2,16 +2,12 @@ from zeit.importer.interfaces import PRINT_NS, DOC_NS, WORKFLOW_NS
 import lxml.etree
 import logging
 import os.path
-import pkg_resources
 import re
 import zeit.importer.interfaces
 import zope.component
 
 
 log = logging.getLogger(__name__)
-
-K4_STYLESHEET = pkg_resources.resource_filename(
-    __name__, '/stylesheets/k4import.xslt')
 p_pattern = re.compile('<p>([a-z0-9])</p>\s*<p>', re.M | re.I)  # <p>V</p>
 
 
@@ -43,12 +39,8 @@ class Article(object):
     def __init__(self, path):
         if not os.path.isfile(path):
             raise IOError('%s does not exists' % path)
-
-        xslt_doc = lxml.etree.parse(K4_STYLESHEET)
-        transform = lxml.etree.XSLT(xslt_doc)
-
-        self.k4_xml = lxml.etree.parse(path)
-        self.doc = transform(self.k4_xml)
+        conf = zope.component.getUtility(zeit.importer.interfaces.ISettings)
+        self.doc = conf['k4_stylesheet'](lxml.etree.parse(path))
         self.metadata = self.getAttributesFromDoc()
         self.product_id = None
 
