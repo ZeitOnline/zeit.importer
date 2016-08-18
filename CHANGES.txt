@@ -1,10 +1,12 @@
 zeit.importer changes
 =================
 
-0.2.7 (unreleased)
+1.0.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Use a configuration file
+
+- ZON-3250: Load ressort map XML from DAV
 
 
 0.2.6 (2015-10-21)
