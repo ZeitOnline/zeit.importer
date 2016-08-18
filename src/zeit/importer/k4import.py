@@ -223,6 +223,11 @@ def load_configuration():
             settings['product_names'][id] = label
             settings['product_ids'][k4_id] = id
 
+    try:
+        connector[settings['ressortmap']]
+    except KeyError:
+        raise ValueError('Ressortmap file %s not found',
+                         settings.get('ressortmap', ''))
     parser = lxml.etree.XMLParser()
     parser.resolvers.add(ConnectorResolver())
     settings['k4_stylesheet'] = lxml.etree.XSLT(lxml.etree.parse(

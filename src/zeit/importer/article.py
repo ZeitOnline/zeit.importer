@@ -40,7 +40,8 @@ class Article(object):
         if not os.path.isfile(path):
             raise IOError('%s does not exists' % path)
         conf = zope.component.getUtility(zeit.importer.interfaces.ISettings)
-        self.doc = conf['k4_stylesheet'](lxml.etree.parse(path))
+        self.doc = conf['k4_stylesheet'](
+            lxml.etree.parse(path), ressortmap_url="'%s'" % conf['ressortmap'])
         self.metadata = self.getAttributesFromDoc()
         self.product_id = None
 

@@ -11,6 +11,7 @@ settings = {
     'import_root': 'http://xml.zeit.de/archiv-wf/archiv/',
     'import_root_in': 'http://xml.zeit.de/archiv-wf/archiv-in/',
     'import_config': 'http://xml.zeit.de/forms/importexport.xml',
+    'ressortmap': 'http://xml.zeit.de/forms/printimport-ressortmap.xml',
 }
 
 
