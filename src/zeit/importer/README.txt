@@ -127,32 +127,3 @@ Add additional attributes to head/attributes
     <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="product-name">DIE ZEIT</attribute>
     <attribute ns="http://namespaces.zeit.de/CMS/document" name="export_cds">no</attribute>
 ...
-
-Lookup for articel extra files. "titel" and "kasten"
-
->>> from zeit.importer.article import ArticleExtras
->>> extras = ArticleExtras(os.path.dirname(__file__)+'/testdocs/Begleitschutz.xml')
->>> print [e.tag for e in extras.title_elems]
-['title', 'subtitle', 'image-credits']
->>> print extras.box_elems
-[]
-
-Add title to main doc
->>> new_doc = transform_k4(os.path.dirname(__file__)+'/testdocs/Begleitschutz.xml')
->>> main_doc = TransformedArticle(new_doc, ipool)
->>> main_doc.addTitleToDoc(extras.title_elems)
->>> main_doc.doc.xpath('//body')[0].getchildren()[0:4]
-[<Element title at ...>, <Element subtitle at ...>, <Element image-credits at ...>, <Element caption at ...>]
-
->>> extras = ArticleExtras(os.path.dirname(__file__)+'/testdocs/P-Weber.xml')
->>> print [e.tag for e in extras.box_elems]
-['title', 'p', 'p']
->>> print extras.title_elems
-[]
-
-Add box to main doc
->>> new_doc = transform_k4(os.path.dirname(__file__)+'/testdocs/P-Weber.xml')
->>> main_doc = TransformedArticle(new_doc, ipool)
->>> main_doc.addBoxToDoc(extras.box_elems)
->>> main_doc.doc.xpath('//body')[0].getchildren()[-4:]
-[<Element image-credits at ...>, <Element title at ...>, <Element p at ...>, <Element p at ...>]

@@ -148,25 +148,3 @@ class TransformedArticle(object):
             self.doc, encoding="utf-8", xml_declaration=True)
         xml = sanitizeDoc(xml)  # <p>V</p> etc
         return xml
-
-
-class ArticleExtras(object):
-
-    def __init__(self, file_path):
-        self.directory = os.path.dirname(file_path)
-        self.file_article = os.path.basename(file_path)
-        self.file_title = os.path.join(
-            self.directory, 'titel-' + self.file_article)
-        self.file_box = os.path.join(
-            self.directory, 'kasten-' + self.file_article)
-
-        # results in here
-        self.title_elems = self.get_additional_elements(self.file_title)
-        self.box_elems = self.get_additional_elements(self.file_box)
-
-    def get_additional_elements(self, file_path):
-        result = []
-        if os.path.isfile(file_path):
-            new_doc = transform_k4(file_path)
-            result = new_doc.xpath('//body/*')
-        return result
