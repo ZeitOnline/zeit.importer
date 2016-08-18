@@ -25,10 +25,10 @@ def test_suite():
 
 def getConnector():
     connector = zeit.connector.mock.Connector('http://xml.zeit.de/')
-    res = zeit.connector.resource.Resource(
-        'http://xml.zeit.de/forms/importexport.xml', 'importexport.xml',
-        'text', pkg_resources.resource_stream(
-            __name__, '/testdocs/ipool/importexport.xml'),
-        contentType='text/xml')
-    connector.add(res)
+    for name in ['importexport.xml', 'printimport-ressortmap.xml']:
+        connector.add(zeit.connector.resource.Resource(
+            'http://xml.zeit.de/forms/%s' % name, name,
+            'text', pkg_resources.resource_stream(
+                __name__, '/testdocs/ipool/%s' % name),
+            contentType='text/xml'))
     return connector

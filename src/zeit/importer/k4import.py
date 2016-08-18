@@ -192,6 +192,16 @@ def run_dir(input_dir, product_id_in):
         log.warning('No documents to import found in %s', input_dir)
 
 
+class ConnectorResolver(lxml.etree.Resolver):
+
+    def resolve(self, url, id, context):
+        if not url.startswith('http://xml.zeit.de/'):
+            return None
+        connector = zope.component.getUtility(
+            zeit.connector.interfaces.IConnector)
+        return self.resolve_file(connector[url].data, context)
+
+
 def load_configuration():
     connector = zope.component.getUtility(zeit.connector.interfaces.IConnector)
     settings = zope.component.getUtility(zeit.importer.interfaces.ISettings)
@@ -213,9 +223,11 @@ def load_configuration():
             settings['product_names'][id] = label
             settings['product_ids'][k4_id] = id
 
+    parser = lxml.etree.XMLParser()
+    parser.resolvers.add(ConnectorResolver())
     settings['k4_stylesheet'] = lxml.etree.XSLT(lxml.etree.parse(
         pkg_resources.resource_filename(
-            __name__, 'stylesheets/k4import.xslt')))
+            __name__, 'stylesheets/k4import.xslt'), parser=parser))
 
 
 def main():
