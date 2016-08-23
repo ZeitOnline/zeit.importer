@@ -24,7 +24,7 @@
         <idref>ZEOE</idref>
     </product>
 
-    
+
     <product id="ZEISACHOE" type="cluster">
         <label>Die ZEIT (alle Seiten)</label>
         <idref>ZEI</idref>
@@ -46,7 +46,7 @@
         <gjid>ZESA</gjid>
         <label>ZEIT Sachsen</label>
     </product>
-    
+
     <product id="ZECH">
         <k4id>1111111111</k4id>
         <infid>ZECH</infid>
@@ -92,7 +92,7 @@
         <xsl>article2pmg.xsl</xsl>
         <collection_mode>merge</collection_mode>
         <send_mode>archive</send_mode>
-        
+
         <name>Infopool</name>
         <checked>true</checked>
         <description />
@@ -111,7 +111,7 @@
         <suffix>xml</suffix>
         <destdir>[product_id]/_ARTIKEL_</destdir>
 
-        <allowed>ZEI</allowed>        
+        <allowed>ZEI</allowed>
         <allowed>ZMLB</allowed>
         <allowed>ZTWI</allowed>
         <allowed>ZTCS</allowed>
@@ -127,9 +127,9 @@
          <xsl>article2pmg.xsl</xsl>
         <collection_mode>merge</collection_mode>
         <send_mode>archive</send_mode>
- 
-         
-        <name>Gruner und Jahr</name>         
+
+
+        <name>Gruner und Jahr</name>
         <description>erhält nur Die Zeit (alle Seiten) und das Magazin</description>
         <checked>true</checked>
         <subfolder>false</subfolder>
@@ -144,7 +144,7 @@
         <pass>URET5ggKaD</pass>
         <suffix>xml</suffix>
 
-        <allowed>ZEISACHOE</allowed>        
+        <allowed>ZEISACHOE</allowed>
         <allowed>ZMLB</allowed>
 
 
@@ -152,12 +152,12 @@
     <receiver id="gbi">
         <collection_mode>single</collection_mode>
         <send_mode>archive</send_mode>
-        
+
         <prefix_id>ZEIT_</prefix_id>
         <use_product_id>false</use_product_id>
         <datetype_id>ddMMyyyy</datetype_id>
 
-        <name>Gbi</name>         
+        <name>Gbi</name>
         <description>erhält nur "Die Zeit + ZEIT Magazin"</description>
         <checked>false</checked>
         <subfolder>false</subfolder>
@@ -190,7 +190,7 @@
         <suffix>xml</suffix>
         <destdir>html/[product_id]/_ARTIKEL_</destdir>
 
-        <allowed>ZEI</allowed>        
+        <allowed>ZEI</allowed>
         <allowed>ZMLB</allowed>
         <allowed>ZTWI</allowed>
         <allowed>ZTCS</allowed>
