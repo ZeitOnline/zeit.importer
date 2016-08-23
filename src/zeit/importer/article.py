@@ -84,7 +84,10 @@ class Article(object):
                 if not publication_id:
                     raise "PublicationId not found '%s'" % (filename)
 
-                # detect the Produktid
+                ressort = self.getAttributeValue(PRINT_NS, 'ressort')
+                if ressort:
+                    publication_id = conf['publication_ids'].get(
+                        (publication_id, ressort)) or publication_id
                 self.product_id = conf['product_ids'].get(publication_id)
                 if not self.product_id:
                     log.warning(

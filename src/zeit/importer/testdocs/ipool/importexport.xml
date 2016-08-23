@@ -6,6 +6,7 @@
         <infid>ZEI</infid>
         <gjid>ZEI</gjid>
         <label>DIE ZEIT</label>
+        <ressort name="Politik" id="3333333333"/>
     </product>
 
     <product id="ZMLB">

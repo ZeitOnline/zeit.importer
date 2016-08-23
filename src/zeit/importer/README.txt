@@ -123,3 +123,10 @@ Add additional attributes to head/attributes
     <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="product-name">DIE ZEIT</attribute>
     <attribute ns="http://namespaces.zeit.de/CMS/document" name="export_cds">no</attribute>
 ...
+
+Per k4-publication-id ressorts can be configured to belong to a different
+publication id instead:
+
+>>> doc = Article(os.path.dirname(__file__)+'/testdocs/AufmarschAtom.xml')
+>>> doc.get_product_id(None, 'uninteresting-k4-filename')
+'ZESA'

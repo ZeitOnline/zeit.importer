@@ -214,6 +214,7 @@ def load_configuration():
 
     settings['product_names'] = {}
     settings['product_ids'] = {}
+    settings['publication_ids'] = {}
     tree = lxml.etree.fromstring(resource.data.read())
     for p in tree.xpath('/config/product'):
         k4_id = p.findtext('k4id')
@@ -222,6 +223,9 @@ def load_configuration():
         if k4_id:
             settings['product_names'][id] = label
             settings['product_ids'][k4_id] = id
+            for ressort in p.xpath('ressort'):
+                settings['publication_ids'][
+                    (k4_id, ressort.get('name'))] = ressort.get('id')
 
     try:
         connector[settings['ressortmap']]
