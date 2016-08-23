@@ -61,7 +61,7 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <xsl:variable name="map-doc" select="document('ressortmap.xml')//mapping[@id=$ressort]" />
+        <xsl:variable name="map-doc" select="document($ressortmap_url)//mapping[@id=$ressort]" />
         <xsl:choose>
             <xsl:when test="$map-doc !=''">
                 <attribute ns="http://namespaces.zeit.de/CMS/document" name="ressort">

@@ -1,15 +1,24 @@
-first we need a module which will do the work for us
+>>> import zeit.importer.tests
+>>> import zope.component
+>>> import zeit.importer.interfaces
+>>> connector = zeit.importer.tests.getConnector()
+>>> zope.component.provideUtility(connector)
+>>> zope.component.provideUtility(
+...     zeit.importer.tests.settings, zeit.importer.interfaces.ISettings)
+
+Check product settings:
 
 >>> from zeit.importer import k4import
->>> k4import
-<module 'zeit.importer.k4import'...>
+>>> k4import.load_configuration()
+>>> settings = zope.component.getUtility(zeit.importer.interfaces.ISettings)
+>>> settings['product_ids']['1153836019']
+'ZTCS'
+>>> settings['product_names']['ZMLB']
+'ZEIT Magazin'
 
->>> connector = k4import.getConnector(dev=True)
->>> connector
-<zeit.connector.mock.Connector object at 0x...>
+Check for generating proper filenames, names are in unicode
 
-Check for generating proper filenames, name ar in unicode
-
+>>> from zeit.importer import k4import
 >>> k4import.mangleQPSName('Streitgespr‰ch_Vitakasten'.decode('utf-8'))
 'Streitgespraech-Vitakasten'
 >>> k4import.mangleQPSName('Kˆpfe der Zeit'.decode('utf-8'))
@@ -30,28 +39,15 @@ Remove ugly print layout
 Convert k4.xml to zeit-article.xml
 
 >>> import os.path
->>> from zeit.importer.article import transform_k4
->>> new_doc = transform_k4(os.path.dirname(__file__)+'/testdocs/Sp_te_Flucht_89.xml')
->>> print new_doc
+>>> from zeit.importer.article import Article
+>>> doc = Article(
+...     os.path.dirname(__file__)+'/testdocs/Sp_te_Flucht_89.xml')
+>>> print doc.doc
 <?xml version="1.0" encoding="UTF-8"?>
 <article>
   <head>
     <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="status">import</attribute>
 ...
-
-We need the settings for infopool
-
->>> from zeit.importer.ipoolconfig import IPoolConfig
->>> ipool = IPoolConfig( connector['http://xml.zeit.de/forms/importexport.xml'])
-
-now with the infopool data and the new doc, we will treat them right
-
->>> from zeit.importer.article import TransformedArticle
->>> doc = TransformedArticle(new_doc, ipool)
->>> doc
-<zeit.importer.article.TransformedArticle object at 0...>
-
-we have metadata
 
 >>> print doc.metadata
 [('http://namespaces.zeit.de/CMS/workflow', 'status', 'import')...
@@ -85,7 +81,7 @@ check product id for DACH
 get publication id
 
 >>> publication_id = doc.getAttributeValue('http://namespaces.zeit.de/CMS/print','publication-id')
->>> product_id = ipool.product_map.get(publication_id)
+>>> product_id = settings['product_ids'].get(publication_id)
 >>> product_id
 'ZEI'
 
@@ -95,7 +91,7 @@ Build collections for import
 >>> volume = doc.getAttributeValue('http://namespaces.zeit.de/CMS/document','volume')
 >>> print_ressort = doc.getAttributeValue('http://namespaces.zeit.de/CMS/print', 'ressort')
 >>> print_ressort = k4import.mangleQPSName(print_ressort).lower()
->>> k4import.prepareColl(connector, product_id, year, volume, print_ressort)
+>>> k4import.prepareColl(product_id, year, volume, print_ressort)
 >>> connector['http://xml.zeit.de/archiv-wf/archiv/ZEI/2009/40/feuilleton'].type
 'collection'
 >>> connector['http://xml.zeit.de/archiv-wf/archiv-in/ZEI/2009/40/feuilleton'].type
@@ -127,3 +123,10 @@ Add additional attributes to head/attributes
     <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="product-name">DIE ZEIT</attribute>
     <attribute ns="http://namespaces.zeit.de/CMS/document" name="export_cds">no</attribute>
 ...
+
+Per k4-publication-id ressorts can be configured to belong to a different
+publication id instead:
+
+>>> doc = Article(os.path.dirname(__file__)+'/testdocs/AufmarschAtom.xml')
+>>> doc.get_product_id(None, 'uninteresting-k4-filename')
+'ZESA'

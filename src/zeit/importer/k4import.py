@@ -1,27 +1,25 @@
 # coding: utf-8
 from zeit.connector.resource import Resource
-from zeit.importer import DOC_NS, PRINT_NS
-from zeit.importer import add_file_logging
-from zeit.importer.article import TransformedArticle, transform_k4
-from zeit.importer.ipoolconfig import IPoolConfig
+from zeit.importer.article import Article
+from zeit.importer.interfaces import DOC_NS, PRINT_NS
+import ConfigParser
 import StringIO
 import datetime
 import logging
+import logging.config
+import lxml.etree
 import optparse
 import os
+import pkg_resources
 import re
 import shutil
+import zeit.connector.connector
+import zeit.connector.interfaces
+import zeit.importer.interfaces
+import zope.component
+
 
 log = logging.getLogger(__name__)
-
-# XXX: Could be refactores to something smarter than globals
-CONNECTOR_URL = 'http://zip6.zeit.de:9000/cms/'
-CMS_ROOT = 'http://xml.zeit.de/'
-IMPORT_ROOT = 'http://xml.zeit.de/archiv-wf/archiv/'
-IMPORT_ROOT_IN = 'http://xml.zeit.de/archiv-wf/archiv-in/'
-K4_EXPORT_DIR = '/var/cms/import/k4incoming/'
-K4_ARCHIVE_DIR = '/var/cms/import/old/'
-IPOOL_CONF = 'http://xml.zeit.de/forms/importexport.xml'
 
 
 def mangleQPSName(qps_name):
@@ -42,9 +40,11 @@ def mangleQPSName(qps_name):
     return cname
 
 
-def prepareColl(connector, product_id, year, volume, print_ressort):
+def prepareColl(product_id, year, volume, print_ressort):
     """If the target collection does not exist, it will be created."""
-    for d in [IMPORT_ROOT, IMPORT_ROOT_IN]:
+    connector = zope.component.getUtility(zeit.connector.interfaces.IConnector)
+    settings = zope.component.getUtility(zeit.importer.interfaces.ISettings)
+    for d in [settings['import_root'], settings['import_root_in']]:
         coll_path = d
         parts = [product_id, year, volume, print_ressort]
         for p in parts:
@@ -64,9 +64,12 @@ def prepareColl(connector, product_id, year, volume, print_ressort):
 
 
 def copyExportToArchive(input_dir):
+    settings = zope.component.getUtility(zeit.importer.interfaces.ISettings)
     today = datetime.datetime.today()
     archive_path = os.path.normpath('%s/%s/%s' % (
-        K4_ARCHIVE_DIR, today.strftime("%Y"), today.strftime("%m-%d-%a")))
+        settings['k4_archive_dir'],
+        today.strftime("%Y"),
+        today.strftime("%m-%d-%a")))
     if os.path.isdir(archive_path):
         for i in range(1, 20):
             tmp_path = '%s-%d' % (archive_path, i)
@@ -79,27 +82,20 @@ def copyExportToArchive(input_dir):
     shutil.copytree(input_dir, archive_path)
     log.info('Copied input articles from %s to %s', input_dir, archive_path)
 
-    if input_dir == K4_EXPORT_DIR:
+    if input_dir == settings['k4_export_dir']:
         log.info('Cleaning input directory %s', input_dir)
-        # when standard input dir, do some cleanup in that dir
-        for f in [os.path.normpath('%s/%s' % (K4_EXPORT_DIR, f))
-                  for f in os.listdir(K4_EXPORT_DIR)]:
+        for f in [os.path.normpath('%s/%s' % (settings['k4_export_dir'], f))
+                  for f in os.listdir(settings['k4_export_dir'])]:
             if os.path.isfile(f):
                 os.remove(f)
 
 
-def run_dir(connector, input_dir, product_id_in):
-
+def run_dir(input_dir, product_id_in):
     if not os.path.isdir(input_dir):
         raise IOError("No such directory '%s'" % (input_dir,))
 
-    if not connector:
-        raise EnvironmentError("No connector given")
-
-    try:
-        ipool = IPoolConfig(connector[IPOOL_CONF])
-    except:
-        raise EnvironmentError("Infopool config missing")
+    connector = zope.component.getUtility(zeit.connector.interfaces.IConnector)
+    settings = zope.component.getUtility(zeit.importer.interfaces.ISettings)
 
     count = 0
     cnames = []
@@ -112,8 +108,7 @@ def run_dir(connector, input_dir, product_id_in):
                 continue
 
             log.info('Importing %s', k4_filename)
-            new_doc = transform_k4(k4_filepath)
-            doc = TransformedArticle(new_doc, ipool, log)
+            doc = Article(k4_filepath)
 
             jobname = doc.getAttributeValue(DOC_NS, 'jobname')
             if not jobname:
@@ -152,13 +147,14 @@ def run_dir(connector, input_dir, product_id_in):
             if not all([year, volume, print_ressort]):
                 raise ValueError('Missing metadata in %s', cname)
             print_ressort = mangleQPSName(print_ressort).lower()
-            cms_paths.append(IMPORT_ROOT + '%s/%s/%s/%s/%s' % (
+            cms_paths.append(settings['import_root'] + '%s/%s/%s/%s/%s' % (
                 product_id, year, volume, print_ressort, cname))
-            cms_paths.append(IMPORT_ROOT_IN + '%s/%s/%s/%s/%s' % (
-                product_id, year, volume, print_ressort, cname))
+            cms_paths.append(
+                settings['import_root_in'] + '%s/%s/%s/%s/%s' % (
+                    product_id, year, volume, print_ressort, cname))
             log.debug(
                 '%s, %s, %s, %s', product_id, year, volume, print_ressort)
-            prepareColl(connector, product_id, year, volume, print_ressort)
+            prepareColl(product_id, year, volume, print_ressort)
 
             doc.addAttributesToDoc(product_id, year, volume, cname)
             new_xml = doc.to_string()
@@ -196,57 +192,91 @@ def run_dir(connector, input_dir, product_id_in):
         log.warning('No documents to import found in %s', input_dir)
 
 
-def getConnector(dev=None):
-    if dev:
-        import zeit.connector.mock
-        connector = zeit.connector.mock.Connector('http://xml.zeit.de/')
-        # add mock config
-        conf_id = 'http://xml.zeit.de/forms/importexport.xml'
-        conf_file = open(
-            os.path.dirname(__file__) + '/testdocs/ipool/importexport.xml')
-        res = Resource(
-            conf_id, 'importexport.xml', 'text', conf_file,
-            contentType='text/xml')
-        connector.add(res)
-    else:
-        import zeit.connector.connector
-        connector = zeit.connector.connector.Connector(
-            {'default': CONNECTOR_URL})
-    return connector
+class ConnectorResolver(lxml.etree.Resolver):
+
+    def resolve(self, url, id, context):
+        if not url.startswith('http://xml.zeit.de/'):
+            return None
+        connector = zope.component.getUtility(
+            zeit.connector.interfaces.IConnector)
+        return self.resolve_file(connector[url].data, context)
 
 
-def main(**kwargs):
-    # XXX Refactor and do  not rely on globals here
-    for name, value in kwargs.items():
-        globals()[name] = value
+def load_configuration():
+    connector = zope.component.getUtility(zeit.connector.interfaces.IConnector)
+    settings = zope.component.getUtility(zeit.importer.interfaces.ISettings)
 
-    usage = "usage: %prog [options] arg"
-    parser = optparse.OptionParser(usage)
+    try:
+        resource = connector[settings['import_config']]
+    except KeyError:
+        raise ValueError('Import configuration file %s not found',
+                         settings.get('import_config', ''))
+
+    settings['product_names'] = {}
+    settings['product_ids'] = {}
+    settings['publication_ids'] = {}
+    tree = lxml.etree.fromstring(resource.data.read())
+    for p in tree.xpath('/config/product'):
+        k4_id = p.findtext('k4id')
+        label = p.findtext('label')
+        id = p.get('id')
+        if k4_id:
+            settings['product_names'][id] = label
+            settings['product_ids'][k4_id] = id
+            for ressort in p.xpath('ressort'):
+                settings['publication_ids'][
+                    (k4_id, ressort.get('name'))] = ressort.get('id')
+
+    try:
+        connector[settings['ressortmap']]
+    except KeyError:
+        raise ValueError('Ressortmap file %s not found',
+                         settings.get('ressortmap', ''))
+    parser = lxml.etree.XMLParser()
+    parser.resolvers.add(ConnectorResolver())
+    settings['k4_stylesheet'] = lxml.etree.XSLT(lxml.etree.parse(
+        pkg_resources.resource_filename(
+            __name__, 'stylesheets/k4import.xslt'), parser=parser))
+
+
+def main():
+    parser = optparse.OptionParser("usage: %prog [options] arg")
     parser.add_option("-i", "--indir", dest="input_dir",
                       help="directory with the k4 export files")
     parser.add_option("-p", "--productid", dest="product_id",
                       help="product id to be used with every article")
-    parser.add_option("-l", "--log", dest="logfile",
-                      help="logfile for errors")
-    parser.add_option("-d", "--dev", action="store_true", dest="dev",
-                      help="use dev connector")
-
+    parser.add_option("-c", "--config", dest="config_file",
+                      help="path to configuration file")
     (options, args) = parser.parse_args()
 
+    if not options.config_file:
+        options.config_file = os.environ.get('ZEIT_IMPORTER_CONFIG')
+    if not options.config_file:
+        raise ValueError('A configuration file is required.')
+
+    config = ConfigParser.ConfigParser()
+    config.read([options.config_file])
+
+    # Inspired by pyramid.paster.setup_logging().
+    if config.has_section('loggers'):
+        path = os.path.abspath(options.config_file)
+        logging.config.fileConfig(path, dict(
+            __file__=path, here=os.path.dirname(path)))
+
+    settings = dict(config.items('importer'))
+    zope.component.provideUtility(settings, zeit.importer.interfaces.ISettings)
+    zope.component.provideUtility(zeit.connector.connector.Connector(
+        {'default': settings['connector_url']}))
+    load_configuration()
+
     if not options.input_dir:
-        options.input_dir = K4_EXPORT_DIR
-        log.info('using default indir %s' % options.input_dir)
-
-    if 'LOGFILE' in globals():
-        add_file_logging(log, globals()['LOGFILE'])
-
-    if options.logfile:
-        add_file_logging(log, options.logfile)
+        options.input_dir = settings['k4_export_dir']
+        log.info('No input directory given, assuming %s', options.input_dir)
 
     try:
-        log.info('Start import of %s to %s', options.input_dir, IMPORT_ROOT)
-        connector = getConnector(options.dev)
-        run_dir(connector, options.input_dir, options.product_id)
+        log.info('Start import of %s to %s', options.input_dir,
+                 settings['import_root'])
+        run_dir(options.input_dir, options.product_id)
     except Exception:
         log.error('Error', exc_info=True)
         raise

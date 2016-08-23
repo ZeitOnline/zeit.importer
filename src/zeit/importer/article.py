@@ -1,9 +1,13 @@
-from zeit.importer import PRINT_NS, DOC_NS, WORKFLOW_NS
+from zeit.importer.interfaces import PRINT_NS, DOC_NS, WORKFLOW_NS
 import lxml.etree
+import logging
 import os.path
 import re
+import zeit.importer.interfaces
+import zope.component
 
-K4_STYLESHEET = os.path.dirname(__file__) + '/stylesheets/k4import.xslt'
+
+log = logging.getLogger(__name__)
 p_pattern = re.compile('<p>([a-z0-9])</p>\s*<p>', re.M | re.I)  # <p>V</p>
 
 
@@ -29,26 +33,15 @@ def indent(elem, level=0):
             elem.tail = i
 
 
-def transform_k4(k4xml_path):
+class Article(object):
     """Transforms k4xml to zeit article format."""
-    if not os.path.isfile(k4xml_path):
-        raise IOError('%s does not exists' % k4xml_path)
 
-    xslt_doc = lxml.etree.parse(K4_STYLESHEET)
-    transform = lxml.etree.XSLT(xslt_doc)
-
-    doc = lxml.etree.parse(k4xml_path)
-    result = transform(doc)
-
-    return result
-
-
-class TransformedArticle(object):
-
-    def __init__(self, doc, ipool, logger=False):
-        self.doc = doc
-        self.ipool = ipool
-        self.logger = logger
+    def __init__(self, path):
+        if not os.path.isfile(path):
+            raise IOError('%s does not exists' % path)
+        conf = zope.component.getUtility(zeit.importer.interfaces.ISettings)
+        self.doc = conf['k4_stylesheet'](
+            lxml.etree.parse(path), ressortmap_url="'%s'" % conf['ressortmap'])
         self.metadata = self.getAttributesFromDoc()
         self.product_id = None
 
@@ -72,18 +65,10 @@ class TransformedArticle(object):
         except:
             return None
 
-    def get_publication_id_by_ressort(self, publication_id, ressort):
-        if not ressort:
-            return publication_id
-
-        if self.ipool.ressort_map.get((publication_id, ressort)):
-            return self.ipool.ressort_map.get((publication_id, ressort))
-
-        return publication_id
-
     def get_product_id(self, product_id_in, filename):
         """Detects product id of the document, by file-pattern matching or by
         doc-attribute."""
+        conf = zope.component.getUtility(zeit.importer.interfaces.ISettings)
         if product_id_in is None:
             if filename.startswith('CH-') or filename.startswith('CH_'):
                 self.product_id = 'ZECH'
@@ -100,19 +85,19 @@ class TransformedArticle(object):
                     raise "PublicationId not found '%s'" % (filename)
 
                 ressort = self.getAttributeValue(PRINT_NS, 'ressort')
-                publication_id = self.get_publication_id_by_ressort(
-                    publication_id, ressort)
-
-                # detect the Produktid
-                self.product_id = self.ipool.product_map.get(publication_id)
+                if ressort:
+                    publication_id = conf['publication_ids'].get(
+                        (publication_id, ressort)) or publication_id
+                self.product_id = conf['product_ids'].get(publication_id)
                 if not self.product_id:
-                    self.logger.warning(
+                    log.warning(
                         'PublicationId %s cannot be mapped.', publication_id)
         else:
             self.product_id = product_id_in
         return self.product_id
 
     def addAttributesToDoc(self, product_id, year, volume, cname):
+        conf = zope.component.getUtility(zeit.importer.interfaces.ISettings)
         head = self.doc.xpath('//article/head')[0]
         attributes = [
             '<attribute ns="%s" name="id">%s-%s-%s-%s</attribute>' % (
@@ -122,7 +107,7 @@ class TransformedArticle(object):
             '<attribute ns="%s" name="product-id">%s</attribute>' % (
                 WORKFLOW_NS, product_id),
             '<attribute ns="%s" name="product-name">%s</attribute>' % (
-                WORKFLOW_NS, self.ipool.products.get(product_id, '')),
+                WORKFLOW_NS, conf['product_names'].get(product_id, '')),
             '<attribute ns="%s" name="export_cds">%s</attribute>' % (
                 DOC_NS, 'no')
         ]
