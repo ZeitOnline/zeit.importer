@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:f="http://namespaces.zeit.de/functions" version="1.0">
     <xsl:output indent="yes" encoding="UTF-8" method="xml"/>
     <xsl:template name="convert_date"><xsl:param name="in"/><xsl:value-of select="substring($in,4,2)"/>.<xsl:value-of select="substring($in,1,2)"/>.<xsl:value-of
             select="substring($in,7,4)"/></xsl:template>
@@ -146,6 +146,9 @@
     </xsl:template>
 
     <!-- body -->
+    <xsl:template match="text()">
+        <xsl:value-of select="f:normalize_whitespace(.)" />
+    </xsl:template>
 
     <xsl:template match="STORY">
         <body>
