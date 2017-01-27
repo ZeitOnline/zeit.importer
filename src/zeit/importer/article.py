@@ -34,9 +34,7 @@ def indent(elem, level=0):
 
 
 def normalize_whitespace(context, text):
-    for t in text:
-        t = re.sub("\s+", " ", t).strip()
-    return text
+    return [re.sub("\s+", " ", t).strip() for t in text]
 
 
 class Article(object):

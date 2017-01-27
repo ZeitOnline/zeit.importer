@@ -38,9 +38,9 @@ def getConnector():
 
 class K4ImportTest(unittest.TestCase):
 
-    def _get_doc(self):
+    def _get_doc(self, filename='Sp_te_Flucht_89.xml'):
         return Article(
-            os.path.dirname(__file__)+'/testdocs/Sp_te_Flucht_89.xml')
+            os.path.dirname(__file__)+'/testdocs/{}'.format(filename))
 
     def setUp(self):
         self.connector = getConnector()
@@ -184,3 +184,16 @@ class K4ImportTest(unittest.TestCase):
         doc = Article(os.path.dirname(__file__)+'/testdocs/AufmarschAtom.xml')
         doc_id = doc.get_product_id(None, 'uninteresting-k4-filename')
         self.assertEquals(doc_id, 'ZESA')
+
+    def test_normalize_whitespace(self):
+        text = zeit.importer.article.normalize_whitespace(object(), (
+            ['this ', '  is a ', 'test\n  foo ba  foo ']))
+        self.assertEquals(text[0], 'this')
+        self.assertEquals(text[1], 'is a')
+        self.assertEquals(text[2], 'test foo ba foo')
+        doc = self._get_doc(filename='whitespace.xml')
+        xpath = doc.doc.xpath('//p')
+        self.assertEquals(xpath[0].text, u'Stra\xdfburg')
+        self.assertEquals(xpath[1].text, 'Test some whitespace. Is OK!')
+        self.assertEquals(xpath[2].text, 'This should be normalized')
+        self.assertEquals(xpath[3].text, 'foo')
