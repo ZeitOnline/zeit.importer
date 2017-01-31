@@ -33,6 +33,10 @@ def indent(elem, level=0):
             elem.tail = i
 
 
+def normalize_whitespace(context, text):
+    return [re.sub("\s+", " ", t).strip() for t in text]
+
+
 class Article(object):
     """Transforms k4xml to zeit article format."""
 
@@ -40,6 +44,9 @@ class Article(object):
         if not os.path.isfile(path):
             raise IOError('%s does not exists' % path)
         conf = zope.component.getUtility(zeit.importer.interfaces.ISettings)
+        ns = lxml.etree.FunctionNamespace(
+                'http://namespaces.zeit.de/functions')
+        ns['normalize_whitespace'] = normalize_whitespace
         self.doc = conf['k4_stylesheet'](
             lxml.etree.parse(path), ressortmap_url="'%s'" % conf['ressortmap'])
         self.metadata = self.getAttributesFromDoc()

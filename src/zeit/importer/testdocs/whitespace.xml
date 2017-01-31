@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EXPORT>
+   <HEADER>
+      <id value="44068790"/>
+      <name value="EU_Tajani"/>
+      <Autor value=" Ladurner"/>
+      <Datum value=""/>
+      <iPad value="3_artikel.default"/>
+      <Zugang value="loginpflichtig"/>
+      <SAPid value="All"/>
+      <ObjectID value="44068790"/>
+      <PublicationID value="1367938747371"/>
+      <PublicationName value="Die Zeit"/>
+      <Ressort value="Politik"/>
+      <RessortID value="41"/>
+      <Ausgabe value="04/17"/>
+      <AusgabeID value="41666100"/>
+      <Erscheinungsdatum value="01/19/2017"/>
+      <Jahr value="2017"/>
+      <Seite-von value="5"/>
+      <Seite-bis value="5"/>
+      <Layoutname value="005_ Politik 4"/>
+      <LayoutID value="44058571"/>
+      <Type value="Story"/>
+      <Frames>
+         <Frame>
+            <Pagina>5</Pagina>
+            <Spread>0</Spread>
+            <Page>0</Page>
+            <PageWidth>1133.86</PageWidth>
+            <PageHeight>1615.75</PageHeight>
+            <Top>242.94</Top>
+            <Left>454.11</Left>
+            <Width>638.65</Width>
+            <Height>448.5</Height>
+         </Frame>
+         <Frame>
+            <Pagina>5</Pagina>
+            <Spread>0</Spread>
+            <Page>0</Page>
+            <PageWidth>1133.86</PageWidth>
+            <PageHeight>1615.75</PageHeight>
+            <Top>139.44</Top>
+            <Left>479.65</Left>
+            <Width>612.96</Width>
+            <Height>80.5</Height>
+         </Frame>
+         <Frame>
+            <Pagina>5</Pagina>
+            <Spread>0</Spread>
+            <Page>0</Page>
+            <PageWidth>1133.86</PageWidth>
+            <PageHeight>1615.75</PageHeight>
+            <Top>547.61</Top>
+            <Left>684.57</Left>
+            <Width>177.11</Width>
+            <Height>46</Height>
+         </Frame>
+      </Frames>
+   </HEADER>
+   <STORY>
+      <p pstyle=" Grundtext mit Einzug" cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Straßburg </p>
+      <p pstyle=" Initial 5-zeilig " cstyle="[No character style]" fname="" fface=""
+         fsize=""
+         color="">Test some  whitespace.  Is OK! </p>
+      <p pstyle=" Grundtext mit Einzug" cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color=""> This
+         should
+         be
+         normalized
+     
+     
+     
+     </p>
+      <p pstyle=" Grundtext mit Einzug" cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">       foo    </p>
+  </STORY>
+</EXPORT>
