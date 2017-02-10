@@ -223,12 +223,23 @@ class K4ImportTest(unittest.TestCase):
         unique_ids = {
                 "http://xml.zeit.de/Trump": (
                     self._get_doc(filename='Trump.xml'), 'Trump')}
-        boxes = [('http://xml.zeit.de/Trump-Kasten',
-                  self._get_doc(filename='Trump-Kasten.xml').doc)]
+        boxes = {'http://xml.zeit.de/Trump-Kasten': (
+            self._get_doc(filename='Trump-Kasten.xml'), 'Trump')}
+        box_xml = boxes['http://xml.zeit.de/Trump-Kasten'][0].doc
         zeit.importer.k4import.process_boxes(boxes, unique_ids)
-        self.assertEquals(0, len(boxes[0][1].xpath('//p')))
+        self.assertEquals(0, len(box_xml.xpath('//p')))
         article = unique_ids['http://xml.zeit.de/Trump'][0].doc
         self.assertEquals(1, len(article.xpath('/article/body/box')))
+
+    def test_process_not_corresponding_boxes(self):
+        unique_ids = {
+                "http://xml.zeit.de/Obama": (
+                    self._get_doc(filename='Trump.xml'), 'Trump')}
+        boxes = {'http://xml.zeit.de/Trump-Kasten': (
+            self._get_doc(filename='Trump-Kasten.xml'), 'Trump')}
+        boxes_return = zeit.importer.k4import.process_boxes(boxes, unique_ids)
+        self.assertEquals(
+                'http://xml.zeit.de/Trump-Kasten', boxes_return.keys()[0])
 
     def test_put_articles(self):
         unique_ids = {

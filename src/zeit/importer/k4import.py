@@ -101,7 +101,7 @@ def run_dir(input_dir, product_id_in):
     cnames = []
 
     k4_files = os.listdir(input_dir)
-    boxes = []
+    boxes = {}
     unique_ids = {}
     for (k4_filename, k4_filepath) in [
             (f, os.path.join(input_dir, f)) for f in k4_files]:
@@ -175,7 +175,7 @@ def run_dir(input_dir, product_id_in):
 
                 if new_xml:
                     if 'Kasten' in cms_id:
-                        boxes.append((cms_id, doc.doc))
+                        boxes[cms_id] = (doc, cname)
                     else:
                         unique_ids[cms_id] = (doc, cname)
             count = count + 1
@@ -185,7 +185,8 @@ def run_dir(input_dir, product_id_in):
             log.error('Error', exc_info=True)
             continue
 
-    process_boxes(boxes, unique_ids)
+    boxes_to_put = process_boxes(boxes, unique_ids)
+    unique_ids.update(boxes_to_put)
     put_articles(unique_ids)
 
     if count > 0:
@@ -208,15 +209,19 @@ def put_articles(unique_ids):
 
 
 def process_boxes(boxes, unique_ids):
-    for box in boxes:
+    no_corresponding_article = {}
+    for box_id in boxes.keys():
         # Find belonging article
-        box_id, box_xml = box
+        box_doc, box_cname = boxes[box_id]
+        box_xml = box_doc.doc
         article_id = re.sub('-Kasten.*$', '', box_id)
+
+        if unique_ids.get(article_id) is None:
+            no_corresponding_article[box_id] = boxes[box_id]
+            continue
 
         doc, cname = unique_ids.get(article_id)
         article = doc.doc
-        if article is None:
-            continue
 
         # Extract coordinates and add to article
         extract_and_move_xml_elements(
@@ -226,6 +231,7 @@ def process_boxes(boxes, unique_ids):
         article.find('//body').append(new_box)
         extract_and_move_xml_elements(
              box_xml.find("//body").getchildren(), new_box)
+    return no_corresponding_article
 
 
 def extract_and_move_xml_elements(elements, new_parent):
