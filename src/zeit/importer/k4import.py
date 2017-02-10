@@ -162,7 +162,6 @@ def run_dir(input_dir, product_id_in):
             new_xml = doc.to_string()
 
             for cms_id in cms_paths:
-                log.info('Storing in CMS as %s/%s', cms_id, cname)
                 check_resource = None
                 try:
                     check_resource = connector[cms_id]
@@ -170,7 +169,7 @@ def run_dir(input_dir, product_id_in):
                     log.info(e)
 
                 if check_resource:
-                    log.info(cms_id + "... wurde _nicht_ neu importiert")
+                    log.info("{} wurde _nicht_ neu importiert".format(cms_id))
                     continue
 
                 if new_xml:
@@ -205,6 +204,7 @@ def put_articles(unique_ids):
         for prop in doc.metadata:
             prop_val = re.sub(r'\&', ' + ', prop[2])
             res.properties[(prop[1], prop[0])] = (prop_val)
+        log.info('Storing in CMS as %s/%s', unique_id, cname)
         connector.add(res)
 
 
@@ -223,6 +223,7 @@ def process_boxes(boxes, unique_ids):
         doc, cname = unique_ids.get(article_id)
         article = doc.doc
 
+        log.info('Process box %s for %s', box_id, article_id)
         # Extract coordinates and add to article
         extract_and_move_xml_elements(
             box_xml.find("//Frame"),  article.find('//Frames')[0])
