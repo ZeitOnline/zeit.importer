@@ -101,6 +101,8 @@ def run_dir(input_dir, product_id_in):
     cnames = []
 
     k4_files = os.listdir(input_dir)
+    boxes = []
+    unique_ids = {}
     for (k4_filename, k4_filepath) in [
             (f, os.path.join(input_dir, f)) for f in k4_files]:
         try:
@@ -172,13 +174,10 @@ def run_dir(input_dir, product_id_in):
                     continue
 
                 if new_xml:
-                    res = Resource(
-                        cms_id, cname, 'article', StringIO.StringIO(new_xml),
-                        contentType='text/xml')
-                    for prop in doc.metadata:
-                        prop_val = re.sub(r'\&', ' + ', prop[2])
-                        res.properties[(prop[1], prop[0])] = (prop_val)
-                    connector.add(res)
+                    if 'Kasten' in cms_id:
+                        boxes.append((cms_id, doc.doc))
+                    else:
+                        unique_ids[cms_id] = (doc, cname)
             count = count + 1
             log.info('Done importing %s', cname)
 
@@ -186,10 +185,26 @@ def run_dir(input_dir, product_id_in):
             log.error('Error', exc_info=True)
             continue
 
+    process_boxes(boxes, unique_ids)
+    put_articles(unique_ids)
+
     if count > 0:
         copyExportToArchive(input_dir)
     else:
         log.warning('No documents to import found in %s', input_dir)
+
+
+def put_articles(unique_ids):
+    connector = zope.component.getUtility(zeit.connector.interfaces.IConnector)
+    for unique_id in unique_ids.keys():
+        doc, cname = unique_ids[unique_id]
+        res = Resource(
+            unique_id, cname, 'article', StringIO.StringIO(doc.to_string()),
+            contentType='text/xml')
+        for prop in doc.metadata:
+            prop_val = re.sub(r'\&', ' + ', prop[2])
+            res.properties[(prop[1], prop[0])] = (prop_val)
+        connector.add(res)
 
 
 def process_boxes(boxes, unique_ids):

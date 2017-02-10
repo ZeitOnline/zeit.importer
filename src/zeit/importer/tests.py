@@ -8,6 +8,7 @@ from lxml.etree import Element
 import os.path
 import pkg_resources
 import unittest
+import lxml.etree
 import zeit.cms.testing
 import zeit.connector.mock
 import zeit.connector.resource
@@ -228,3 +229,15 @@ class K4ImportTest(unittest.TestCase):
         self.assertEquals(0, len(boxes[0][1].xpath('//p')))
         article = unique_ids['http://xml.zeit.de/Trump'][0].doc
         self.assertEquals(1, len(article.xpath('/article/body/box')))
+
+    def test_put_articles(self):
+        unique_ids = {
+            "http://xml.zeit.de/Trump": (
+                self._get_doc(filename='Trump.xml'), 'Trump')}
+        zeit.importer.k4import.put_articles(unique_ids)
+        connector = zope.component.getUtility(
+                zeit.connector.interfaces.IConnector)
+        res = connector['http://xml.zeit.de/Trump']
+        doc = lxml.etree.parse(res.data)
+        self.assertEquals(25, len(doc.xpath('/article/head/attribute')))
+        self.assertEquals(29, len(res.properties))
