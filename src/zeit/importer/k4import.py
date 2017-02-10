@@ -192,6 +192,12 @@ def run_dir(input_dir, product_id_in):
         log.warning('No documents to import found in %s', input_dir)
 
 
+def extract_and_move_xml_elements(elements, new_parent):
+    for element in elements:
+        element.getparent().remove(element)
+        new_parent.append(element)
+
+
 class ConnectorResolver(lxml.etree.Resolver):
 
     def resolve(self, url, id, context):

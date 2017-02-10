@@ -4,6 +4,7 @@
 from zeit.importer.article import Article
 from zeit.importer.article import sanitizeDoc
 from zeit.importer import k4import
+from lxml.etree import Element
 import os.path
 import pkg_resources
 import unittest
@@ -197,3 +198,22 @@ class K4ImportTest(unittest.TestCase):
         self.assertEquals(xpath[1].text, 'Test some whitespace. Is OK!')
         self.assertEquals(xpath[2].text, 'This should be normalized')
         self.assertEquals(xpath[3].text, 'foo')
+
+    def test_extract_and_move_elements(self):
+        root = Element("article")
+        head = Element("head")
+        body = Element("body")
+        root.append(head)
+        root.append(body)
+
+        for x in xrange(1, 5):
+            body.append(Element("foo"))
+
+        self.assertEquals(4, len(root.xpath("/article/body/foo")))
+
+        root_2 = Element("root")
+        zeit.importer.k4import.extract_and_move_xml_elements(
+                root.xpath("//foo"), root_2)
+
+        self.assertEquals(4, len(root_2.xpath("/root/foo")))
+        self.assertEquals(0, len(root.xpath("/article/body/foo")))
