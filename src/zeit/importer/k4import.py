@@ -192,6 +192,27 @@ def run_dir(input_dir, product_id_in):
         log.warning('No documents to import found in %s', input_dir)
 
 
+def process_boxes(boxes, unique_ids):
+    for box in boxes:
+        # Find belonging article
+        box_id, box_xml = box
+        article_id = re.sub('-Kasten.*$', '', box_id)
+
+        doc, cname = unique_ids.get(article_id)
+        article = doc.doc
+        if article is None:
+            continue
+
+        # Extract coordinates and add to article
+        extract_and_move_xml_elements(
+            box_xml.find("//Frame"),  article.find('//Frames')[0])
+
+        new_box = lxml.etree.Element("box")
+        article.find('//body').append(new_box)
+        extract_and_move_xml_elements(
+             box_xml.find("//body").getchildren(), new_box)
+
+
 def extract_and_move_xml_elements(elements, new_parent):
     for element in elements:
         element.getparent().remove(element)

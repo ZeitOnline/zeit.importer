@@ -217,3 +217,14 @@ class K4ImportTest(unittest.TestCase):
 
         self.assertEquals(4, len(root_2.xpath("/root/foo")))
         self.assertEquals(0, len(root.xpath("/article/body/foo")))
+
+    def test_process_boxes(self):
+        unique_ids = {
+                "http://xml.zeit.de/Trump": (
+                    self._get_doc(filename='Trump.xml'), 'Trump')}
+        boxes = [('http://xml.zeit.de/Trump-Kasten',
+                  self._get_doc(filename='Trump-Kasten.xml').doc)]
+        zeit.importer.k4import.process_boxes(boxes, unique_ids)
+        self.assertEquals(0, len(boxes[0][1].xpath('//p')))
+        article = unique_ids['http://xml.zeit.de/Trump'][0].doc
+        self.assertEquals(1, len(article.xpath('/article/body/box')))
