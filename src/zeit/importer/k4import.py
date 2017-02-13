@@ -101,6 +101,8 @@ def run_dir(input_dir, product_id_in):
     cnames = []
 
     k4_files = os.listdir(input_dir)
+    boxes = {}
+    articles = {}
     for (k4_filename, k4_filepath) in [
             (f, os.path.join(input_dir, f)) for f in k4_files]:
         try:
@@ -160,7 +162,6 @@ def run_dir(input_dir, product_id_in):
             new_xml = doc.to_string()
 
             for cms_id in cms_paths:
-                log.info('Storing in CMS as %s/%s', cms_id, cname)
                 check_resource = None
                 try:
                     check_resource = connector[cms_id]
@@ -168,17 +169,14 @@ def run_dir(input_dir, product_id_in):
                     log.info(e)
 
                 if check_resource:
-                    log.info(cms_id + "... wurde _nicht_ neu importiert")
+                    log.info("%s wurde _nicht_ neu importiert", cms_id)
                     continue
 
                 if new_xml:
-                    res = Resource(
-                        cms_id, cname, 'article', StringIO.StringIO(new_xml),
-                        contentType='text/xml')
-                    for prop in doc.metadata:
-                        prop_val = re.sub(r'\&', ' + ', prop[2])
-                        res.properties[(prop[1], prop[0])] = (prop_val)
-                    connector.add(res)
+                    if 'Kasten' in cms_id:
+                        boxes[cms_id] = (doc, cname)
+                    else:
+                        articles[cms_id] = (doc, cname)
             count = count + 1
             log.info('Done importing %s', cname)
 
@@ -186,10 +184,63 @@ def run_dir(input_dir, product_id_in):
             log.error('Error', exc_info=True)
             continue
 
+    unintegrated_boxes = process_boxes(boxes, articles)
+    content = {}
+    content.update(articles)
+    content.update(unintegrated_boxes)
+    put_content(content)
+
     if count > 0:
         copyExportToArchive(input_dir)
     else:
         log.warning('No documents to import found in %s', input_dir)
+
+
+def put_content(resources):
+    connector = zope.component.getUtility(zeit.connector.interfaces.IConnector)
+    for unique_id in resources.keys():
+        doc, cname = resources[unique_id]
+        res = Resource(
+            unique_id, cname, 'article', StringIO.StringIO(doc.to_string()),
+            contentType='text/xml')
+        for prop in doc.metadata:
+            prop_val = re.sub(r'\&', ' + ', prop[2])
+            res.properties[(prop[1], prop[0])] = (prop_val)
+        log.info('Storing in CMS as %s/%s', unique_id, cname)
+        connector.add(res)
+
+
+def process_boxes(boxes, articles):
+    no_corresponding_article = {}
+    for box_id in boxes.keys():
+        # Find belonging article
+        box_doc, box_cname = boxes[box_id]
+        box_xml = box_doc.doc
+        article_id = re.sub('-Kasten.*$', '', box_id)
+
+        if articles.get(article_id) is None:
+            no_corresponding_article[box_id] = boxes[box_id]
+            continue
+
+        doc, cname = articles.get(article_id)
+        article = doc.doc
+
+        log.info('Process box %s for %s', box_id, article_id)
+        # Extract coordinates and add to article
+        extract_and_move_xml_elements(
+            box_xml.find("//Frame"),  article.find('//Frames')[0])
+
+        new_box = lxml.etree.Element("box")
+        article.find('//body').append(new_box)
+        extract_and_move_xml_elements(
+             box_xml.find("//body").getchildren(), new_box)
+    return no_corresponding_article
+
+
+def extract_and_move_xml_elements(elements, new_parent):
+    for element in elements:
+        element.getparent().remove(element)
+        new_parent.append(element)
 
 
 class ConnectorResolver(lxml.etree.Resolver):

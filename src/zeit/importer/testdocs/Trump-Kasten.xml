@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EXPORT>
+   <HEADER>
+      <id value="44775116"/>
+      <name value="Trump-Kasten"/>
+      <Autor value=" "/>
+      <Datum value=""/>
+      <iPad value="?"/>
+      <Zugang value="loginpflichtig"/>
+      <SAPid value="All"/>
+      <ObjectID value="44775116"/>
+      <PublicationID value="1367938747371"/>
+      <PublicationName value="Die Zeit"/>
+      <Ressort value="Dossier"/>
+      <RessortID value="33"/>
+      <Ausgabe value="07/17"/>
+      <AusgabeID value="41666192"/>
+      <Erscheinungsdatum value="02/09/2017"/>
+      <Jahr value="2017"/>
+      <Seite-von value="13"/>
+      <Seite-bis value="13"/>
+      <Layoutname value="013_015 Dossier 7"/>
+      <LayoutID value="44563052"/>
+      <Type value="Story"/>
+      <Frames>
+         <Frame>
+            <Pagina>13</Pagina>
+            <Spread>0</Spread>
+            <Page>0</Page>
+            <PageWidth>1133.86</PageWidth>
+            <PageHeight>1615.75</PageHeight>
+            <Top>1093.94</Top>
+            <Left>478.16</Left>
+            <Width>178.58</Width>
+            <Height>460</Height>
+         </Frame>
+      </Frames>
+   </HEADER>
+   <STORY>
+      <p pstyle=" Überschrift Kasten" cstyle="[No character style]" fname="Zeit Tiemann"
+         fface="Leicht"
+         fsize=""
+         color="">Regieren per Erlass</p>
+      <p pstyle=" Grundtext Kasten" cstyle=" Bold" fname="Zeit Garamond Pro"
+         fface="Bold"
+         fsize=""
+         color="">Freitag, 20. Januar</p>
+      <p pstyle=" Grundtext Kasten" cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Trump unterzeichnet einen Erlass, der sich gegen die Gesundheitsreform »Obamacare« richtet</p>
+      <p pstyle=" Grundtext Kasten" cstyle=" Bold" fname="Zeit Garamond Pro"
+         fface="Bold"
+         fsize=""
+         color="">Samstag, 21. Januar</p>
+      <p pstyle=" Grundtext Kasten" cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">In seiner Rede vor der CIA attackiert Trump die Medien</p>
+      <p pstyle=" Grundtext Kasten" cstyle=" Bold" fname="Zeit Garamond Pro"
+         fface="Bold"
+         fsize=""
+         color="">Montag, 23. Januar</p>
+      <p pstyle=" Grundtext Kasten" cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Trump kündigt das transpazifische Freihandelsabkommen TPP</p>
+      <p pstyle=" Grundtext Kasten" cstyle=" Bold" fname="Zeit Garamond Pro"
+         fface="Bold"
+         fsize=""
+         color="">Dienstag, 24. Januar</p>
+      <p pstyle=" Grundtext Kasten" cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Zwei Ölpipeline-Projekte, die Obama gestoppt hatte, werden von Trump wieder aufgenommen</p>
+      <p pstyle=" Grundtext Kasten" cstyle=" Bold" fname="Zeit Garamond Pro"
+         fface="Bold"
+         fsize=""
+         color="">Mittwoch, 25. Januar</p>
+      <p pstyle=" Grundtext Kasten" cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Trump leitet den Beginn des  Mauerbaus an der mexikanischen Grenze ein</p>
+      <p pstyle=" Grundtext Kasten" cstyle=" Bold" fname="Zeit Garamond Pro"
+         fface="Bold"
+         fsize=""
+         color="">Freitag, 27. Januar</p>
+      <p pstyle=" Grundtext Kasten" cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Trump unterzeichnet einen Erlass, der Bürgern aus sieben mehrheitlich muslimischen Ländern die Einreise in die USA verbietet</p>
+      <p pstyle=" Grundtext Kasten" cstyle=" Bold" fname="Zeit Garamond Pro"
+         fface="Bold"
+         fsize=""
+         color="">Dienstag, 31. Januar</p>
+      <p pstyle=" Grundtext Kasten" cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Trump nominiert Neil Gorsuch als Richter am Supreme Court</p>
+   </STORY>
+</EXPORT>

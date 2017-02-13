@@ -4,9 +4,11 @@
 from zeit.importer.article import Article
 from zeit.importer.article import sanitizeDoc
 from zeit.importer import k4import
+from lxml.etree import Element
 import os.path
 import pkg_resources
 import unittest
+import lxml.etree
 import zeit.cms.testing
 import zeit.connector.mock
 import zeit.connector.resource
@@ -197,3 +199,56 @@ class K4ImportTest(unittest.TestCase):
         self.assertEquals(xpath[1].text, 'Test some whitespace. Is OK!')
         self.assertEquals(xpath[2].text, 'This should be normalized')
         self.assertEquals(xpath[3].text, 'foo')
+
+    def test_extract_and_move_elements(self):
+        root = Element("article")
+        head = Element("head")
+        body = Element("body")
+        root.append(head)
+        root.append(body)
+
+        for x in xrange(1, 5):
+            body.append(Element("foo"))
+
+        self.assertEquals(4, len(root.xpath("/article/body/foo")))
+
+        root_2 = Element("root")
+        zeit.importer.k4import.extract_and_move_xml_elements(
+                root.xpath("//foo"), root_2)
+
+        self.assertEquals(4, len(root_2.xpath("/root/foo")))
+        self.assertEquals(0, len(root.xpath("/article/body/foo")))
+
+    def test_process_boxes(self):
+        articles = {
+                "http://xml.zeit.de/Trump": (
+                    self._get_doc(filename='Trump.xml'), 'Trump')}
+        boxes = {'http://xml.zeit.de/Trump-Kasten': (
+            self._get_doc(filename='Trump-Kasten.xml'), 'Trump')}
+        box_xml = boxes['http://xml.zeit.de/Trump-Kasten'][0].doc
+        zeit.importer.k4import.process_boxes(boxes, articles)
+        self.assertEquals(0, len(box_xml.xpath('//p')))
+        article = articles['http://xml.zeit.de/Trump'][0].doc
+        self.assertEquals(1, len(article.xpath('/article/body/box')))
+
+    def test_process_not_corresponding_boxes(self):
+        articles = {
+                "http://xml.zeit.de/Obama": (
+                    self._get_doc(filename='Trump.xml'), 'Trump')}
+        boxes = {'http://xml.zeit.de/Trump-Kasten': (
+            self._get_doc(filename='Trump-Kasten.xml'), 'Trump')}
+        boxes_return = zeit.importer.k4import.process_boxes(boxes, articles)
+        self.assertEquals(
+                'http://xml.zeit.de/Trump-Kasten', boxes_return.keys()[0])
+
+    def test_put_content(self):
+        articles = {
+            "http://xml.zeit.de/Trump": (
+                self._get_doc(filename='Trump.xml'), 'Trump')}
+        zeit.importer.k4import.put_content(articles)
+        connector = zope.component.getUtility(
+                zeit.connector.interfaces.IConnector)
+        res = connector['http://xml.zeit.de/Trump']
+        doc = lxml.etree.parse(res.data)
+        self.assertEquals(25, len(doc.xpath('/article/head/attribute')))
+        self.assertEquals(29, len(res.properties))
