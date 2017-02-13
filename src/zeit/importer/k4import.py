@@ -169,7 +169,7 @@ def run_dir(input_dir, product_id_in):
                     log.info(e)
 
                 if check_resource:
-                    log.info("{} wurde _nicht_ neu importiert".format(cms_id))
+                    log.info("%s wurde _nicht_ neu importiert", cms_id)
                     continue
 
                 if new_xml:
