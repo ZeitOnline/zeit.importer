@@ -220,32 +220,32 @@ class K4ImportTest(unittest.TestCase):
         self.assertEquals(0, len(root.xpath("/article/body/foo")))
 
     def test_process_boxes(self):
-        unique_ids = {
+        articles = {
                 "http://xml.zeit.de/Trump": (
                     self._get_doc(filename='Trump.xml'), 'Trump')}
         boxes = {'http://xml.zeit.de/Trump-Kasten': (
             self._get_doc(filename='Trump-Kasten.xml'), 'Trump')}
         box_xml = boxes['http://xml.zeit.de/Trump-Kasten'][0].doc
-        zeit.importer.k4import.process_boxes(boxes, unique_ids)
+        zeit.importer.k4import.process_boxes(boxes, articles)
         self.assertEquals(0, len(box_xml.xpath('//p')))
-        article = unique_ids['http://xml.zeit.de/Trump'][0].doc
+        article = articles['http://xml.zeit.de/Trump'][0].doc
         self.assertEquals(1, len(article.xpath('/article/body/box')))
 
     def test_process_not_corresponding_boxes(self):
-        unique_ids = {
+        articles = {
                 "http://xml.zeit.de/Obama": (
                     self._get_doc(filename='Trump.xml'), 'Trump')}
         boxes = {'http://xml.zeit.de/Trump-Kasten': (
             self._get_doc(filename='Trump-Kasten.xml'), 'Trump')}
-        boxes_return = zeit.importer.k4import.process_boxes(boxes, unique_ids)
+        boxes_return = zeit.importer.k4import.process_boxes(boxes, articles)
         self.assertEquals(
                 'http://xml.zeit.de/Trump-Kasten', boxes_return.keys()[0])
 
-    def test_put_articles(self):
-        unique_ids = {
+    def test_put_content(self):
+        articles = {
             "http://xml.zeit.de/Trump": (
                 self._get_doc(filename='Trump.xml'), 'Trump')}
-        zeit.importer.k4import.put_articles(unique_ids)
+        zeit.importer.k4import.put_content(articles)
         connector = zope.component.getUtility(
                 zeit.connector.interfaces.IConnector)
         res = connector['http://xml.zeit.de/Trump']

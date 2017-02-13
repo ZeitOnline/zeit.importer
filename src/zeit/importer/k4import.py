@@ -102,7 +102,7 @@ def run_dir(input_dir, product_id_in):
 
     k4_files = os.listdir(input_dir)
     boxes = {}
-    unique_ids = {}
+    articles = {}
     for (k4_filename, k4_filepath) in [
             (f, os.path.join(input_dir, f)) for f in k4_files]:
         try:
@@ -176,7 +176,7 @@ def run_dir(input_dir, product_id_in):
                     if 'Kasten' in cms_id:
                         boxes[cms_id] = (doc, cname)
                     else:
-                        unique_ids[cms_id] = (doc, cname)
+                        articles[cms_id] = (doc, cname)
             count = count + 1
             log.info('Done importing %s', cname)
 
@@ -184,9 +184,11 @@ def run_dir(input_dir, product_id_in):
             log.error('Error', exc_info=True)
             continue
 
-    boxes_to_put = process_boxes(boxes, unique_ids)
-    unique_ids.update(boxes_to_put)
-    put_articles(unique_ids)
+    unintegrated_boxes = process_boxes(boxes, articles)
+    content = {}
+    content.update(articles)
+    content.update(unintegrated_boxes)
+    put_content(content)
 
     if count > 0:
         copyExportToArchive(input_dir)
@@ -194,10 +196,10 @@ def run_dir(input_dir, product_id_in):
         log.warning('No documents to import found in %s', input_dir)
 
 
-def put_articles(unique_ids):
+def put_content(resources):
     connector = zope.component.getUtility(zeit.connector.interfaces.IConnector)
-    for unique_id in unique_ids.keys():
-        doc, cname = unique_ids[unique_id]
+    for unique_id in resources.keys():
+        doc, cname = resources[unique_id]
         res = Resource(
             unique_id, cname, 'article', StringIO.StringIO(doc.to_string()),
             contentType='text/xml')
@@ -208,7 +210,7 @@ def put_articles(unique_ids):
         connector.add(res)
 
 
-def process_boxes(boxes, unique_ids):
+def process_boxes(boxes, articles):
     no_corresponding_article = {}
     for box_id in boxes.keys():
         # Find belonging article
@@ -216,11 +218,11 @@ def process_boxes(boxes, unique_ids):
         box_xml = box_doc.doc
         article_id = re.sub('-Kasten.*$', '', box_id)
 
-        if unique_ids.get(article_id) is None:
+        if articles.get(article_id) is None:
             no_corresponding_article[box_id] = boxes[box_id]
             continue
 
-        doc, cname = unique_ids.get(article_id)
+        doc, cname = articles.get(article_id)
         article = doc.doc
 
         log.info('Process box %s for %s', box_id, article_id)
