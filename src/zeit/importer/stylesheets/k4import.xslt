@@ -146,10 +146,6 @@
     </xsl:template>
 
     <!-- body -->
-    <xsl:template match="text()">
-        <xsl:value-of select="f:normalize_whitespace(.)" />
-    </xsl:template>
-
     <xsl:template match="STORY">
         <body>
             <xsl:apply-templates select="p" mode="supertitle"/>

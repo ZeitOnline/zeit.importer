@@ -188,7 +188,7 @@ class K4ImportTest(unittest.TestCase):
         self.assertEquals(doc_id, 'ZESA')
 
     def test_normalize_whitespace(self):
-        text = zeit.importer.article.normalize_whitespace(object(), (
+        text = zeit.importer.article.normalize_and_strip_whitespace(object(), (
             ['this ', '  is a ', 'test\n  foo ba  foo ']))
         self.assertEquals(text[0], 'this')
         self.assertEquals(text[1], 'is a')
@@ -199,6 +199,26 @@ class K4ImportTest(unittest.TestCase):
         self.assertEquals(xpath[1].text, 'Test some whitespace. Is OK!')
         self.assertEquals(xpath[2].text, 'This should be normalized')
         self.assertEquals(xpath[3].text, 'foo')
+
+    def test_normalize_whitespace_with_mixed_content(self):
+        doc = self._get_doc(filename='whitespace.xml')
+        xpath = doc.doc.xpath('//p')
+        self.assertEquals(xpath[4].text,
+                          ('This is text, which should '
+                          'not be trimmed incorrectly.'))
+        self.assertEquals(xpath[5].text,
+                          ('This is text, which should '
+                          'not be trimmed incorrectly. But normalized.'))
+        self.assertEquals(xpath[6].text,
+                          ('This is text, with mixed content but we can '
+                           'do trimming at the end.'))
+        self.assertEquals(xpath[7].text,
+                          ('This is text, with too much whitespace, '
+                           'which should be normalized and trimmed.'))
+        self.assertEquals(lxml.etree.tostring(xpath[8]), (
+            '<p xmlns:f=\"http://namespaces.zeit.de/functions\">This is text, '
+            '<strong> with too much whitespace, </strong> which cannot be '
+            'trimmed.</p> '))
 
     def test_extract_and_move_elements(self):
         root = Element("article")
