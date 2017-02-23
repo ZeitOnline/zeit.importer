@@ -84,5 +84,11 @@
          fface=""
          fsize=""
          color="">       foo    </p>
+
+      <p pstyle=" Grundtext mit Einzug" cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">This is Text <span>which should not</span> be trimmed incorrectly.</p>
   </STORY>
 </EXPORT>
