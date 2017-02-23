@@ -288,6 +288,9 @@ def load_configuration():
     settings['k4_stylesheet'] = lxml.etree.XSLT(lxml.etree.parse(
         pkg_resources.resource_filename(
             __name__, 'stylesheets/k4import.xslt'), parser=parser))
+    settings['normalize_whitespace'] = lxml.etree.XSLT(lxml.etree.parse(
+        pkg_resources.resource_filename(
+            __name__, 'stylesheets/normalize_whitespace.xslt'), parser=parser))
 
 
 def main():
