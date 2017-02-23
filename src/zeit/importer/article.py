@@ -33,8 +33,12 @@ def indent(elem, level=0):
             elem.tail = i
 
 
-def normalize_whitespace(context, text):
+def normalize_and_strip_whitespace(context, text):
     return [re.sub("\s+", " ", t).strip() for t in text]
+
+
+def normalize_whitespace(context, text):
+    return [re.sub("\s+", " ", t) for t in text]
 
 
 class Article(object):
@@ -47,6 +51,7 @@ class Article(object):
         ns = lxml.etree.FunctionNamespace(
                 'http://namespaces.zeit.de/functions')
         ns['normalize_whitespace'] = normalize_whitespace
+        ns['normalize_and_strip_whitespace'] = normalize_and_strip_whitespace
         self.doc = conf['k4_stylesheet'](
             lxml.etree.parse(path), ressortmap_url="'%s'" % conf['ressortmap'])
         self.metadata = self.getAttributesFromDoc()
