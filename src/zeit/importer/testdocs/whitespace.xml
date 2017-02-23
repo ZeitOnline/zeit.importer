@@ -84,7 +84,6 @@
          fface=""
          fsize=""
          color="">       foo    </p>
-
       <p pstyle=" Grundtext mit Einzug" cstyle="[No character style]"
          fname="Zeit Garamond Pro"
          fface=""
@@ -95,5 +94,20 @@
          fface=""
          fsize=""
          color="">This is text,  <span>which should not</span> be trimmed incorrectly. But   normalized.</p>
+      <p pstyle=" Grundtext mit Einzug" cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">This is text, <span>with mixed content </span>but we can do trimming at the end.  </p>
+      <p pstyle=" Grundtext mit Einzug" cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">This is text, <span> with too much whitespace,  </span>  which should be normalized and trimmed.</p>
+      <p pstyle=" Grundtext mit Einzug" cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">This is text, <span fface='Bold'> with too much whitespace, </span>  which cannot be trimmed.</p>
   </STORY>
 </EXPORT>

@@ -146,18 +146,6 @@
     </xsl:template>
 
     <!-- body -->
-    <xsl:template match="text()">
-        <xsl:value-of select="f:normalize_and_strip_whitespace(.)" />
-    </xsl:template>
-
-    <xsl:template match="text()[./following-sibling::*]">
-        <xsl:value-of select="f:normalize_whitespace(.)" />
-    </xsl:template>
-
-    <xsl:template match="text()[./preceding-sibling::*]">
-        <xsl:value-of select="f:normalize_whitespace(.)" />
-    </xsl:template>
-
     <xsl:template match="STORY">
         <body>
             <xsl:apply-templates select="p" mode="supertitle"/>

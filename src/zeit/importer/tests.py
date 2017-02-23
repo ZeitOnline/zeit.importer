@@ -209,6 +209,16 @@ class K4ImportTest(unittest.TestCase):
         self.assertEquals(xpath[5].text,
                           ('This is text, which should '
                           'not be trimmed incorrectly. But normalized.'))
+        self.assertEquals(xpath[6].text,
+                          ('This is text, with mixed content but we can '
+                           'do trimming at the end.'))
+        self.assertEquals(xpath[7].text,
+                          ('This is text, with too much whitespace, '
+                           'which should be normalized and trimmed.'))
+        self.assertEquals(lxml.etree.tostring(xpath[8]), (
+            '<p xmlns:f=\"http://namespaces.zeit.de/functions\">This is text, '
+            '<strong> with too much whitespace, </strong> which cannot be '
+            'trimmed.</p> '))
 
     def test_extract_and_move_elements(self):
         root = Element("article")

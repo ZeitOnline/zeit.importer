@@ -33,12 +33,28 @@ def indent(elem, level=0):
             elem.tail = i
 
 
-def normalize_and_strip_whitespace(context, text):
-    return [re.sub("\s+", " ", t).strip() for t in text]
+def _normalize_whitespace(text):
+    return re.sub("\s+", " ", text)
 
 
 def normalize_whitespace(context, text):
-    return [re.sub("\s+", " ", t) for t in text]
+    return [_normalize_whitespace(t) for t in text]
+
+
+def normalize_and_strip_whitespace(context, text):
+    return [_normalize_whitespace(t).strip() for t in text]
+
+
+def normalize_whitespace_strip_right(context, text):
+    return [_normalize_whitespace(t).rstrip() for t in text]
+
+
+def normalize_whitespace_strip_left(context, text):
+    return [_normalize_whitespace(t).lstrip() for t in text]
+
+
+def _transform(xslt, xml, **kwargs):
+    return xslt(xml, **kwargs)
 
 
 class Article(object):
@@ -50,10 +66,17 @@ class Article(object):
         conf = zope.component.getUtility(zeit.importer.interfaces.ISettings)
         ns = lxml.etree.FunctionNamespace(
                 'http://namespaces.zeit.de/functions')
-        ns['normalize_whitespace'] = normalize_whitespace
+        ns['normalize_whitespace_strip_left'] = (
+            normalize_whitespace_strip_left)
+        ns['normalize_whitespace_strip_right'] = (
+            normalize_whitespace_strip_right)
         ns['normalize_and_strip_whitespace'] = normalize_and_strip_whitespace
-        self.doc = conf['k4_stylesheet'](
-            lxml.etree.parse(path), ressortmap_url="'%s'" % conf['ressortmap'])
+        ns['normalize_whitespace'] = normalize_whitespace
+
+        basic_article = _transform(
+            conf['k4_stylesheet'], lxml.etree.parse(path),
+            ressortmap_url="'%s'" % conf['ressortmap'])
+        self.doc = _transform(conf['normalize_whitespace'], basic_article)
         self.metadata = self.getAttributesFromDoc()
         self.product_id = None
 
