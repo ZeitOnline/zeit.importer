@@ -4,7 +4,7 @@ zeit.importer changes
 1.2.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- BUG-666: Improve whitespace normalisation
 
 
 1.1.0 (2017-02-14)
