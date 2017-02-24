@@ -270,5 +270,10 @@ class K4ImportTest(unittest.TestCase):
                 zeit.connector.interfaces.IConnector)
         res = connector['http://xml.zeit.de/Trump']
         doc = lxml.etree.parse(res.data)
-        self.assertEquals(25, len(doc.xpath('/article/head/attribute')))
-        self.assertEquals(29, len(res.properties))
+        self.assertEquals(26, len(doc.xpath('/article/head/attribute')))
+        self.assertEquals(30, len(res.properties))
+
+    def test_access_transformation(self):
+        doc = self._get_doc(filename='access.xml').doc
+        val = doc.xpath("//attribute[@name='access']")[0].text
+        self.assertEquals("metered", val)

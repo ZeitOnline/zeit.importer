@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 from zeit.importer.interfaces import PRINT_NS, DOC_NS, WORKFLOW_NS
 import lxml.etree
 import logging
@@ -57,6 +60,15 @@ def _transform(xslt, xml, **kwargs):
     return xslt(xml, **kwargs)
 
 
+def map_access(context, text):
+    map = {
+            "loginpflichtig": "metered",
+            "abopflichtig": "paid",
+            "frei": "free",
+            u"nicht für online": "skip"}
+    return [map.get(t, 'metered') for t in text]
+
+
 class Article(object):
     """Transforms k4xml to zeit article format."""
 
@@ -72,6 +84,7 @@ class Article(object):
             normalize_whitespace_strip_right)
         ns['normalize_and_strip_whitespace'] = normalize_and_strip_whitespace
         ns['normalize_whitespace'] = normalize_whitespace
+        ns['map_access'] = map_access
 
         basic_article = _transform(
             conf['k4_stylesheet'], lxml.etree.parse(path),
