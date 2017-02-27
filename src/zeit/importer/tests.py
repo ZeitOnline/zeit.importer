@@ -302,4 +302,6 @@ class K4ImportTest(unittest.TestCase):
                           access(object(), ['abopflichtig']))
         self.assertEquals(['free'],
                           access(object(), ['frei']))
+        self.assertEquals(['__skip_import__'],
+                          access(object(), ['something']))
         self.settings['access_override_value'] = 'registration'
