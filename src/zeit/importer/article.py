@@ -1,5 +1,4 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+# coding: utf-8
 
 from zeit.importer.interfaces import PRINT_NS, DOC_NS, WORKFLOW_NS
 import lxml.etree
