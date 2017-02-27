@@ -243,6 +243,10 @@ def extract_and_move_xml_elements(elements, new_parent):
         new_parent.append(element)
 
 
+def load_access_mapping(access_source):
+    return {e.get('k4_id'): e.get('id') for e in access_source.xpath("//type")}
+
+
 class ConnectorResolver(lxml.etree.Resolver):
 
     def resolve(self, url, id, context):
@@ -283,6 +287,7 @@ def load_configuration():
     except KeyError:
         raise ValueError('Ressortmap file %s not found',
                          settings.get('ressortmap', ''))
+
     parser = lxml.etree.XMLParser()
     parser.resolvers.add(ConnectorResolver())
     settings['k4_stylesheet'] = lxml.etree.XSLT(lxml.etree.parse(
@@ -291,6 +296,9 @@ def load_configuration():
     settings['normalize_whitespace'] = lxml.etree.XSLT(lxml.etree.parse(
         pkg_resources.resource_filename(
             __name__, 'stylesheets/normalize_whitespace.xslt'), parser=parser))
+
+    access_source = lxml.etree.parse(connector[settings['access_source']].data)
+    settings['access_mapping'] = load_access_mapping(access_source)
 
 
 def main():

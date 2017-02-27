@@ -60,12 +60,10 @@ def _transform(xslt, xml, **kwargs):
 
 
 def map_access(context, text):
-    map = {
-            "loginpflichtig": "metered",
-            "abopflichtig": "paid",
-            "frei": "free",
-            u"nicht für online": "skip"}
-    return [map.get(t, 'metered') for t in text]
+    conf = zope.component.getUtility(zeit.importer.interfaces.ISettings)
+    if conf.get('access_override_value'):
+        return [conf.get('access_override_value') for t in text]
+    return [conf['access_mapping'].get(t, '__skip_import__') for t in text]
 
 
 class Article(object):

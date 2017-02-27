@@ -24,6 +24,8 @@ settings = {
     'import_root_in': 'http://xml.zeit.de/archiv-wf/archiv-in/',
     'import_config': 'http://xml.zeit.de/forms/importexport.xml',
     'ressortmap': 'http://xml.zeit.de/forms/printimport-ressortmap.xml',
+    'access_source': 'http://xml.zeit.de/work/data/access.xml',
+    'access_override_value': 'registration'
 }
 
 
@@ -35,6 +37,11 @@ def getConnector():
             'text', pkg_resources.resource_stream(
                 __name__, '/testdocs/ipool/%s' % name),
             contentType='text/xml'))
+    connector.add(zeit.connector.resource.Resource(
+        settings['access_source'], 'access_source',
+        'text',  pkg_resources.resource_stream(
+            __name__, '/testdocs/ipool/access.xml'),
+        contentType='text/xml'))
     return connector
 
 
@@ -273,7 +280,26 @@ class K4ImportTest(unittest.TestCase):
         self.assertEquals(26, len(doc.xpath('/article/head/attribute')))
         self.assertEquals(30, len(res.properties))
 
-    def test_access_transformation(self):
+    def test_access_override(self):
         doc = self._get_doc(filename='access.xml').doc
         val = doc.xpath("//attribute[@name='access']")[0].text
-        self.assertEquals("metered", val)
+        self.assertEquals("registration", val)
+
+        del self.settings['access_override_value']
+        zeit.importer.k4import.load_configuration()
+        doc = self._get_doc(filename='access.xml').doc
+        val = doc.xpath("//attribute[@name='access']")[0].text
+        self.assertEquals("free", val)
+        self.settings['access_override_value'] = 'registration'
+
+    def test_access_mapping(self):
+        del self.settings['access_override_value']
+        zeit.importer.k4import.load_configuration()
+        access = zeit.importer.article.map_access
+        self.assertEquals(['registration'],
+                          access(object(), ['loginpflichtig']))
+        self.assertEquals(['abo'],
+                          access(object(), ['abopflichtig']))
+        self.assertEquals(['free'],
+                          access(object(), ['frei']))
+        self.settings['access_override_value'] = 'registration'
