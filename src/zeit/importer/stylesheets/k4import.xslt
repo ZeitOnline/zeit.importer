@@ -52,7 +52,6 @@
     <xsl:template match="Frames" mode="ressort" />
 
     <xsl:template match="HEADER/Ressort" mode="ressort">
-
         <xsl:variable name="ressort">
             <xsl:choose>
                 <xsl:when test="@value='Reise'">Reisen</xsl:when>
@@ -80,17 +79,13 @@
                 <attribute ns="http://namespaces.zeit.de/CMS/print" name="ressort"><xsl:value-of select="$ressort" /></attribute>
             </xsl:otherwise>
         </xsl:choose>
-
     </xsl:template>
 
-    <!--<xsl:template match="HEADER/Jahr">
-        <attribute ns="http://namespaces.zeit.de/CMS/document" name="year">
-            <xsl:value-of select="@value"/>
+    <xsl:template match="HEADER/Zugang">
+        <attribute namespace="http://namespaces.zeit.de/CMS/document" name="access">
+            <xsl:value-of select="f:map_access(@value)" />
         </attribute>
-    </xsl:template-->
-        <!--attribute ns="http://namespaces.zeit.de/QPS/attributes" name="year">
-                <xsl:value-of select="@value"/>
-        </attribute-->
+    </xsl:template>
 
     <xsl:template match="HEADER/PublicationID">
         <attribute ns="http://namespaces.zeit.de/CMS/print" name="publication-id">

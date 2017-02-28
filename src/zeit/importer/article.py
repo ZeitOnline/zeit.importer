@@ -1,3 +1,5 @@
+# coding: utf-8
+
 from zeit.importer.interfaces import PRINT_NS, DOC_NS, WORKFLOW_NS
 import lxml.etree
 import logging
@@ -57,6 +59,13 @@ def _transform(xslt, xml, **kwargs):
     return xslt(xml, **kwargs)
 
 
+def map_access(context, text):
+    conf = zope.component.getUtility(zeit.importer.interfaces.ISettings)
+    if conf.get('access_override_value'):
+        return [conf.get('access_override_value') for t in text]
+    return [conf['access_mapping'].get(t, '__skip_import__') for t in text]
+
+
 class Article(object):
     """Transforms k4xml to zeit article format."""
 
@@ -72,6 +81,7 @@ class Article(object):
             normalize_whitespace_strip_right)
         ns['normalize_and_strip_whitespace'] = normalize_and_strip_whitespace
         ns['normalize_whitespace'] = normalize_whitespace
+        ns['map_access'] = map_access
 
         basic_article = _transform(
             conf['k4_stylesheet'], lxml.etree.parse(path),
