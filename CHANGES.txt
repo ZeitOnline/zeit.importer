@@ -1,7 +1,7 @@
 zeit.importer changes
 =================
 
-1.2.0 (unreleased)
+1.2.0 (2017-03-01)
 ------------------
 
 - ZON-3735: Set access attribute from K4 import
