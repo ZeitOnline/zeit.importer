@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from lxml.etree import Element
-from zeit.importer import k4import
+from PIL import Image
+from zeit.importer import highres, k4import
 from zeit.importer.article import Article
 from zeit.importer.article import sanitizeDoc
+import io
 import lxml.etree
 import mock
 import os.path
@@ -19,6 +21,9 @@ settings = {
     'connector_url': 'mocked',
     'k4_export_dir': '/var/cms/import/k4incoming/',
     'k4_archive_dir': '/var/cms/import/old/',
+    'k4_highres_dir': os.path.dirname(__file__) + '/testdocs/',
+    'highres_sample_size': 4,
+    'highres_diff_cutoff': 0.1,
     'import_root': 'http://xml.zeit.de/archiv-wf/archiv/',
     'import_root_in': 'http://xml.zeit.de/archiv-wf/archiv-in/',
     'import_config': 'http://xml.zeit.de/forms/importexport.xml',
@@ -298,16 +303,17 @@ class K4ImportTest(unittest.TestCase):
         self.assertEquals(zon_images[0].get('vivi_name'), 'img-1')
         self.assertEquals(len(zon_images), 1)
 
-    def test_get_preview_img_resource(self):
+    def test_get_prefixed_img_resource(self):
         xml = lxml.etree.parse(
             os.path.dirname(__file__) + '/testdocs/img_47210154_Walser.xml')
-        res = k4import.get_preview_img_resource(
+        res = k4import.get_prefixed_img_resource(
             os.path.dirname(__file__) + '/testdocs/',
             xml,
             'http://xml.zeit.de/base-id',
+            'prefix',
             'img-1')
         self.assertEquals(
-            'http://xml.zeit.de/base-id/preview-img-1.jpg',
+            'http://xml.zeit.de/base-id/prefix-img-1.jpg',
             res.id)
 
         file_path = os.path.dirname(__file__) + (
@@ -353,4 +359,46 @@ class K4ImportTest(unittest.TestCase):
             'ZEI/2017/13/zon-images/Walser')
         resources = list(self.connector.listCollection(col_id))
         self.assertEquals(u'img-1', resources[0][0])
-        self.assertEquals(u'preview-img-1.jpg', resources[1][0])
+        self.assertEquals(u'master-img-1.jpg', resources[1][0])
+        self.assertEquals(u'preview-img-1.jpg', resources[2][0])
+
+
+class HighresTest(K4ImportTest):
+
+    def test_imagehash_initializes_with_settings(self):
+        fp = io.BytesIO()
+        Image.new('1', (1, 1)).save(fp, 'jpeg')
+        hash_ = highres.ImageHash('foobar', fp)
+        self.assertEquals(hash_.size, self.settings['highres_sample_size'])
+        self.assertEquals(hash_.cutoff, self.settings['highres_diff_cutoff'])
+        self.assertEquals(hash_.id, 'foobar')
+
+    def test_imagehash_calculates_plausible_hash_values(self):
+        fp = io.BytesIO()
+        image = Image.new('L', (2, 2))
+        image.putdata([250, 15, 140, 190])
+        image = image.resize((4, 4))
+        image.save(fp, 'jpeg')
+        hash_ = highres.ImageHash('', fp)
+        self.assertEquals(hash_['average_hash'], 'CC77')
+        self.assertEquals(hash_['dhash'], '05C1')
+        self.assertEquals(hash_['dhash_vertical'], '083A')
+
+    def test_imagehash_finds_plausible_matches(self):
+        hashes = []
+        for id_, pixels in enumerate((
+                [15, 255, 255, 15],
+                [250, 70, 80, 245],
+                [10, 240, 240, 10],
+                [70, 70, 80, 75],
+                [0, 0, 250, 255])):
+            fp = io.BytesIO()
+            image = Image.new('L', (2, 2))
+            image.putdata(pixels)
+            image = image.resize([self.settings['highres_sample_size']] * 2)
+            image.save(fp, 'jpeg')
+            hash_ = highres.ImageHash(id_, fp)
+            hashes.append(hash_)
+        master = hashes.pop(0)
+        match = master.find_match(hashes)
+        self.assertEquals(match.id, 2)

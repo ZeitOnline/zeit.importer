@@ -1,6 +1,7 @@
 # coding: utf-8
 from zeit.connector.resource import Resource
 from zeit.importer.article import Article
+from zeit.importer.highres import ImageHash
 from zeit.importer.interfaces import DOC_NS, PRINT_NS
 import ConfigParser
 import datetime
@@ -93,13 +94,14 @@ def run_dir(input_dir, product_id_in):
     connector = zope.component.getUtility(zeit.connector.interfaces.IConnector)
     settings = zope.component.getUtility(zeit.importer.interfaces.ISettings)
 
+    highres_images = None  # Wait for the 1st article to tell us the volume
     count = 0
     cnames = []
 
     k4_files = os.listdir(input_dir)
     boxes = {}
     articles = {}
-    images = []
+
     for (k4_filename, k4_filepath) in [
             (f, os.path.join(input_dir, f)) for f in k4_files]:
         try:
@@ -150,6 +152,9 @@ def run_dir(input_dir, product_id_in):
             if not all([year, volume, print_ressort]):
                 raise ValueError('Missing metadata in %s', cname)
 
+            if highres_images is None:
+                highres_images = hash_highres_dir(year, volume)
+
             print_ressort = mangleQPSName(print_ressort).lower()
 
             import_root = ensure_collection(
@@ -166,7 +171,19 @@ def run_dir(input_dir, product_id_in):
                 os.path.join(settings['import_root'], product_id,
                              year, volume, 'zon-images', cname))
 
-            images.extend(create_image_resources(input_dir, doc, img_base_id))
+            for xml_resource, lowres, highres in create_image_resources(
+                    input_dir, doc, img_base_id):
+                try:
+                    lowres_hash = ImageHash(lowres.id, lowres.data)
+                except Exception, e:
+                    log.warning('Could not hash %s: %s' % (lowres.id, e))
+                else:
+                    highres_hash = lowres_hash.find_match(highres_images)
+                    if highres_hash:
+                        highres.data = file(highres_hash.id)
+                        connector.add(highres)
+                connector.add(lowres)
+                connector.add(xml_resource)
 
             doc.addAttributesToDoc(product_id, year, volume, cname)
             new_xml = doc.to_string()
@@ -194,7 +211,6 @@ def run_dir(input_dir, product_id_in):
     content.update(articles)
     content.update(unintegrated_boxes)
     put_content(content)
-    put_images(images)
 
     if count > 0:
         copyExportToArchive(input_dir)
@@ -214,12 +230,6 @@ def put_content(resources):
             res.properties[(prop[1], prop[0])] = (prop_val)
         log.info('Storing in CMS as %s/%s', unique_id, cname)
         connector.add(res)
-
-
-def put_images(images):
-    connector = zope.component.getUtility(zeit.connector.interfaces.IConnector)
-    for image in images:
-        connector.add(image)
 
 
 def process_boxes(boxes, articles):
@@ -318,10 +328,12 @@ def create_image_resources(input_dir, doc, img_base_id):
     for elem in doc.doc.xpath("/article/head/zon-image"):
         vivi_name = elem.get('vivi_name')
         img_xml = lxml.etree.parse(os.path.join(input_dir, elem.get('k4_id')))
-        img_resources.append(get_xml_img_resource(
-            img_xml, img_base_id, vivi_name))
-        img_resources.append(get_preview_img_resource(
-            input_dir, img_xml, img_base_id, vivi_name))
+        xml_resource = get_xml_img_resource(img_xml, img_base_id, vivi_name)
+        lowres = get_prefixed_img_resource(
+            input_dir, img_xml, img_base_id, 'preview', vivi_name)
+        highres = get_prefixed_img_resource(
+            input_dir, img_xml, img_base_id, 'master', vivi_name)
+        img_resources.append((xml_resource, lowres, highres))
     return img_resources
 
 
@@ -332,15 +344,30 @@ def get_xml_img_resource(img_xml, img_base_id, name):
         StringIO.StringIO(lxml.etree.tostring(xml)), contentType='text/xml')
 
 
-def get_preview_img_resource(input_dir, img_xml, img_base_id, name):
+def get_prefixed_img_resource(input_dir, img_xml, img_base_id, prefix, name):
     normpath = '/'.join(
         img_xml.find('/HEADER/LowResPath').text.replace(
             '\\', '/').split('/')[1:])
     path = os.path.join(input_dir, normpath)
-    name = 'preview-%s.jpg' % (name)
+    name = '%s-%s.jpg' % (prefix, name)
     return Resource(
         os.path.join(img_base_id, name), name, 'image', file(path),
         contentType='image/jpeg')
+
+
+def hash_highres_dir(year, volume):
+    settings = zope.component.getUtility(zeit.importer.interfaces.ISettings)
+    k4_highres_dir = settings.get('k4_highres_dir', '')
+    directory = k4_highres_dir.format(year=year, volume=volume)
+    hashes = []
+    for path, _, files in os.walk(directory):
+        for filename in files:
+            try:
+                fp = os.path.join(path, filename).decode('utf-8')
+                hashes.append(ImageHash(fp, fp))
+            except Exception, e:
+                log.warn('Hashing error: {}'.format(e.message))
+    return hashes
 
 
 def create_img_xml(xml):
