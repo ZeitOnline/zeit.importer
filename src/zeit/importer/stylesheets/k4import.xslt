@@ -82,7 +82,7 @@
     </xsl:template>
 
     <xsl:template match="HEADER/Zugang">
-        <attribute namespace="http://namespaces.zeit.de/CMS/document" name="access">
+        <attribute ns="http://namespaces.zeit.de/CMS/document" name="access">
             <xsl:value-of select="f:map_access(@value)" />
         </attribute>
     </xsl:template>
