@@ -1,7 +1,7 @@
 zeit.importer changes
 =================
 
-1.2.1 (unreleased)
+1.2.1 (2017-03-07)
 ------------------
 
 - Typo: Correct attribute in XSLT
