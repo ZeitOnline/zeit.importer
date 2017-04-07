@@ -108,9 +108,15 @@ def run_dir(input_dir, product_id_in):
         try:
             if (os.path.isdir(k4_filepath)):
                 continue
+            elif k4_filename[0:4] == 'img_':
+                # We handle img-xml, when it is discovered inside the article
+                # XML.
+                continue
 
             log.info('Importing %s', k4_filename)
             doc = Article(k4_filepath)
+
+            process_img_info(doc, input_dir)
 
             jobname = doc.getAttributeValue(DOC_NS, 'jobname')
             if not jobname:
@@ -299,6 +305,55 @@ def load_configuration():
 
     access_source = lxml.etree.parse(connector[settings['access_source']].data)
     settings['access_mapping'] = load_access_mapping(access_source)
+
+
+def process_img_info(input_dir, doc):
+    for elem in doc.doc.xpath("/article/head/zon-image"):
+        img_xml = lxml.etree.parse('%s%s' % (input_dir, elem.get('k4_id')))
+        zon_img_xml = create_img_xml(img_xml)
+        put_preview_img(img_xml)
+        put_img_xml(zon_img_xml, elem.get('path'))
+
+
+def put_preview_img(img_xml):
+    pass
+
+
+def create_img_xml(xml):
+    img_group = lxml.etree.Element('image-group')
+
+    meta_type = lxml.etree.Element('attribute',
+                                   ns='http://namespaces.zeit.de/CMS/meta',
+                                   name='type')
+    meta_type.text = 'image-group'
+    img_group.append(meta_type)
+    img_alt = lxml.etree.Element('attribute',
+                                 ns='http://namespaces.zeit.de/CMS/image',
+                                 name='alt')
+    img_alt.text = xml.find('/HEADER/DESCRIPTION').get('value')
+    img_group.append(img_alt)
+    img_caption = lxml.etree.Element('attribute',
+                                     ns='http://namespaces.zeit.de/CMS/image',
+                                     name='caption')
+    img_caption.text = xml.find('/HEADER/BUZ').get('value')
+    img_group.append(img_caption)
+    img_master = lxml.etree.Element('attribute',
+                                    ns='http://namespaces.zeit.de/CMS/image',
+                                    name='master_images')
+    img_master.text = 'master-%s' % (
+            xml.find('/HEADER/LowResPath').text.split('\\')[-1])
+    img_group.append(img_master)
+    img_copyrights = lxml.etree.Element(
+            'attribute',
+            ns='http://namespaces.zeit.de/CMS/document',
+            name='copyrights')
+    img_copyrights.text = xml.find('/HEADER/CREDITS').text
+    img_group.append(img_copyrights)
+    return img_group
+
+
+def put_img_xml(img_xml, path):
+    pass
 
 
 def main():
