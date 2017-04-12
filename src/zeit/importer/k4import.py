@@ -305,16 +305,34 @@ def load_configuration():
     settings['access_mapping'] = load_access_mapping(access_source)
 
 
-def process_img_info(input_dir, doc):
+def create_image_resources(input_dir, doc, img_base_id):
+    img_resources = []
     for elem in doc.doc.xpath("/article/head/zon-image"):
-        img_xml = lxml.etree.parse('%s%s' % (input_dir, elem.get('k4_id')))
-        zon_img_xml = create_img_xml(img_xml)
-        put_preview_img(img_xml)
-        put_img_xml(zon_img_xml, elem.get('path'))
+        vivi_name = elem.get('vivi_name')
+        img_xml = lxml.etree.parse(os.path.join(input_dir, elem.get('k4_id')))
+        img_resources.append(get_xml_img_resource(
+            img_xml, img_base_id, vivi_name))
+        img_resources.append(get_preview_img_resource(
+            input_dir, img_xml, img_base_id, vivi_name))
+    return img_resources
 
 
-def put_preview_img(img_xml):
-    pass
+def get_xml_img_resource(img_xml, img_base_id, name):
+    xml = create_img_xml(img_xml)
+    return Resource(
+        os.path.join(img_base_id, name), name, 'image-xml',
+        StringIO.StringIO(lxml.etree.tostring(xml)), contentType='text/xml')
+
+
+def get_preview_img_resource(input_dir, img_xml, img_base_id, name):
+    normpath = '/'.join(
+        img_xml.find('/HEADER/LowResPath').text.replace(
+            '\\', '/').split('/')[1:])
+    path = os.path.join(input_dir, normpath)
+    name = 'preview-%s.jpg' % (name)
+    return Resource(
+        os.path.join(img_base_id, name), name, 'image', file(path),
+        contentType='image/jpeg')
 
 
 def create_img_xml(xml):
@@ -348,10 +366,6 @@ def create_img_xml(xml):
     img_copyrights.text = xml.find('/HEADER/CREDITS').text
     img_group.append(img_copyrights)
     return img_group
-
-
-def put_img_xml(img_xml, path):
-    pass
 
 
 def main():

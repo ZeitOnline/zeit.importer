@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 
 from zeit.importer.article import Article
@@ -295,9 +294,25 @@ class K4ImportTest(unittest.TestCase):
     def test_create_image_reference(self):
         article = self._get_doc('Walser.xml')
         zon_images = article.doc.xpath('/article/head/zon-image')
-        self.assertEquals(zon_images[0].get('path'),
-                          'zon-images/img_47210154_Walser.xml')
+        self.assertEquals(zon_images[0].get('vivi_name'), 'img-1')
         self.assertEquals(len(zon_images), 1)
+
+    def test_get_preview_img_resource(self):
+        xml = lxml.etree.parse(
+                os.path.dirname(__file__)+'/testdocs/img_47210154_Walser.xml')
+        res = k4import.get_preview_img_resource(
+            os.path.dirname(__file__)+'/testdocs/',
+            xml,
+            'http://xml.zeit.de/base-id',
+            'img-1')
+        self.assertEquals(
+                'http://xml.zeit.de/base-id/preview-img-1.jpg',
+                res.id)
+
+        file_path = os.path.dirname(__file__) + (
+            '/testdocs/preview/47210/Familie '
+            'Walser01b___30x40__AUGEN_47210154.jpg')
+        self.assertEquals(len(res.data.read()), os.stat(file_path).st_size)
 
     def test_create_img_xml(self):
         article = self._get_doc('Walser.xml')
@@ -314,3 +329,15 @@ class K4ImportTest(unittest.TestCase):
                 attributes[3].text,
                 'master-Familie Walser01b___30x40__AUGEN_47210154.jpg')
         self.assertEquals(attributes[4].text, 'Foto: Karin Rocholl')
+
+    def test_get_xml_img_resource(self):
+        article = self._get_doc('Walser.xml')
+        input_dir = os.path.dirname(__file__)+'/testdocs/'
+        elem = article.doc.xpath('/article/head/zon-image')[0]
+        img_xml = lxml.etree.parse('%s%s' % (input_dir, elem.get('k4_id')))
+        res = k4import.get_xml_img_resource(
+            img_xml, 'http://xml.zeit.de/base-id', 'img-1')
+        self.assertEquals(res.id, 'http://xml.zeit.de/base-id/img-1')
+        self.assertEquals(
+                '<image-group><attribute name="type" ns="',
+                res.data.read()[0:40])
