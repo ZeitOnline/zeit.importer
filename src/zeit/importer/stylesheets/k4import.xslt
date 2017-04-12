@@ -47,8 +47,8 @@
 
     <xsl:template match="/EXPORT/IMAGE">
         <zon-image>
-            <xsl:attribute name="path">
-                <xsl:value-of select="concat('zon-images/', @path)" />
+            <xsl:attribute name="vivi_name">
+                <xsl:value-of select="concat('img-', position())" />
             </xsl:attribute>
             <xsl:attribute name="k4_id">
                 <xsl:value-of select="@path" />
