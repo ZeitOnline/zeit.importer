@@ -115,24 +115,10 @@ class K4ImportTest(unittest.TestCase):
         self.assertEquals(product_id, 'ZEI')
 
     def test_creation_of_import_collections(self):
-        doc = self._get_doc()
-        year = doc.getAttributeValue(
-                'http://namespaces.zeit.de/CMS/document', 'year')
-        volume = doc.getAttributeValue(
-                'http://namespaces.zeit.de/CMS/document', 'volume')
-        print_ressort = doc.getAttributeValue(
-                'http://namespaces.zeit.de/CMS/print', 'ressort')
-        print_ressort = k4import.mangleQPSName(print_ressort).lower()
-        publication_id = doc.getAttributeValue(
-                'http://namespaces.zeit.de/CMS/print', 'publication-id')
-        product_id = settings['product_ids'].get(publication_id)
-        k4import.prepareColl(product_id, year, volume, print_ressort)
+        k4import.ensure_collection(
+            'http://xml.zeit.de/archiv-wf/archiv/ZEI/2009/40/feuilleton')
         res_type = self.connector[(
             'http://xml.zeit.de/archiv-wf/archiv/ZEI/2009/40/feuilleton')].type
-        self.assertEquals(res_type, 'collection')
-        res_type = self.connector[(
-            'http://xml.zeit.de/archiv-wf/archiv-in'
-            '/ZEI/2009/40/feuilleton')].type
         self.assertEquals(res_type, 'collection')
 
     def _get_attr_val(self, doc, ns, name):
