@@ -99,6 +99,7 @@ def run_dir(input_dir, product_id_in):
     k4_files = os.listdir(input_dir)
     boxes = {}
     articles = {}
+    images = []
     for (k4_filename, k4_filepath) in [
             (f, os.path.join(input_dir, f)) for f in k4_files]:
         try:
@@ -193,6 +194,7 @@ def run_dir(input_dir, product_id_in):
     content.update(articles)
     content.update(unintegrated_boxes)
     put_content(content)
+    put_images(images)
 
     if count > 0:
         copyExportToArchive(input_dir)
@@ -212,6 +214,12 @@ def put_content(resources):
             res.properties[(prop[1], prop[0])] = (prop_val)
         log.info('Storing in CMS as %s/%s', unique_id, cname)
         connector.add(res)
+
+
+def put_images(images):
+    connector = zope.component.getUtility(zeit.connector.interfaces.IConnector)
+    for image in images:
+        connector.add(image)
 
 
 def process_boxes(boxes, articles):
