@@ -233,8 +233,8 @@ class K4ImportTest(unittest.TestCase):
 
     def test_process_boxes(self):
         articles = {
-                "http://xml.zeit.de/Trump": (
-                    self._get_doc(filename='Trump.xml'), 'Trump')}
+                    "http://xml.zeit.de/Trump": (
+                        self._get_doc(filename='Trump.xml'), 'Trump')}
         boxes = {'http://xml.zeit.de/Trump-Kasten': (
             self._get_doc(filename='Trump-Kasten.xml'), 'Trump')}
         box_xml = boxes['http://xml.zeit.de/Trump-Kasten'][0].doc
