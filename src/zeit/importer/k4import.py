@@ -166,8 +166,7 @@ def run_dir(input_dir, product_id_in):
                 os.path.join(settings['import_root'], product_id,
                              year, volume, 'zon-images', cname))
 
-            images = images + create_image_resources(
-                input_dir, doc, img_base_id)
+            images.extend(create_image_resources(input_dir, doc, img_base_id))
 
             doc.addAttributesToDoc(product_id, year, volume, cname)
             new_xml = doc.to_string()
