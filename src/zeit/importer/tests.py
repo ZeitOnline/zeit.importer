@@ -8,6 +8,7 @@ import os.path
 import pkg_resources
 import unittest
 import lxml.etree
+import mock
 import zeit.cms.testing
 import zeit.connector.mock
 import zeit.connector.resource
@@ -341,3 +342,15 @@ class K4ImportTest(unittest.TestCase):
         self.assertEquals(
                 '<image-group><attribute name="type" ns="',
                 res.data.read()[0:40])
+
+    @mock.patch(
+            'zeit.importer.k4import.copyExportToArchive', return_value=None)
+    def test_import_should_process_images(self, copy_function):
+        input_dir = os.path.dirname(__file__)+'/testdocs/'
+        k4import.run_dir(input_dir, 'ZEI')
+        col_id = (
+            'http://xml.zeit.de/archiv-wf/archiv/'
+            'ZEI/2017/13/zon-images/Walser')
+        resources = list(self.connector.listCollection(col_id))
+        self.assertEquals(u'img-1', resources[0][0])
+        self.assertEquals(u'preview-img-1.jpg', resources[1][0])

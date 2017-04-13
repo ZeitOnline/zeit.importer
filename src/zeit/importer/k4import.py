@@ -165,8 +165,9 @@ def run_dir(input_dir, product_id_in):
             img_base_id = ensure_collection(
                     os.path.join(settings['import_root'], product_id,
                                  year, volume, 'zon-images', cname))
+
             images = images + create_image_resources(
-                doc, input_dir, img_base_id)
+                input_dir, doc, img_base_id)
 
             doc.addAttributesToDoc(product_id, year, volume, cname)
             new_xml = doc.to_string()
@@ -240,7 +241,7 @@ def process_boxes(boxes, articles):
         log.info('Process box %s for %s', box_id, article_id)
         # Extract coordinates and add to article
         extract_and_move_xml_elements(
-            box_xml.find("//Frame"),  article.find('//Frames')[0])
+            box_xml.find("//Frame"), article.find('//Frames')[0])
 
         new_box = lxml.etree.Element("box")
         article.find('//body').append(new_box)
