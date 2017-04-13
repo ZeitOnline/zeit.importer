@@ -3,7 +3,6 @@ from zeit.connector.resource import Resource
 from zeit.importer.article import Article
 from zeit.importer.interfaces import DOC_NS, PRINT_NS
 import ConfigParser
-import StringIO
 import datetime
 import logging
 import logging.config
@@ -13,6 +12,7 @@ import os
 import pkg_resources
 import re
 import shutil
+import StringIO
 import urlparse
 import zeit.connector.connector
 import zeit.connector.interfaces
@@ -163,8 +163,8 @@ def run_dir(input_dir, product_id_in):
             import_folders.append(import_root_in)
 
             img_base_id = ensure_collection(
-                    os.path.join(settings['import_root'], product_id,
-                                 year, volume, 'zon-images', cname))
+                os.path.join(settings['import_root'], product_id,
+                             year, volume, 'zon-images', cname))
 
             images = images + create_image_resources(
                 input_dir, doc, img_base_id)
@@ -246,7 +246,7 @@ def process_boxes(boxes, articles):
         new_box = lxml.etree.Element("box")
         article.find('//body').append(new_box)
         extract_and_move_xml_elements(
-             box_xml.find("//body").getchildren(), new_box)
+            box_xml.find("//body").getchildren(), new_box)
     return no_corresponding_article
 
 
@@ -366,12 +366,12 @@ def create_img_xml(xml):
                                     ns='http://namespaces.zeit.de/CMS/image',
                                     name='master_images')
     img_master.text = 'master-%s' % (
-            xml.find('/HEADER/LowResPath').text.split('\\')[-1])
+        xml.find('/HEADER/LowResPath').text.split('\\')[-1])
     img_group.append(img_master)
     img_copyrights = lxml.etree.Element(
-            'attribute',
-            ns='http://namespaces.zeit.de/CMS/document',
-            name='copyrights')
+        'attribute',
+        ns='http://namespaces.zeit.de/CMS/document',
+        name='copyrights')
     img_copyrights.text = xml.find('/HEADER/CREDITS').text
     img_group.append(img_copyrights)
     return img_group
