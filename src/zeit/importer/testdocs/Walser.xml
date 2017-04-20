@@ -1,0 +1,564 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EXPORT>
+   <HEADER>
+      <id value="47144696"/>
+      <name value="Walser"/>
+      <Autor value=" ijo/camm"/>
+      <Datum value=""/>
+      <iPad value="6_artikel.interview"/>
+      <Zugang value="abopflichtig"/>
+      <SAPid value="All"/>
+      <ObjectID value="47144696"/>
+      <PublicationID value="1367938747371"/>
+      <PublicationName value="Die Zeit"/>
+      <Ressort value="Feuilleton"/>
+      <RessortID value="34"/>
+      <Ausgabe value="13/17"/>
+      <AusgabeID value="41666518"/>
+      <Erscheinungsdatum value="03/23/2017"/>
+      <Jahr value="2017"/>
+      <Seite-von value="38"/>
+      <Seite-bis value="39"/>
+      <Layoutname value="038_039 Feuilleton 13"/>
+      <LayoutID value="47011417"/>
+      <Type value="Story"/>
+      <Frames>
+         <Frame>
+            <Pagina>38</Pagina>
+            <Spread>0</Spread>
+            <Page>0</Page>
+            <PageWidth>1133.86</PageWidth>
+            <PageHeight>1615.75</PageHeight>
+            <Top>171.81</Top>
+            <Left>92.13</Left>
+            <Width>574.86</Width>
+            <Height>207</Height>
+         </Frame>
+         <Frame>
+            <Pagina>39</Pagina>
+            <Spread>0</Spread>
+            <Page>1</Page>
+            <PageWidth>1133.86</PageWidth>
+            <PageHeight>1615.75</PageHeight>
+            <Top>185.6</Top>
+            <Left>41.1</Left>
+            <Width>320.76</Width>
+            <Height>172.34</Height>
+         </Frame>
+         <Frame>
+            <Pagina>38</Pagina>
+            <Spread>0</Spread>
+            <Page>0</Page>
+            <PageWidth>1133.86</PageWidth>
+            <PageHeight>1615.75</PageHeight>
+            <Top>449.94</Top>
+            <Left>41.1</Left>
+            <Width>625.89</Width>
+            <Height>1104</Height>
+         </Frame>
+         <Frame>
+            <Pagina>39</Pagina>
+            <Spread>0</Spread>
+            <Page>1</Page>
+            <PageWidth>1133.86</PageWidth>
+            <PageHeight>1615.75</PageHeight>
+            <Top>449.94</Top>
+            <Left>41.1</Left>
+            <Width>411.03</Width>
+            <Height>1104</Height>
+         </Frame>
+         <Frame>
+            <Pagina>38</Pagina>
+            <Spread>0</Spread>
+            <Page>0</Page>
+            <PageWidth>1133.86</PageWidth>
+            <PageHeight>1615.75</PageHeight>
+            <Top>430.81</Top>
+            <Left>695.2</Left>
+            <Width>396.85</Width>
+            <Height>14.41</Height>
+         </Frame>
+         <Frame>
+            <Pagina>38</Pagina>
+            <Spread>0</Spread>
+            <Page>0</Page>
+            <PageWidth>1133.86</PageWidth>
+            <PageHeight>1615.75</PageHeight>
+            <Top>1171.98</Top>
+            <Left>695.2</Left>
+            <Width>396.85</Width>
+            <Height>14.41</Height>
+         </Frame>
+         <Frame>
+            <Pagina>38</Pagina>
+            <Spread>0</Spread>
+            <Page>0</Page>
+            <PageWidth>1133.86</PageWidth>
+            <PageHeight>1615.75</PageHeight>
+            <Top>1542.64</Top>
+            <Left>695.2</Left>
+            <Width>396.85</Width>
+            <Height>14.4</Height>
+         </Frame>
+         <Frame>
+            <Pagina>38</Pagina>
+            <Spread>0</Spread>
+            <Page>0</Page>
+            <PageWidth>1133.86</PageWidth>
+            <PageHeight>1615.75</PageHeight>
+            <Top>801.3</Top>
+            <Left>695.2</Left>
+            <Width>396.85</Width>
+            <Height>14.4</Height>
+         </Frame>
+      </Frames>
+   </HEADER>
+   <STORY>
+      <p pstyle=" Überschrift 72 Punkt"
+         cstyle="[No character style]"
+         fname="Zeit Tiemann"
+         fface="Leicht"
+         fsize="99"
+         color="">»Ich bin  schuldunfähig«</p>
+      <p pstyle=" Unterzeile groß"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Am 24. März feiert Martin Walser seinen  90. Geburtstag. Kein anderer Schriftsteller hat die  deutsche Seelengeschichte seit 1945 so umfassend in  Literatur verwandelt wie er</p>
+      <p pstyle="Interview"
+         cstyle="[No character style]"
+         fname=""
+         fface="Italic"
+         fsize=""
+         color="">Seit 1968 wohnen Martin Walser und seine Frau Käthe, die er 1945 kennenlernte, in diesem Haus am Bodensee. Direkt am Wasser, perfekt zum Schwimmen, aber noch ist es zu kalt. Hinauf geht es ins Arbeitszimmer im ersten Stock. Helles Abendlicht bricht durch die Wolken, in der Ferne schimmern die Schweizer Alpen. Das Schönste, Walsers alemannischer Singsang, lässt sich auf Zeitungspapier leider nicht wiedergeben ...</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">DIE ZEIT: Herr Walser, am 24. März werden Sie 90 Jahre alt. Die theologischen Themen nehmen auffallend zu in Ihrem Werk. Beschäftigt Sie das Thema Religion im Alter stärker?</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Martin Walser: Ich weiß schon, was Ihnen da wieder vorschwebt: Altersfrömmigkeit!</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: Sie werden nicht frömmer, es ist nur so, dass Glaubensfragen Sie immer mehr interessieren!</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Zuletzt habe ich einen Aufsatz geschrieben, der <span cstyle=" Grundtext kursiv" fface="Italic" fname="Zeit Garamond Pro">Theologie des Mangels</span> heißt, über den großen Philosophen Bertrand Russell und seinen Essay <span cstyle=" Grundtext kursiv" fface="Italic" fname="Zeit Garamond Pro">Warum ich kein Christ bin.</span> Es ist bewundernswert, was Russell da alles einfällt, warum es keinen Gott gibt – mir fehlt nur, dass er nicht merkt, dass Gott fehlt. Gegen die selbstzufriedene Gewissheit des Atheisten, dass es keinen Gott gibt, habe ich mich immer gewehrt.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: Gibt es Momente, in denen Gott Ihnen nicht fehlt, und zwar weil er da ist?</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Wenn es bewölkt ist, und auf einmal ist da ein Loch in den Wolken, und die Sonne bricht an einer Stelle brutal durch, dann denke ich: »Jaja, du schon wieder, ich weiß ja ...« Das Religiöse hat mich seit Kindertagen geprägt. Das kann gar nicht anders sein, wenn man aus Wasserburg am Bodensee kommt und mein Jahrgang ist. Unzählige Male bin ich den Weg von unserem Haus in die Kirche und zurück gegangen, zu jeder Jahreszeit, zu jeder Temperatur. Religion war nichts Separates, sondern Alltäglichkeit. In der Kirche in Wasserburg können Sie noch den Beichtstuhl sehen, in dem ich zum ersten Mal gebeichtet habe. Ich sagte da also meinen Text auf, aber das Wichtigste waren die Reue und der aufrichtige Wille, das nie wieder zu tun. Ich wusste aber, ich werde es wieder tun. Also war klar, ich kann gar keine vollkommene Reue haben, also war schon die Kommunion Sünde, Sünde, Sünde. Dieses Sündenbewusstsein, das habe ich als Kind gelernt. Wenn ich von der Kirche heim bin, dann hat es immer in mir gekämpft: »Das wirst du nie wieder tun!«, und ich wusste, ich lüge mich an, wenn ich das sage. Diesen inneren Streit mit mir selber, den ich dem Beichtspiegel zu verdanken hatte, den bedauere ich nicht.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: Ein Gewissenskonflikt, der einen formt.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Das ist schon zu zweckhaft gedacht. Ich war auf eine besondere Art lebendig, weil es unlösbar war.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: Rücken Ihnen solche Kindheitserinnerungen jetzt näher?</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Ich sehe schon, jetzt kommt euer Altersrassismus: »Er erinnert sich stärker an die Kindheit, ist also schon beinahe dement.« Ich muss Sie enttäuschen: Wenn Sie vor zehn Jahren gekommen wären, wäre mir das Gleiche eingefallen wie heute.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: Sie haben in der Tat Ihre Kindheit immer als Stoff verwendet.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Vielleicht war diese Zeit für mich nie weit weg. Goethe hat einmal gegenüber Eckermann gesagt, manchen werde eine »wiederholte Pubertät« geschenkt. Goethe benutzt das Wort »Pubertät«, das ist doch irre! Was er meinte, habe ich allerdings gar nicht immer positiv erlebt, sondern durchaus als Mangel: Ich bin kein erwachsener Mann geworden. Verglichen mit anderen gleichaltrigen, männlichen Wesen, habe ich mich immer als zu wenig männlich, zu wenig erwachsen gefühlt.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: Sie haben 1950 geheiratet, sind mit 22 zum Rundfunk, mit 30 wurden Sie mit Ihrem ersten Roman <span cstyle=" Grundtext kursiv" fface="Italic" fname="Zeit Garamond Pro">Ehen in Philippsburg</span> berühmt, mit 40 zogen Sie in dieses schöne Haus direkt am Bodensee, da hatten Sie bereits Ihre vier Töchter – das klingt doch alles sehr männlich und erwachsen.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Das sieht vielleicht so aus, aber nur äußerlich. Es tut mir leid, ich bin bis heute nicht erwachsen. Gut, ich mag rechthaberisch und herrschsüchtig sein, aber ich bin auch unterwerfungssüchtig. Wie eine Klosterschwester war ich imstande, jahrelang Siegfried Unseld zu dienen. </p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: Er war Ihr Verleger bei Suhrkamp, Sie haben ihm ja auch einiges zu verdanken. </p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Natürlich, das ist ja klar. Aber diese professionelle gegenseitige Nützlichkeit, die meine ich jetzt nicht. 1968 zum Beispiel, als viele seiner Lektoren gegen ihn rebellierten und ein Kollektivgremium als Machtzentrale im Verlag installieren wollten ...</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: ... der berühmte Aufstand der Lektoren ...</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: ... da habe ich mich, obwohl ich so links war, wie man nur sein konnte, oder zumindest als so links galt – da habe ich mich sofort für den Siegfried erklärt. Das hat kein Mensch verstanden. Ich habe das zwar dann mit einem intellektuellen Abrakadabra begründet, aber schon mein ursprüngliches Gefühl war für den Siegfried. Das lag auch an dieser Unterwerfungsfreude, mit der ich mich wie eine Klosterschwester in den Unseld-Orden hineinmanövriert habe.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: Warum galt Ihre Unterwerfungsfreude Siegfried Unseld?</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Ja, pff ... das war es eben: Er war der Erwachsenste.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: Der 2002 verstorbene Unseld, nur drei Jahre älter: Von außen sah das eher wie eine klassische Jungsfreundschaft aus, bei der zwei Siegertypen die Welt erobern.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Ich kannte keinen, der so unerwachsen war wie ich. Siegfried hingegen war ein Cheferwachsener, wahrscheinlich schon als Zehnjähriger erwachsen – so erwachsen, dass ich es manchmal nicht ertragen habe. In den siebziger Jahren, als ich links war – ich habe das Gefühl, so links kann ich gar nicht gewesen sein, wie ich als links gegolten habe, aber gut –, da hat er auf mich eingehämmert und hat versucht, mich zu wecken, zu wecken, zu wecken, damit ich endlich merke, dass er längst aus den Gefühlsbreiten hinausgewachsen war, in denen ich ihn noch aufsuchen wollte. Ich habe damals ja auf alles Politische reagiert. Ich weiß auch nicht, warum, ich konnte mich nicht beherrschen, ich konnte das Maul nicht halten. Da hatte ich mir dann angewöhnt, bei jeder mich provozierenden Bagatelle einen Vierzeiler zu machen. Das sammelte sich über die Jahre an, ich nannte sie <span cstyle=" Grundtext kursiv" fface="Italic" fname="Zeit Garamond Pro">99 Sprüche zur Erbauung des Bewusstseins</span> und schickte sie dem Siegfried. Der sagte: »Das können wir nicht machen, unmöglich.« Ich: »Ja, warum?« Er: »Das ist doch Quatsch: ›Über mir am Werktag und am Sonntag keiner, den ich nicht abwählen kann. Über mir am Werktag und am Sonntag keiner, der mich nicht abwählen kann.‹ Das ist doch Chaos, ich bin der Chef.« Aber als dann der Uwe Johnson gestorben war ...</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: ... mit dem Sie intensiv befreundet waren ...</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: ... da hat mir der Siegfried erzählt, dass er dem Uwe meine <span cstyle=" Grundtext kursiv" fface="Italic" fname="Zeit Garamond Pro">99 Sprüche</span> gegeben hatte, und der Uwe habe gesagt: »Das darfst du nicht machen!« – und ihm zum Beweis Parodien meiner Sprüche geliefert, das musst du dir mal vorstellen! Das waren die wirklichen Verhältnisse. Gut. Der Siegfried war seinem Uwe gegenüber treulos genug, dass er mir das gesagt hat.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: In den sechziger und siebziger Jahren waren Sie der Linksaußen unter den wichtigen deutschen Schriftstellern. Das kann man jetzt in Ihrem Aufsatzband <span cstyle=" Grundtext kursiv" fface="Italic" fname="Zeit Garamond Pro">Ewig aktuell. Aus gegebenem Anlass</span> wieder nachlesen: 1969 haben Sie der CDU »Volksverhetzung« vorgeworfen und bei der Bundestagswahl nicht Willy Brandt, sondern die edelkommunistische »Aktion Demokratischer Fortschritt« gewählt, im DKP-Kulturforum sind Sie aufgetreten, und in den USA beobachteten Sie 1971 eine »Entwicklung des neuen Faschismus«. Ist Ihnen dieser Walser heute fremd geworden?</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Wenn ich diese Texte heute lese, bin ich völlig dafür.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: Aber Sie gelten vielen heute als rechts.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Daran sehen Sie nur, wie falsch diese Kategorien sind. </p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: Trotzdem bleiben Ihre Verwandlungen erstaunlich.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Für mich nicht, auch wenn ich aus der Entfernung daraufblicke. Schauen Sie, 1951 habe ich über Kafka promoviert, also eine Lehrzeit: fünf Jahre Kafka. Dann zwei Jahre Proust. In meiner Dankrede zum Hesse-Preis 1957 sagte ich, dass es töricht sei, zu glauben, ein Roman müsse gesellschaftskritisch sein – das war kühn, weil im damaligen Meinungswetter die Gesellschaftskritik Mode wurde. Als aber in den sechziger Jahren der Krieg der USA in Vietnam begann, musste ich reagieren.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: Sie haben sich gesellschaftskritisch engagiert.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Eine Einladung an die Universität Austin, Texas, habe ich öffentlich abgelehnt, ich habe ein Vietnam-Büro gegründet und Unterschriften gegen den Krieg gesammelt. Auf dem Marienplatz in München habe ich gegen den Vietnamkrieg geredet. Das kann ich mir selber heute nicht mehr so leicht vorstellen.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: Und Sie haben den <span cstyle=" Grundtext kursiv" fface="Italic" fname="Zeit Garamond Pro">ZEIT-</span>Redakteur Theo Sommer 1966 wegen seiner proamerikanischen Artikel einen »Hilfswilligen« des Vietnamkriegs genannt.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Und wer hat recht behalten? Damals reiste die Gruppe 47 nach Princeton. Ich habe gesagt: »Ihr seid wahnsinnig, ihr macht Kulturbetrieb in Princeton, während die in Vietnam töten!« Damals war ich ziemlich allein.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: Enzensberger ist aus Protest gegen die USA nach Kuba gegangen.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Enzensberger hatte zwei Beine, eins in jedem Lager. Gut, damals war er viel kritischer als der Rest der Gruppe 47. Das kann man sich ja heute gar nicht mehr vorstellen: Der Bundespräsident schickte ein Gratulationstelegramm nach Washington, während die Amerikaner Hanoi bombardierten! Dadurch wurde ich links.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: Sie waren aber keine 25 mehr, wie die 68er, sondern ein berühmter Schriftsteller Mitte 40, kulturelles Establishment, der plötzlich gegen die Deutsche Bank schrieb. </p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Wie ich schon sagte: Meine Pubertät hat nicht aufgehört.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: Anders als bei Günter Grass, der damals viele Linke mit seinem Engagement für Willy Brandt und die SPD und seiner Kritik an den 68ern nervte.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Die Wirklichkeit ist natürlich ein heilloses Geflecht aus allem Möglichen. Wenn wir über Grass reden, dann reden wir über einen Faden aus dem ganzen Teppich. Der Name Grass ist ja schon eine Wirkungsgeschichte für sich, seit er 1955 auf der Tagung der Gruppe 47 in Berlin auftauchte. Da kommt einer, sieht aus wie der Kaschube selbst, wunderbar sieht er aus und liest wunderbare Gedichte, bezaubert uns! Dann kommt <span cstyle=" Grundtext kursiv" fface="Italic" fname="Zeit Garamond Pro">Die Blechtrommel,</span> und als schreibender Konkurrent bist du dann froh, dass du die Düsseldorfer Passagen im Roman nicht mehr so toll findest wie die in Danzig.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: Wie wichtig war Ihr Jahrgangsgenosse Grass für Sie?</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Natürlich hatten wir viele Auseinandersetzungen, ich fand es seltsam, was er da mit Brandt in Berlin ständig aufgeführt hat. Aber im Unterschied zu vielen anderen habe ich Grass nie verloren, egal, wie gegeneinander wir oft standen, wie sehr die Öffentlichkeit auch versucht hat, uns gegeneinander auszuspielen. Immer wenn wir uns sahen, hatte ich das Gefühl einer unverbrüchlichen Gefühlsechtheit.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: Die Wiedervereinigung haben Grass und Sie sehr unterschiedlich gesehen. Weshalb kamen Sie als Linker so früh, Ende der siebziger Jahre, auf die nationale Frage?</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Ich fühlte mich eben wieder durch etwas gereizt! Nach dem Vietnamkrieg provozierte mich die deutsche Teilung. Himmelsakrament, was war denn da los? Wir belügen uns doch alle mit dem Provisorium der Teilung, so dachte ich. Karl May und Nietzsche, das waren also jetzt Ausländer, Radebeul und Naumburg Ausland? Das sagte ich öffentlich, und von da an galt ich als Rechter. Was soll ich jetzt, nach alldem, zu Rechts und Links sagen? Die Zeitgeschichte schiebt mich von da nach da, ohne dass ich das Gefühl habe, mich verändert zu haben. 1990 sagten dann Grass oder Walter Jens, die deutsche Teilung müsse bleiben, als Strafe für unsere Verbrechen in Auschwitz. Das war doch absurd. Eine professionell zuschauende Öffentlichkeit muss dich aber so oder so einteilen, sie kann sich nicht wirklich mit dir beschäftigen. So ging es mir nach der Rede in der Paulskirche 1998 ...</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: ... wir wären noch darauf gekommen ...</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Auschwitz ist ein so grauenhafter Vorgang, dass es vielleicht schon falsch war, über dessen Wirkung eine Rede zu halten, noch dazu eine Sonntagsrede. Die Hauptschwäche dieser Rede ist mir inzwischen leidvoll aufgegangen, etwas sehr Schlichtes, aber Verhängnisvolles. Ich hatte dort gegen die »Instrumentalisierung von Auschwitz« gesprochen und nicht genau gesagt, was ich damit meinte. Ignatz Bubis und die jüdische Gemeinde hatten verstanden, ich würde jüdische Ansprüche meinen. So etwas wäre mir nie, nie, nie, <span cstyle=" Grundtext kursiv" fface="Italic" fname="Zeit Garamond Pro">(wird laut)</span> niemals eingefallen, hätte mir gar nicht einfallen können, nach meinem Aufsatz über die Auschwitz-Prozesse von 1965, nach <span cstyle=" Grundtext kursiv" fface="Italic" fname="Zeit Garamond Pro">Auschwitz und kein Ende</span> von 1979 und so weiter.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: Und was meinten Sie genau damals?</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Dass Auschwitz nicht zur Rechtfertigung der deutschen Teilung oder sonst irgendwelcher anderen politischen Fragen taugt. In meinem Roman <span cstyle=" Grundtext kursiv" fface="Italic" fname="Zeit Garamond Pro">Die Verteidigung der Kindheit</span> gibt es den Sohn, der ist Jurist und setzt Wiedergutmachungsansprüche für eine Nelly Pergament durch. Im Roman heißt es danach: Am liebsten würde er jetzt nach Haifa fliegen und auf dem Bett von Nelly Pergament Platz nehmen, weil da sicher ein Sohn fehlt. Solche Stellen kannte natürlich niemand in der Debatte, niemand hat damals gesagt, schau mal, der will bei Nelly Pergament am Bett sitzen. </p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: Roman und Rede sind zweierlei.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Klar, ich habe mich immer auf beiden Feldern angeboten. Bei einer Veranstaltung in München sagte einmal eine Frau zu mir, wenn sie meine Romane und Reden lese, passe das oft gar nicht zusammen. Ich sagte ihr, wenn das so sei, dann solle sie mich bitte mit den Romanen nehmen, das sei ich. Bei den Reden muss ich leider so tun, als wäre ich es. </p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: Wäre Ihr Leben in den vergangenen 20 Jahren ohne die Paulskirchen-Rede anders verlaufen?</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Ganz sicher ruhiger. Ich bin heute noch der mit dieser Rede. Wenn ein Stück von meiner Tochter Theresia in einer New Yorker Theaterzeitschrift abgedruckt wird, dann steht da, dass sie die Tochter von Martin Walser ist, der den Holocaust in der Paulskirchen-Rede geleugnet oder falsch dargestellt hat. Das alles steht international fest. Ich meine, selbst wenn man meine Romane nicht zur Kenntnis nimmt, dann hätte ich doch gedacht, dass die Intellektuellen, die mich jeweils aktuell abfertigen, wenigstens meine Reden lesen. Weit gefehlt! Wenn mein Essay <span cstyle=" Grundtext kursiv" fface="Italic" fname="Zeit Garamond Pro">Auschwitz und kein Ende</span> heißt, der eine Rede zu einer Ausstellung von ehemaligen KZ-Häftlingen war, dann hatte ich irrtümlicherweise erwartet, einem von diesen feuilletonistisch Halb- oder Dreiviertel- oder Ganzgebildeten könnte vielleicht aufgehen, dass es in der deutschen Literaturgeschichte eine Rede namens <span cstyle=" Grundtext kursiv" fface="Italic" fname="Zeit Garamond Pro">Shakespeare und kein Ende</span> gibt, die der junge Goethe zu seinen Freunden am Shakespeare-Tag hielt. Der konnte noch über Shakespeare, ich hingegen musste über »Auschwitz und kein Ende« reden. Das mediale Bewusstsein ist unerreichbar in seiner Selbstgewissheit. Wenn ich ein Buch über den weithin unbekannten jiddischen Autor Sholem Yankev Abramovitsh schreibe, einen Meister aus dem 19. Jahrhundert zwischen Swift und Kafka, und darin formuliere, wir könnten den Juden gegenüber nichts mehr gutmachen, wir könnten nur versuchen, weniger falsch zu machen, dann steht in den Medien: Ah, jetzt hat er die Kurve nach seiner Paulskirchen-Rede gekriegt, aber dafür muss der erst Romane lesen! Es ist hoffnungslos. Du kannst sagen, was du willst. Gut, später werde ich dann altersweise sein und ...</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: ... nichts mehr sagen?</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: ... nichts mehr sagen. Nun, ihr, die Medien, seid ja nicht der liebe Gott und habt also keine Verpflichtung, gerecht zu sein. Medien sind zur Gerechtigkeit nicht imstande. Damit müssen alle leben. Und so schlimm ist es ja auch nicht.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: Sie beschreiben jetzt Ihr öffentliches Auftreten wie eine ungewollte Schwäche – aber es steckt doch sehr viel Lust darin, wenn man das über die Jahrzehnte so intensiv betreibt wie Sie?</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Ich lasse mich provozieren, dafür kann ich nichts, das ist mein Daseinsgesetz.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: Provozieren oder sich provozieren lassen: Hatte früher das Schriftstellerwort insgesamt eine größere Bedeutung in der Bundesrepublik?</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Solche Fragen gehen mich null an, das sollen andere untersuchen. Dass die Literatur die Welt erklärt, glaube ich nicht. Die Literatur hat die Welt immer verklärt, das hat sie mit der Religion gemeinsam. Die Religion erklärt die Welt auch nicht, sondern sie macht sie erträglicher. Und die Literatur macht die Wirklichkeit erträglicher, denn die Wirklichkeit, unerzählt und undargestellt, ist unerträglich. Mein Credo: Ich schreibe etwas so schön, wie es nicht ist. Was ich eben schon 1957 in der Rede zum Hesse-Preis meinte: Die Literatur muss nicht gesellschaftskritisch sein – also ist sie verklärend. Man muss den Gegensatz ernst nehmen – Erklären oder Verklären, wo gehörst du hin? Ich bin bei allem kritischen Bewusstsein auf der Seite der Verklärung.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: Täuscht es, oder waren die Figuren Ihres Werks früher stärker von unglücklichem Bewusstsein betroffen und wurden in den vergangenen zwei Jahrzehnten – ja: immer glücklicher?</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Es gibt bei mir das Wort Unglücksglück; jede andere Form von Glück ist für mich unvorstellbar. Wer das nicht kennt – da kann ich gratulieren, aber es interessiert mich künstlerisch nicht. Ich habe nie negative Figuren darstellen können. Es gibt wunderbare Autoren, die können ver-ur-tei-len. Das ist mir fremd. Auch die vermeintlich negativste Figur, die man mir nachgesagt hat, der Kritiker André Ehrl-König aus <span cstyle=" Grundtext kursiv" fface="Italic" fname="Zeit Garamond Pro">Tod eines Kritikers: </span>Wenn es da das Vorbild Marcel Reich-Ranicki gewesen sein darf, dann habe ich diesen mit Chaplin und Homer-Assoziationen umkränzt. Ich muss eine Figur verständlich, also groß machen. Bitte schön: Verklärung, Verklärung.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: Wenn Sie für die Verklärung plädieren: Kann Literatur dann eine Verantwortung haben?</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Da ist dann wieder meine typische Unerwachsenheit: Ich habe nichts so sehr abgelehnt wie Verantwortungsgefühl. Nichts war mir fremder. Meine unaufhebbare Pubertät ... Ich kann mich nicht schuldig fühlen, ich bin unschuldig. Seriös schuldig kann ich mich nur einzelnen Menschen gegenüber fühlen, und das tue ich auch, das erlischt nie, bleibt ständig peinlich. Deswegen ist natürlich auch das Schweigen so etwas Schönes, man ist nicht verantwortlich.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: Ist das nicht eine Ausrede des Künstlers? Macht sich nicht jeder Handelnde schuldig, auch der Schreibende?</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Einen Roman lerne ich nur dadurch kennen, dass ich ihn schreibe. Wenn ich ihn schon kennte, würde ich ihn nicht mehr schreiben. Ich habe immer bewundert, dass Heinrich Böll sich immer farbige Werkpläne gezeichnet hat, damit er weiß, wie es werden soll. Das war mir immer fremd, ich habe von Satz zu Satz zu Satz gelebt. Das Schreiben ist für mich so eine sich von selbst vollziehende Sache meiner rechten Hand. Der Genius der Sprache ist das, was die rechte Hand macht. Deshalb sage ich, meine Herren: Ich bin schuldunfähig.</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">ZEIT: Und wozu provoziert Sie die aktuelle Gegenwart?</p>
+      <p pstyle=" Grundtext Interview"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Walser: Nun, der Satz von Angela Merkel »Wir schaffen das« ist jedenfalls große Politik. Dazu muss man imstande sein. Und dann wird tatsächlich monatelang über so ein Wort wie »Obergrenze« diskutiert – wie unbedeutend ist das im Vergleich zu dieser großartigen Aussage »Wir schaffen das«!</p>
+      <p pstyle=" Vermerk Textende"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Das Gespräch führten  <span fface="Bold" fname="Zeit Garamond Pro">Alexander Cammann</span> und <span fface="Bold" fname="Zeit Garamond Pro">Ijoma Mangold</span>
+      </p>
+      <p pstyle=" BU"
+         cstyle="[No character style]"
+         fname="Calibre"
+         fface="Medium"
+         fsize=""
+         color="">»Ich bin ein Apfelbaum, der Birnen trägt« – Walser über Walser in »Statt etwas oder Der letzte Rank«</p>
+      <p pstyle=" BU"
+         cstyle="[No character style]"
+         fname="Calibre"
+         fface="Medium"
+         fsize=""
+         color="">Martin Walser, aufgenommen 1957, kurz vor dem Erscheinen seines ersten Romans</p>
+      <p pstyle=" BU"
+         cstyle="[No character style]"
+         fname="Calibre"
+         fface="Medium"
+         fsize=""
+         color="">2015 im Kreise seines anhänglichen Publikums auf dem Literaturfestival Potsdam</p>
+      <p pstyle=" BU"
+         cstyle="[No character style]"
+         fname="Calibre"
+         fface="Medium"
+         fsize=""
+         color="">1968 (ganz rechts) auf einer Veranstaltung des SDS (hinten mit Brille und Schlips Peter Weiss)</p>
+   </STORY>
+   <IMAGE path="img_47210154_Walser.xml"/>
+</EXPORT>

@@ -32,7 +32,7 @@
             <attribute ns="http://namespaces.zeit.de/CMS/document" name="in_rankings">yes</attribute>
 
             <xsl:apply-templates/>
-
+            <xsl:apply-templates select="/EXPORT/IMAGE" />
             <xsl:apply-templates mode="ressort"/>
         </head>
     </xsl:template>
@@ -43,6 +43,17 @@
         <attribute ns="http://namespaces.zeit.de/CMS/document" name="author">
             <xsl:value-of select="@value"/>
         </attribute>
+    </xsl:template>
+
+    <xsl:template match="/EXPORT/IMAGE">
+        <zon-image>
+            <xsl:attribute name="vivi_name">
+                <xsl:value-of select="concat('img-', position())" />
+            </xsl:attribute>
+            <xsl:attribute name="k4_id">
+                <xsl:value-of select="@path" />
+            </xsl:attribute>
+        </zon-image>
     </xsl:template>
 
     <xsl:template match="Frames">
