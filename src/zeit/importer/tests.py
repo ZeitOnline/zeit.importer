@@ -326,16 +326,15 @@ class K4ImportTest(unittest.TestCase):
         input_dir = os.path.dirname(__file__) + '/testdocs/'
         elem = article.doc.xpath('/article/head/zon-image')[0]
         img_xml = lxml.etree.parse('%s%s' % (input_dir, elem.get('k4_id')))
-        zon_img_xml = k4import.create_img_xml(img_xml)
+        zon_img_xml = k4import.create_img_xml(img_xml, 'img-1')
         self.assertEquals(zon_img_xml.tag, 'image-group')
         attributes = zon_img_xml.findall('attribute')
         self.assertEquals(attributes[0].text, 'image-group')
         self.assertEquals(attributes[1].text[0:18], u'Familie mit Martin')
         self.assertEquals(attributes[2].text, 'Bildunterzeile')
-        self.assertEquals(
-            attributes[3].text,
-            'master-Familie Walser01b___30x40__AUGEN_47210154.jpg')
+        self.assertEquals( attributes[3].text, 'img-1')
         self.assertEquals(attributes[4].text, 'Foto: Karin Rocholl')
+        self.assertEquals( attributes[5].text, 'P2W')
 
     def test_get_xml_img_resource(self):
         article = self._get_doc('Walser.xml')
