@@ -338,7 +338,7 @@ def create_image_resources(input_dir, doc, img_base_id):
 
 
 def get_xml_img_resource(img_xml, img_base_id, name):
-    xml = create_img_xml(img_xml)
+    xml = create_img_xml(img_xml, name)
     return Resource(
         os.path.join(img_base_id, name), name, 'image-xml',
         StringIO.StringIO(lxml.etree.tostring(xml)), contentType='text/xml')
@@ -370,7 +370,7 @@ def hash_highres_dir(year, volume):
     return hashes
 
 
-def create_img_xml(xml):
+def create_img_xml(xml, name):
     img_group = lxml.etree.Element('image-group')
 
     meta_type = lxml.etree.Element('attribute',
@@ -390,9 +390,8 @@ def create_img_xml(xml):
     img_group.append(img_caption)
     img_master = lxml.etree.Element('attribute',
                                     ns='http://namespaces.zeit.de/CMS/image',
-                                    name='master_images')
-    img_master.text = 'master-%s' % (
-        xml.find('/HEADER/LowResPath').text.split('\\')[-1])
+                                    name='image_base_name')
+    img_master.text = name
     img_group.append(img_master)
     img_copyrights = lxml.etree.Element(
         'attribute',
@@ -400,6 +399,23 @@ def create_img_xml(xml):
         name='copyrights')
     img_copyrights.text = xml.find('/HEADER/CREDITS').text
     img_group.append(img_copyrights)
+
+    # Yes, there's a typo in LICENCE, but that's how it's sepcified.
+    license_el = xml.find('/HEADER/LICENCE')
+
+    duration = {
+        '2 Wochen': 'P2W',
+        '6 Monate': 'P6M',
+        'unbegrenzt': 'P1000Y',
+        'keine': 'PT0S',
+        '(ohne)': 'PT0S',
+        '': 'PT0S'}
+
+    img_license = lxml.etree.Element('attribute',
+                                     ns='http://namespaces.zeit.de/CMS/image',
+                                     name='expires_in')
+    img_license.text = duration.get(license_el.text, 'PT0S')
+    img_group.append(img_license)
     return img_group
 
 

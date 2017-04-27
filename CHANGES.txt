@@ -4,7 +4,9 @@ zeit.importer changes
 1.3.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- ZON-3737: Implement hashing to determine highres master images
+
+- ZON-3890: Add license to image group
 
 
 1.3.0 (2017-04-26)
