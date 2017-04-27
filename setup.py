@@ -15,9 +15,10 @@ setup(
     license='BSD',
     namespace_packages=['zeit'],
     install_requires=[
-        'zeit.connector',
-        'setuptools',
+        'Pillow',
         'pytz',
+        'setuptools',
+        'zeit.connector',
         'zope.component',
         'zope.interface',
     ],
