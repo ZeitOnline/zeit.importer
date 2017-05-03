@@ -44,6 +44,8 @@ class ImageHash(dict):
 
     def find_match(self, images):
         matches = [(self - i, i) for i in images]
+        if not matches:
+            return
         max_diff = max(d for d, i in matches)
         if max_diff:
             matches = [(d / max_diff, i) for d, i in matches]
