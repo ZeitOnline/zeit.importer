@@ -400,8 +400,8 @@ def create_img_xml(xml, name):
     img_copyrights.text = xml.find('/HEADER/CREDITS').text
     img_group.append(img_copyrights)
 
-    # Yes, there's a typo in LICENCE, but that's how it's sepcified.
-    license_el = xml.find('/HEADER/LICENCE')
+    # Yes, there's a typo in Licence, but that's how it's specified.
+    license_el = xml.find('/HEADER/Licence')
 
     duration = {
         '2 Wochen': 'P2W',
