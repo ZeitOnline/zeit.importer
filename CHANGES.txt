@@ -1,7 +1,7 @@
 zeit.importer changes
 =================
 
-1.4.1 (unreleased)
+1.4.1 (2017-05-03)
 ------------------
 
 - ZON-3350: Minor improvments/bugfixes to k4 image processing
