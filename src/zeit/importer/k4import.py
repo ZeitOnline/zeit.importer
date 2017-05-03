@@ -414,7 +414,7 @@ def create_img_xml(xml, name):
     img_license = lxml.etree.Element('attribute',
                                      ns='http://namespaces.zeit.de/CMS/image',
                                      name='expires_in')
-    img_license.text = duration.get(license_el.text, 'PT0S')
+    img_license.text = duration.get(license_el.get('value'), 'PT0S')
     img_group.append(img_license)
     return img_group
 
