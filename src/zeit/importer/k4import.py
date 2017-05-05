@@ -19,6 +19,7 @@ import zeit.connector.connector
 import zeit.connector.interfaces
 import zeit.importer.interfaces
 import zope.component
+import unicodedata
 
 
 log = logging.getLogger(__name__)
@@ -327,7 +328,9 @@ def create_image_resources(input_dir, doc, img_base_id):
     img_resources = []
     for elem in doc.doc.xpath("/article/head/zon-image"):
         vivi_name = elem.get('vivi_name')
-        img_xml = lxml.etree.parse(os.path.join(input_dir, elem.get('k4_id')))
+        path = unicode(os.path.join(input_dir, elem.get('k4_id')))
+        path = unicodedata.normalize('NFD', path).encode('utf-8')
+        img_xml = lxml.etree.parse(path)
         xml_resource = get_xml_img_resource(img_xml, img_base_id, vivi_name)
         lowres = get_prefixed_img_resource(
             input_dir, img_xml, img_base_id, 'preview', vivi_name)
@@ -348,7 +351,8 @@ def get_prefixed_img_resource(input_dir, img_xml, img_base_id, prefix, name):
     normpath = '/'.join(
         img_xml.find('/HEADER/LowResPath').text.replace(
             '\\', '/').split('/')[1:])
-    path = os.path.join(input_dir, normpath)
+    path = unicode(os.path.join(input_dir, normpath))
+    path = unicodedata.normalize('NFD', path).encode('utf-8')
     name = '%s-%s.jpg' % (prefix, name)
     return Resource(
         os.path.join(img_base_id, name), name, 'image', file(path),
