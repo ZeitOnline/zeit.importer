@@ -32,7 +32,7 @@
             <attribute ns="http://namespaces.zeit.de/CMS/document" name="in_rankings">yes</attribute>
 
             <xsl:apply-templates/>
-            <xsl:apply-templates select="/EXPORT/IMAGE" />
+            <xsl:apply-templates select="/EXPORT/IMAGE" mode="zonimg" />
             <xsl:apply-templates mode="ressort"/>
         </head>
     </xsl:template>
@@ -45,7 +45,8 @@
         </attribute>
     </xsl:template>
 
-    <xsl:template match="/EXPORT/IMAGE">
+    <xsl:template match="/EXPORT/IMAGE" />
+    <xsl:template match="/EXPORT/IMAGE" mode="zonimg">
         <zon-image>
             <xsl:attribute name="vivi_name">
                 <xsl:value-of select="concat('img-', position())" />
