@@ -80,13 +80,6 @@ def copyExportToArchive(input_dir):
     shutil.copytree(input_dir, archive_path)
     log.info('Copied input articles from %s to %s', input_dir, archive_path)
 
-    if input_dir == settings['k4_export_dir']:
-        log.info('Cleaning input directory %s', input_dir)
-        for f in [os.path.normpath('%s/%s' % (settings['k4_export_dir'], f))
-                  for f in os.listdir(settings['k4_export_dir'])]:
-            if os.path.isfile(f):
-                os.remove(f)
-
 
 def run_dir(input_dir, product_id_in):
     if not os.path.isdir(input_dir):
