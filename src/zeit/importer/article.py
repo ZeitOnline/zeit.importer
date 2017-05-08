@@ -178,3 +178,7 @@ class Article(object):
             self.doc, encoding="utf-8", xml_declaration=True)
         xml = sanitizeDoc(xml)  # <p>V</p> etc
         return xml
+
+    @property
+    def zon_images(self):
+        return self.doc.xpath("/article/head/zon-image")

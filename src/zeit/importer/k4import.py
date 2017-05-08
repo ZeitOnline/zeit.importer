@@ -161,9 +161,10 @@ def run_dir(input_dir, product_id_in):
                              volume, print_ressort))
             import_folders.append(import_root_in)
 
-            img_base_id = ensure_collection(
-                os.path.join(settings['import_root'], product_id,
-                             year, volume, 'zon-images', cname))
+            if doc.zon_images:
+                img_base_id = ensure_collection(
+                    os.path.join(settings['import_root'], product_id,
+                                 year, volume, 'zon-images', cname))
 
             for xml_resource, lowres, highres in create_image_resources(
                     input_dir, doc, img_base_id):
@@ -319,7 +320,7 @@ def load_configuration():
 
 def create_image_resources(input_dir, doc, img_base_id):
     img_resources = []
-    for elem in doc.doc.xpath("/article/head/zon-image"):
+    for elem in doc.zon_images:
         vivi_name = elem.get('vivi_name')
         path = unicode(os.path.join(input_dir, elem.get('k4_id')))
         path = unicodedata.normalize('NFD', path).encode('utf-8')

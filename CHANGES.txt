@@ -4,7 +4,7 @@ zeit.importer changes
 1.4.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- ZON-3350: Don't create image folders for articles with no image references
 
 
 1.4.2 (2017-05-08)
