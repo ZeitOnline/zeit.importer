@@ -166,19 +166,19 @@ def run_dir(input_dir, product_id_in):
                     os.path.join(settings['import_root'], product_id,
                                  year, volume, 'zon-images', cname))
 
-            for xml_resource, lowres, highres in create_image_resources(
-                    input_dir, doc, img_base_id):
-                try:
-                    lowres_hash = ImageHash(lowres.id, lowres.data)
-                except Exception, e:
-                    log.warning('Could not hash %s: %s' % (lowres.id, e))
-                else:
-                    highres_hash = lowres_hash.find_match(highres_images)
-                    if highres_hash:
-                        highres.data = file(highres_hash.id)
-                        connector.add(highres)
-                connector.add(lowres)
-                connector.add(xml_resource)
+                for xml_resource, lowres, highres in create_image_resources(
+                        input_dir, doc, img_base_id):
+                    try:
+                        lowres_hash = ImageHash(lowres.id, lowres.data)
+                    except Exception, e:
+                        log.warning('Could not hash %s: %s' % (lowres.id, e))
+                    else:
+                        highres_hash = lowres_hash.find_match(highres_images)
+                        if highres_hash:
+                            highres.data = file(highres_hash.id)
+                            connector.add(highres)
+                    connector.add(lowres)
+                    connector.add(xml_resource)
 
             doc.addAttributesToDoc(product_id, year, volume, cname)
             new_xml = doc.to_string()
@@ -402,7 +402,7 @@ def create_img_xml(xml, name):
     license_el = xml.find('/HEADER/Licence')
 
     duration = {
-        '2 Wochen': 'P2W',
+        '2 Wochen': 'P14D',
         '6 Monate': 'P6M',
         'unbegrenzt': 'P1000Y',
         'keine': 'PT0S',
