@@ -161,24 +161,32 @@ def run_dir(input_dir, product_id_in):
                              volume, print_ressort))
             import_folders.append(import_root_in)
 
-            if doc.zon_images:
-                img_base_id = ensure_collection(
-                    os.path.join(settings['import_root'], product_id,
-                                 year, volume, 'zon-images', cname))
+            try:
+                if doc.zon_images:
+                    img_base_id = ensure_collection(
+                        os.path.join(settings['import_root'], product_id,
+                                     year, volume, 'zon-images', cname))
 
-                for xml_resource, lowres, highres in create_image_resources(
-                        input_dir, doc, img_base_id):
-                    try:
-                        lowres_hash = ImageHash(lowres.id, lowres.data)
-                    except Exception, e:
-                        log.warning('Could not hash %s: %s' % (lowres.id, e))
-                    else:
-                        highres_hash = lowres_hash.find_match(highres_images)
-                        if highres_hash:
-                            highres.data = file(highres_hash.id)
-                            connector.add(highres)
-                    connector.add(lowres)
-                    connector.add(xml_resource)
+                    for xml_res, lowres, highres in create_image_resources(
+                            input_dir, doc, img_base_id):
+                        try:
+                            lowres_hash = ImageHash(lowres.id, lowres.data)
+                        except Exception, e:
+                            log.warning(
+                                'Could not hash %s: %s' % (lowres.id, e))
+                        else:
+                            highres_hash = lowres_hash.find_match(
+                                highres_images)
+                            if highres_hash:
+                                highres.data = file(highres_hash.id)
+                                connector.add(highres)
+                        connector.add(lowres)
+                        connector.add(xml_res)
+                        log.info("An image was imported for %s", cname)
+                    log.info("All images were imported for %s", cname)
+            except Exception:
+                log.error("Some or all images for %s could not be imported.",
+                          cname, exc_info=True)
 
             doc.addAttributesToDoc(product_id, year, volume, cname)
             new_xml = doc.to_string()

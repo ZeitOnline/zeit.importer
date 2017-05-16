@@ -4,7 +4,8 @@ zeit.importer changes
 1.4.4 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- HOTFIX: Improve error handling. Article will be processed, if something went
+  wrong with the images
 
 
 1.4.3 (2017-05-12)
