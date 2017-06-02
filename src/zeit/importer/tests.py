@@ -361,6 +361,18 @@ class K4ImportTest(unittest.TestCase):
         self.assertEquals(u'master-img-1.jpg', resources[1][0])
         self.assertEquals(u'preview-img-1.jpg', resources[2][0])
 
+    def test_get_path_should_deliver_correct_path_or_fail(self):
+        with self.assertRaises(IOError):
+            zeit.importer.k4import._get_path(u'i_do_not_exist')
+
+        path = '%s%s%s' % (
+            unicode(os.path.dirname(__file__)),
+            u'/testdocs/',
+            u'img_49964910_Ank\xfc_Wissen_23.xml')
+        path = os.path.basename(os.path.normpath(
+            zeit.importer.k4import._get_path(path)))
+        self.assertEquals(path, 'img_49964910_Ank\xfc_Wissen_23.xml')
+
 
 class HighresTest(K4ImportTest):
 
