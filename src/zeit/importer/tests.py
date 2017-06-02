@@ -365,6 +365,10 @@ class K4ImportTest(unittest.TestCase):
         with self.assertRaises(IOError):
             zeit.importer.k4import._get_path(u'i_do_not_exist')
 
+        with self.assertRaises(IOError):
+            zeit.importer.k4import._get_path(
+                u'ZLeo Cover 03_2017 •_49811159.jpg')
+
         path = '%s%s%s' % (
             unicode(os.path.dirname(__file__)),
             u'/testdocs/',
@@ -372,6 +376,14 @@ class K4ImportTest(unittest.TestCase):
         path = os.path.basename(os.path.normpath(
             zeit.importer.k4import._get_path(path)))
         self.assertEquals(path, 'img_49964910_Ank\xfc_Wissen_23.xml')
+
+        path = '%s%s%s' % (
+            unicode(os.path.dirname(__file__)),
+            u'/testdocs/',
+            u'ZLeo Cover 03_2017 •_49811159.jpg')
+        path = os.path.basename(os.path.normpath(
+            zeit.importer.k4import._get_path(path)))
+        self.assertEquals(path, 'ZLeo Cover 03_2017 \x95_49811159.jpg')
 
 
 class HighresTest(K4ImportTest):

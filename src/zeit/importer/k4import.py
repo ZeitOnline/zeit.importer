@@ -369,10 +369,10 @@ def _get_path(path):
         log.error('Error finding path (2/3)', exc_info=True)
 
     try:
-        path_iso = path.encode('iso-8859-1')
+        path_iso = path.encode('cp1250')
         if os.path.isfile(path_iso):
             return path_iso
-    except UnicodeDecodeError:
+    except (UnicodeDecodeError, UnicodeEncodeError):
         log.error('Error finding path (3/3)', exc_info=True)
 
     raise IOError('Path %s could not be found' % path)
