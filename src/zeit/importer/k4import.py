@@ -341,7 +341,7 @@ def create_image_resources(input_dir, doc, img_base_id):
             highres = get_prefixed_img_resource(
                 input_dir, img_xml, img_base_id, 'master', vivi_name)
             img_resources.append((xml_resource, lowres, highres))
-        except IOError:
+        except FileNotFoundException:
             log.error('Could not process an image', exc_info=True)
     return img_resources
 
@@ -354,6 +354,7 @@ def _get_path(path):
 
     if os.path.isfile(path):
         return path
+
     try:
         path_unicode = unicodedata.normalize('NFD', path).encode('utf-8')
         if os.path.isfile(path):
@@ -375,7 +376,11 @@ def _get_path(path):
     except (UnicodeDecodeError, UnicodeEncodeError):
         log.error('Error finding path (3/3)', exc_info=True)
 
-    raise IOError('Path %s could not be found' % path)
+    raise FileNotFoundException('Path %s could not be found' % path)
+
+
+class FileNotFoundException(Exception):
+    pass
 
 
 def get_xml_img_resource(img_xml, img_base_id, name):

@@ -362,10 +362,10 @@ class K4ImportTest(unittest.TestCase):
         self.assertEquals(u'preview-img-1.jpg', resources[2][0])
 
     def test_get_path_should_deliver_correct_path_or_fail(self):
-        with self.assertRaises(IOError):
+        with self.assertRaises(zeit.importer.k4import.FileNotFoundException):
             zeit.importer.k4import._get_path(u'i_do_not_exist')
 
-        with self.assertRaises(IOError):
+        with self.assertRaises(zeit.importer.k4import.FileNotFoundException):
             zeit.importer.k4import._get_path(
                 u'ZLeo Cover 03_2017 •_49811159.jpg')
 
