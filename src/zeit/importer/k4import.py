@@ -166,6 +166,7 @@ def run_dir(input_dir, product_id_in):
                     img_base_id = ensure_collection(
                         os.path.join(settings['import_root'], product_id,
                                      year, volume, 'zon-images', cname))
+                    set_zon_image_uniqueId(doc, img_base_id)
 
                     for xml_res, lowres, highres in create_image_resources(
                             input_dir, doc, img_base_id):
@@ -187,8 +188,6 @@ def run_dir(input_dir, product_id_in):
             except Exception:
                 log.error("Some or all images for %s could not be imported.",
                           cname, exc_info=True)
-
-            set_zon_image_uniqueId(doc, img_base_id)
 
             doc.addAttributesToDoc(product_id, year, volume, cname)
             new_xml = doc.to_string()
