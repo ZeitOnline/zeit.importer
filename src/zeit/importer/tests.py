@@ -348,6 +348,15 @@ class K4ImportTest(unittest.TestCase):
             '<image-group><attribute name="type" ns="',
             res.data.read()[0:40])
 
+    def test_zon_image_should_reference_uniqueId(self):
+        article = self._get_doc('Walser.xml')
+        zeit.importer.k4import.set_zon_image_uniqueId(
+            article,
+            "http://xml.zeit.de/test")
+        url = article.doc.xpath('/article/head/zon-image')[0].get("uniqueId")
+        self.assertEquals(url, "http://xml.zeit.de/test/img-1")
+
+
     @mock.patch(
         'zeit.importer.k4import.copyExportToArchive', return_value=None)
     def test_import_should_process_images(self, copy_function):

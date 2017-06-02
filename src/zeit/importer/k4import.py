@@ -188,6 +188,8 @@ def run_dir(input_dir, product_id_in):
                 log.error("Some or all images for %s could not be imported.",
                           cname, exc_info=True)
 
+            set_zon_image_uniqueId(doc, img_base_id)
+
             doc.addAttributesToDoc(product_id, year, volume, cname)
             new_xml = doc.to_string()
             for import_folder in import_folders:
@@ -340,6 +342,12 @@ def create_image_resources(input_dir, doc, img_base_id):
             input_dir, img_xml, img_base_id, 'master', vivi_name)
         img_resources.append((xml_resource, lowres, highres))
     return img_resources
+
+
+def set_zon_image_uniqueId(doc, img_base_id):
+    for elem in doc.zon_images:
+        vivi_name = elem.get('vivi_name')
+        elem.set("uniqueId", os.path.join(img_base_id, vivi_name))
 
 
 def get_xml_img_resource(img_xml, img_base_id, name):
