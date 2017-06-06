@@ -74,7 +74,7 @@ class Article(object):
             raise IOError('%s does not exists' % path)
         conf = zope.component.getUtility(zeit.importer.interfaces.ISettings)
         ns = lxml.etree.FunctionNamespace(
-                'http://namespaces.zeit.de/functions')
+            'http://namespaces.zeit.de/functions')
         ns['normalize_whitespace_strip_left'] = (
             normalize_whitespace_strip_left)
         ns['normalize_whitespace_strip_right'] = (
