@@ -10,7 +10,6 @@ import mock
 import os.path
 import pkg_resources
 import unittest
-import zeit.cms.testing
 import zeit.connector.mock
 import zeit.connector.resource
 import zeit.importer.interfaces
@@ -355,7 +354,6 @@ class K4ImportTest(unittest.TestCase):
             "http://xml.zeit.de/test")
         url = article.doc.xpath('/article/head/zon-image')[0].get("uniqueId")
         self.assertEquals(url, "http://xml.zeit.de/test/img-1")
-
 
     @mock.patch(
         'zeit.importer.k4import.copyExportToArchive', return_value=None)
