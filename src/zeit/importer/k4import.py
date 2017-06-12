@@ -329,7 +329,7 @@ def load_configuration():
 
 def create_image_resources(input_dir, doc, img_base_id):
     img_resources = []
-    for elem in doc.zon_images:
+    for counter, elem in enumerate(doc.zon_images):
         try:
             vivi_name = elem.get('vivi_name')
             path = _get_path(
@@ -343,7 +343,8 @@ def create_image_resources(input_dir, doc, img_base_id):
                 input_dir, img_xml, img_base_id, 'master', vivi_name)
             img_resources.append((xml_resource, lowres, highres))
         except FileNotFoundException:
-            log.error('Could not process an image', exc_info=True)
+            log.error('Image %s/%s could not be processed', counter,
+                      len(doc.zon_images), exc_info=True)
     return img_resources
 
 
