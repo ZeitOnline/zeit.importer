@@ -329,18 +329,60 @@ def load_configuration():
 
 def create_image_resources(input_dir, doc, img_base_id):
     img_resources = []
-    for elem in doc.zon_images:
-        vivi_name = elem.get('vivi_name')
-        path = unicode(os.path.join(input_dir, elem.get('k4_id')))
-        path = unicodedata.normalize('NFD', path).encode('utf-8')
-        img_xml = lxml.etree.parse(path)
-        xml_resource = get_xml_img_resource(img_xml, img_base_id, vivi_name)
-        lowres = get_prefixed_img_resource(
-            input_dir, img_xml, img_base_id, 'preview', vivi_name)
-        highres = get_prefixed_img_resource(
-            input_dir, img_xml, img_base_id, 'master', vivi_name)
-        img_resources.append((xml_resource, lowres, highres))
+    for counter, elem in enumerate(doc.zon_images):
+        try:
+            vivi_name = elem.get('vivi_name')
+            path = _get_path(
+                unicode(os.path.join(input_dir, elem.get('k4_id'))))
+            img_xml = lxml.etree.parse(path)
+            xml_resource = get_xml_img_resource(
+                img_xml, img_base_id, vivi_name)
+            lowres = get_prefixed_img_resource(
+                input_dir, img_xml, img_base_id, 'preview', vivi_name)
+            highres = get_prefixed_img_resource(
+                input_dir, img_xml, img_base_id, 'master', vivi_name)
+            img_resources.append((xml_resource, lowres, highres))
+        except FileNotFoundException:
+            log.error('Image %s/%s could not be processed', counter,
+                      len(doc.zon_images), exc_info=True)
     return img_resources
+
+
+def _get_path(path):
+    """ For unknown reasons we get file names in different encodings, while
+    the lxml document has an utf-8 encoding. We tried a couple
+    patterns, that proved to work and catch all of the encoding cases we know
+    of."""
+
+    if os.path.isfile(path):
+        return path
+
+    try:
+        path_unicode = unicodedata.normalize('NFD', path).encode('utf-8')
+        if os.path.isfile(path):
+            return path_unicode
+    except UnicodeEncodeError:
+        log.error('Error finding path (1/3)', exc_info=True)
+
+    try:
+        path_unicode_2 = path.encode('utf-8')
+        if os.path.isfile(path):
+            return path_unicode_2
+    except UnicodeEncodeError:
+        log.error('Error finding path (2/3)', exc_info=True)
+
+    try:
+        path_iso = path.encode('cp1250')
+        if os.path.isfile(path_iso):
+            return path_iso
+    except (UnicodeDecodeError, UnicodeEncodeError):
+        log.error('Error finding path (3/3)', exc_info=True)
+
+    raise FileNotFoundException('Path %s could not be found' % path)
+
+
+class FileNotFoundException(Exception):
+    pass
 
 
 def set_zon_image_uniqueId(doc, img_base_id):
@@ -361,7 +403,7 @@ def get_prefixed_img_resource(input_dir, img_xml, img_base_id, prefix, name):
         img_xml.find('/HEADER/LowResPath').text.replace(
             '\\', '/').split('/')[1:])
     path = unicode(os.path.join(input_dir, normpath))
-    path = unicodedata.normalize('NFD', path).encode('utf-8')
+    path = _get_path(path)
     name = '%s-%s.jpg' % (prefix, name)
     return Resource(
         os.path.join(img_base_id, name), name, 'image', file(path),
