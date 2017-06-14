@@ -16,6 +16,8 @@ setup(
     namespace_packages=['zeit'],
     install_requires=[
         'Pillow',
+        'lxml',
+        'mock',
         'pytz',
         'setuptools',
         'zeit.connector',
