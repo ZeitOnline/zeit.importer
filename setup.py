@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='zeit.importer',
-    version='1.4.6.dev0',
+    version='1.4.7.dev0',
     author='Martin Borho, gocept, Zeit Online',
     author_email='zon-backend@zeit.de',
     url='http://www.zeit.de/',
@@ -16,6 +16,8 @@ setup(
     namespace_packages=['zeit'],
     install_requires=[
         'Pillow',
+        'lxml',
+        'mock',
         'pytz',
         'setuptools',
         'zeit.connector',

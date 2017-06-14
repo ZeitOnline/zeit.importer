@@ -1,0 +1,82 @@
+--index=http://devpi.zeit.de:4040/zeit/default
+--trusted-host=devpi.zeit.de
+
+Pillow == 2.9.0
+lxml == 3.4.1
+setuptools == 34.3.2
+zeit.connector == 2.10.0
+zope.component == 3.10.0
+zope.interface == 4.0.5
+
+# setuptools
+appdirs == 1.4.3
+packaging == 16.8
+pyparsing == 2.2.0
+six == 1.10.0
+
+# Testing
+execnet == 1.1
+mock == 1.0.1
+pep8 == 1.6.2
+py == 1.4.31
+pytest == 3.0.2
+pytest-cache == 1.0
+pytest-pep8 == 1.0.6
+
+# zeit.connector
+ZConfig == 2.8.0
+ZODB == 4.0.1
+gocept.cache == 0.5.1
+gocept.lxml == 0.2.2
+pytz == 2012c
+zc.set == 0.1dev-r75642
+zope.cachedescriptors == 3.5.1
+zope.event == 3.5.2
+zope.schema == 3.7.1
+zope.security == 3.8.3
+zope.app.file == 3.6.1
+
+# gocept.cache
+decorator == 3.4.0
+transaction == 1.1.1
+zope.testing == 3.10.3
+zope.exceptions == 3.6.2
+
+# zc.set
+zope.app.folder == 3.5.2
+zope.app.content == 3.5.1
+
+# zope.security
+zope.i18nmessageid == 3.5.3
+zope.location == 3.9.1
+zope.proxy == 3.6.1
+
+# zope.app.file
+ZODB3 == 3.11.0
+ZEO == 4.0.0
+zope.annotation == 3.5.0
+zope.app.publication == 3.12.0
+zope.authentication == 3.7.1
+zope.broken == 3.6.0
+zope.browser == 1.3
+zope.componentvocabulary == 1.0.1
+zope.configuration == 3.7.4
+zope.container == 3.12.0
+zope.contenttype == 3.5.5
+zope.datetime == 3.4.1
+zope.dottedname == 3.4.6
+zope.dublincore == 3.8.2
+zope.error == 3.7.4
+zope.filerepresentation == 3.6.1
+zope.i18n == 3.7.4
+zope.lifecycleevent == 3.6.2
+zope.publisher == 3.12.6
+zope.site == 3.9.2
+zope.size == 3.4.1
+zope.traversing == 3.14.0
+
+# ZODB
+BTrees == 4.0.8
+persistent == 4.0.8
+zc.lockfile == 1.0.0
+zdaemon == 4.0.0
