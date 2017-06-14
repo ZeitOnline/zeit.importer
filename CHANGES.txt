@@ -6,6 +6,8 @@ zeit.importer changes
 
 - ZON-3997: Set up testrunner via tox
 
+- MAINT: Move tests into their own subdirectory
+
 
 1.4.6 (2017-06-12)
 ------------------
