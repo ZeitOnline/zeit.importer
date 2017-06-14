@@ -14,7 +14,8 @@ Eine Beispiel-Konfigurationsdatei liegt in ``k4import-example.ini``.
 Tests laufen lassen
 ===================
 
-Mit `tox`_ und pytest, also einfach ``tox`` aufrufen.
+Mit `tox`_ und pytest. ``tox`` ggfs. installieren (z.B. via ``pip install tox``)
+und dann einfach ``tox`` aufrufen.
 
 .. _`tox`: http://tox.readthedocs.io/
 
