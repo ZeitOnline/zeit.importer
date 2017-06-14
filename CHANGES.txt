@@ -1,7 +1,13 @@
 zeit.importer changes
 =================
 
-1.4.6 (unreleased)
+1.4.7 (unreleased)
+------------------
+
+- Nothing changed yet.
+
+
+1.4.6 (2017-06-12)
 ------------------
 
 - ZON-3975: Handle different file encodings better
