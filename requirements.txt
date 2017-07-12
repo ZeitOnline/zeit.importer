@@ -7,6 +7,7 @@ setuptools == 34.3.2
 zeit.connector == 2.10.0
 zope.component == 3.10.0
 zope.interface == 4.0.5
+pyyaml == 3.12
 
 # setuptools
 appdirs == 1.4.3

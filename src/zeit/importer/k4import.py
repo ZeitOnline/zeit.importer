@@ -4,6 +4,7 @@ from zeit.importer.article import Article
 from zeit.importer.highres import ImageHash
 from zeit.importer.interfaces import DOC_NS, PRINT_NS
 import ConfigParser
+import StringIO
 import datetime
 import logging
 import logging.config
@@ -13,13 +14,13 @@ import os
 import pkg_resources
 import re
 import shutil
-import StringIO
+import unicodedata
 import urlparse
 import zeit.connector.connector
 import zeit.connector.interfaces
 import zeit.importer.interfaces
 import zope.component
-import unicodedata
+import yaml
 
 
 log = logging.getLogger(__name__)
@@ -474,7 +475,23 @@ def create_img_xml(xml, name):
     return img_group
 
 
-def main():
+def _configure(stream):
+    config = yaml.load(stream)
+    settings = config['importer']
+    zope.component.provideUtility(settings, zeit.importer.interfaces.ISettings)
+    zope.component.provideUtility(zeit.connector.connector.Connector(
+        {'default': settings['connector_url']}))
+
+
+def _configure_logging():
+    # Inspired by pyramid.paster.setup_logging().
+    if config.has_section('loggers'):
+        path = os.path.abspath(options.config_file)
+        logging.config.fileConfig(path, dict(
+            __file__=path, here=os.path.dirname(path)))
+
+
+def _parse_args():
     parser = optparse.OptionParser("usage: %prog [options] arg")
     parser.add_option("-i", "--indir", dest="input_dir",
                       help="directory with the k4 export files")
@@ -486,23 +503,18 @@ def main():
 
     if not options.config_file:
         options.config_file = os.environ.get('ZEIT_IMPORTER_CONFIG')
+
     if not options.config_file:
         raise ValueError('A configuration file is required.')
+    return options
 
-    config = ConfigParser.ConfigParser()
-    config.read([options.config_file])
 
-    # Inspired by pyramid.paster.setup_logging().
-    if config.has_section('loggers'):
-        path = os.path.abspath(options.config_file)
-        logging.config.fileConfig(path, dict(
-            __file__=path, here=os.path.dirname(path)))
-
-    settings = dict(config.items('importer'))
-    zope.component.provideUtility(settings, zeit.importer.interfaces.ISettings)
-    zope.component.provideUtility(zeit.connector.connector.Connector(
-        {'default': settings['connector_url']}))
+def main():
+    options = _parse_args()
+    stream = file(options.config_file, 'r')
+    _configure(stream)
     load_configuration()
+    #_configure_logging()
 
     if not options.input_dir:
         options.input_dir = settings['k4_export_dir']

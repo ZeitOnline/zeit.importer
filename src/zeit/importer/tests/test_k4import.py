@@ -9,9 +9,37 @@ import os.path
 import pkg_resources
 import zeit.importer.testing
 import zope.component
+import yaml
+import StringIO
 
 
 class K4ImportTest(zeit.importer.testing.TestCase):
+
+    def test_configuration(self):
+        config = {
+            'importer': {
+                'connector_url': 'foo',
+                'k4_export_dir': '/foo',
+                'k4_archive_dir': '/baa',
+                'k4_highres_dir': 'batz',
+                'import_root': 'http://xml.zeit.de/archiv-wf/archiv/',
+                'import_root_in': 'http://xml.zeit.de/archiv-wf/archiv-in/',
+                'import_config': 'http://xml.zeit.de/forms/importexport.xml',
+                'ressortmap': 'http://xml.zeit.de/forms/printimport.xml',
+                'access_source': 'http://xml.zeit.de/work/data/access.xml'},
+            'loggers': {
+                'keys': 'root, zeit'},
+            'logger_root': {
+                'level': 'INFO',
+                'handlers': 'console, logfile'}
+        }
+
+        stream = StringIO.StringIO(yaml.dump(config))
+        k4import._configure(stream)
+        
+        processed_config = zope.component.getUtility(
+            zeit.importer.interfaces.ISettings)
+        self.assertTrue('connector_url' in processed_config.keys())
 
     def test_filename_normalization(self):
         norm_1 = k4import.mangleQPSName(
