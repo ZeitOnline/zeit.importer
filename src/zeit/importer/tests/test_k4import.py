@@ -5,55 +5,30 @@ from zeit.importer.article import Article
 from zeit.importer.article import sanitizeDoc
 import lxml.etree
 import mock
-import os.path
+import os
 import pkg_resources
 import zeit.importer.testing
 import zope.component
-import yaml
-import StringIO
 
 
 class K4ImportTest(zeit.importer.testing.TestCase):
 
     def test_configuration(self):
-        config = {
-            'version': 1,
-            'importer': {
-                'connector_url': 'foo',
-                'k4_export_dir': '/foo',
-                'k4_archive_dir': '/baa',
-                'k4_highres_dir': 'batz',
-                'import_root': 'http://xml.zeit.de/archiv-wf/archiv/',
-                'import_root_in': 'http://xml.zeit.de/archiv-wf/archiv-in/',
-                'import_config': 'http://xml.zeit.de/forms/importexport.xml',
-                'ressortmap': 'http://xml.zeit.de/forms/printimport.xml',
-                'access_source': 'http://xml.zeit.de/work/data/access.xml'},
-            'handlers': {
-                'console': {
-                    'class': 'logging.StreamHandler',
-                    'formatter': 'generic',
-                    'level': 'NOTSET',
-                    'stream': 'ext://sys.stdout'
-                }
-            },
-            'formatters': {
-                'generic': {
-                    'class': 'zope.exceptions.log.Formatter',
-                    'format': ('%(asctime)s %(levelname)-5.5s %(name)s'
-                               '%(message)s')
-                }
-            },
-            'loggers': {
-                'root': {
-                    'handlers': ['console']
-                }
-            }
-        }
+        config = {'importer': {
+            'connector_url': 'foo',
+            'k4_export_dir': '/foo',
+            'k4_archive_dir': '/baa',
+            'k4_highres_dir': 'batz',
+            'import_root': 'http://xml.zeit.de/archiv-wf/archiv/',
+            'import_root_in': 'http://xml.zeit.de/archiv-wf/archiv-in/',
+            'import_config': 'http://xml.zeit.de/forms/importexport.xml',
+            'ressortmap': 'http://xml.zeit.de/forms/printimport.xml',
+            'access_source': 'http://xml.zeit.de/work/data/access.xml'
+        }}
 
         k4import._configure(config)
         processed_config = zope.component.getUtility(
             zeit.importer.interfaces.ISettings)
-        k4import._configure_logging(config)
         self.assertTrue('connector_url' in processed_config.keys())
 
     def test_filename_normalization(self):
