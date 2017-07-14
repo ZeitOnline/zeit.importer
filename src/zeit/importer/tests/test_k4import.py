@@ -17,6 +17,7 @@ class K4ImportTest(zeit.importer.testing.TestCase):
 
     def test_configuration(self):
         config = {
+            'version': 1,
             'importer': {
                 'connector_url': 'foo',
                 'k4_export_dir': '/foo',
@@ -27,18 +28,32 @@ class K4ImportTest(zeit.importer.testing.TestCase):
                 'import_config': 'http://xml.zeit.de/forms/importexport.xml',
                 'ressortmap': 'http://xml.zeit.de/forms/printimport.xml',
                 'access_source': 'http://xml.zeit.de/work/data/access.xml'},
+            'handlers': {
+                'console': {
+                    'class': 'logging.StreamHandler',
+                    'formatter': 'generic',
+                    'level': 'NOTSET',
+                    'stream': 'ext://sys.stdout'
+                }
+            },
+            'formatters': {
+                'generic': {
+                    'class': 'zope.exceptions.log.Formatter',
+                    'format': ('%(asctime)s %(levelname)-5.5s %(name)s'
+                               '%(message)s')
+                }
+            },
             'loggers': {
-                'keys': 'root, zeit'},
-            'logger_root': {
-                'level': 'INFO',
-                'handlers': 'console, logfile'}
+                'root': {
+                    'handlers': ['console']
+                }
+            }
         }
 
-        stream = StringIO.StringIO(yaml.dump(config))
-        k4import._configure(stream)
-        
+        k4import._configure(config)
         processed_config = zope.component.getUtility(
             zeit.importer.interfaces.ISettings)
+        k4import._configure_logging(config)
         self.assertTrue('connector_url' in processed_config.keys())
 
     def test_filename_normalization(self):
@@ -248,7 +263,7 @@ class K4ImportTest(zeit.importer.testing.TestCase):
         self.assertEquals("registration", val)
 
         del self.settings['access_override_value']
-        zeit.importer.k4import.load_configuration()
+        zeit.importer.k4import._configure_from_dav_xml()
         doc = self._get_doc(filename='access.xml').doc
         val = doc.xpath("//attribute[@name='access']")[0].text
         self.assertEquals("free", val)
@@ -256,7 +271,7 @@ class K4ImportTest(zeit.importer.testing.TestCase):
 
     def test_access_mapping(self):
         del self.settings['access_override_value']
-        zeit.importer.k4import.load_configuration()
+        zeit.importer.k4import._configure_from_dav_xml()
         access = zeit.importer.article.map_access
         self.assertEquals(['registration'],
                           access(object(), ['loginpflichtig']))
