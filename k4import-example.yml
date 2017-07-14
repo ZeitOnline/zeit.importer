@@ -1,0 +1,41 @@
+importer:
+  connector_url: http://cms-backend.staging.zeit.de:9000/cms/
+  k4_export_dir: /srv/k4/incoming
+  k4_archive_dir: /srv/k4/archive
+  k4_highres_dir: /srv/k4/highres/ausgabe_{volume}_{year}_bilder_ipad_unsortiert
+  import_root: http://xml.zeit.de/archiv-wf/archiv/
+  import_root_in: http://xml.zeit.de/archiv-wf/archiv-in/
+  import_config: http://xml.zeit.de/forms/importexport.xml
+  ressortmap: http://xml.zeit.de/forms/printimport-ressortmap.xml
+  access_source: http://xml.zeit.de/work/data/access.xml
+
+  # Dimensions all images will be resized to for comparison
+  highres_sample_size: 8
+
+  # Images with a score less than this, won't be considered equal
+  highres_diff_cutoff: 0.5
+
+# logging configuration
+version: 1
+loggers:
+  root:
+    handlers: [console, logfile]
+  zeit:
+    level: INFO
+    qualname: zeit
+    handlers: [logfile]
+formatters:
+  generic:
+    class: zope.exceptions.log.Formatter
+    format: '%(asctime)s %(levelname)-5.5s %(name)s%(message)s'
+handlers:
+  console:
+    class: logging.StreamHandler
+    formatter: generic
+    level: NOTSET
+    stream: ext://sys.stdout
+  logfile:
+    class: logging.FileHandler
+    args: ('/srv/k4/deployment/log/k4import.log',)
+    level: NOTSET
+    formatter: generic

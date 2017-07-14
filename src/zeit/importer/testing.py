@@ -52,6 +52,6 @@ class TestCase(unittest.TestCase):
         zope.component.provideUtility(self.connector)
         zope.component.provideUtility(
             settings, zeit.importer.interfaces.ISettings)
-        zeit.importer.k4import.load_configuration()
+        zeit.importer.k4import._configure_from_dav_xml()
         self.settings = zope.component.getUtility(
             zeit.importer.interfaces.ISettings)

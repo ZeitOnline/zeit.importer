@@ -5,13 +5,31 @@ from zeit.importer.article import Article
 from zeit.importer.article import sanitizeDoc
 import lxml.etree
 import mock
-import os.path
+import os
 import pkg_resources
 import zeit.importer.testing
 import zope.component
 
 
 class K4ImportTest(zeit.importer.testing.TestCase):
+
+    def test_configuration(self):
+        config = {'importer': {
+            'connector_url': 'foo',
+            'k4_export_dir': '/foo',
+            'k4_archive_dir': '/baa',
+            'k4_highres_dir': 'batz',
+            'import_root': 'http://xml.zeit.de/archiv-wf/archiv/',
+            'import_root_in': 'http://xml.zeit.de/archiv-wf/archiv-in/',
+            'import_config': 'http://xml.zeit.de/forms/importexport.xml',
+            'ressortmap': 'http://xml.zeit.de/forms/printimport.xml',
+            'access_source': 'http://xml.zeit.de/work/data/access.xml'
+        }}
+
+        k4import._configure(config)
+        processed_config = zope.component.getUtility(
+            zeit.importer.interfaces.ISettings)
+        self.assertTrue('connector_url' in processed_config.keys())
 
     def test_filename_normalization(self):
         norm_1 = k4import.mangleQPSName(
@@ -220,7 +238,7 @@ class K4ImportTest(zeit.importer.testing.TestCase):
         self.assertEquals("registration", val)
 
         del self.settings['access_override_value']
-        zeit.importer.k4import.load_configuration()
+        zeit.importer.k4import._configure_from_dav_xml()
         doc = self._get_doc(filename='access.xml').doc
         val = doc.xpath("//attribute[@name='access']")[0].text
         self.assertEquals("free", val)
@@ -228,7 +246,7 @@ class K4ImportTest(zeit.importer.testing.TestCase):
 
     def test_access_mapping(self):
         del self.settings['access_override_value']
-        zeit.importer.k4import.load_configuration()
+        zeit.importer.k4import._configure_from_dav_xml()
         access = zeit.importer.article.map_access
         self.assertEquals(['registration'],
                           access(object(), ['loginpflichtig']))
