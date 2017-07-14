@@ -284,50 +284,6 @@ class ConnectorResolver(lxml.etree.Resolver):
         return self.resolve_file(connector[url].data, context)
 
 
-def load_configuration():
-    connector = zope.component.getUtility(zeit.connector.interfaces.IConnector)
-    settings = zope.component.getUtility(zeit.importer.interfaces.ISettings)
-
-    try:
-        resource = connector[settings['import_config']]
-    except KeyError:
-        raise ValueError('Import configuration file %s not found',
-                         settings.get('import_config', ''))
-
-    settings['product_names'] = {}
-    settings['product_ids'] = {}
-    settings['publication_ids'] = {}
-    tree = lxml.etree.fromstring(resource.data.read())
-    for p in tree.xpath('/config/product'):
-        k4_id = p.findtext('k4id')
-        label = p.findtext('label')
-        id = p.get('id')
-        if k4_id:
-            settings['product_names'][id] = label
-            settings['product_ids'][k4_id] = id
-            for ressort in p.xpath('ressort'):
-                settings['publication_ids'][
-                    (k4_id, ressort.get('name'))] = ressort.get('id')
-
-    try:
-        connector[settings['ressortmap']]
-    except KeyError:
-        raise ValueError('Ressortmap file %s not found',
-                         settings.get('ressortmap', ''))
-
-    parser = lxml.etree.XMLParser()
-    parser.resolvers.add(ConnectorResolver())
-    settings['k4_stylesheet'] = lxml.etree.XSLT(lxml.etree.parse(
-        pkg_resources.resource_filename(
-            __name__, 'stylesheets/k4import.xslt'), parser=parser))
-    settings['normalize_whitespace'] = lxml.etree.XSLT(lxml.etree.parse(
-        pkg_resources.resource_filename(
-            __name__, 'stylesheets/normalize_whitespace.xslt'), parser=parser))
-
-    access_source = lxml.etree.parse(connector[settings['access_source']].data)
-    settings['access_mapping'] = load_access_mapping(access_source)
-
-
 def create_image_resources(input_dir, doc, img_base_id):
     img_resources = []
     for counter, elem in enumerate(doc.zon_images):
@@ -475,20 +431,60 @@ def create_img_xml(xml, name):
     return img_group
 
 
-def _configure(stream):
-    config = yaml.load(stream)
-    settings = config['importer']
+def _configure(config):
+    settings = config.pop('importer')
     zope.component.provideUtility(settings, zeit.importer.interfaces.ISettings)
     zope.component.provideUtility(zeit.connector.connector.Connector(
         {'default': settings['connector_url']}))
 
 
-def _configure_logging():
-    # Inspired by pyramid.paster.setup_logging().
-    if config.has_section('loggers'):
-        path = os.path.abspath(options.config_file)
-        logging.config.fileConfig(path, dict(
-            __file__=path, here=os.path.dirname(path)))
+def _configure_logging(config):
+    if 'loggers' in config.keys():
+        logging.config.dictConfig(config)
+
+
+def _configure_from_dav_xml():
+    connector = zope.component.getUtility(zeit.connector.interfaces.IConnector)
+    settings = zope.component.getUtility(zeit.importer.interfaces.ISettings)
+
+    try:
+        resource = connector[settings['import_config']]
+    except KeyError:
+        raise ValueError('Import configuration file %s not found',
+                         settings.get('import_config', ''))
+
+    settings['product_names'] = {}
+    settings['product_ids'] = {}
+    settings['publication_ids'] = {}
+    tree = lxml.etree.fromstring(resource.data.read())
+    for p in tree.xpath('/config/product'):
+        k4_id = p.findtext('k4id')
+        label = p.findtext('label')
+        id = p.get('id')
+        if k4_id:
+            settings['product_names'][id] = label
+            settings['product_ids'][k4_id] = id
+            for ressort in p.xpath('ressort'):
+                settings['publication_ids'][
+                    (k4_id, ressort.get('name'))] = ressort.get('id')
+
+    try:
+        connector[settings['ressortmap']]
+    except KeyError:
+        raise ValueError('Ressortmap file %s not found',
+                         settings.get('ressortmap', ''))
+
+    parser = lxml.etree.XMLParser()
+    parser.resolvers.add(ConnectorResolver())
+    settings['k4_stylesheet'] = lxml.etree.XSLT(lxml.etree.parse(
+        pkg_resources.resource_filename(
+            __name__, 'stylesheets/k4import.xslt'), parser=parser))
+    settings['normalize_whitespace'] = lxml.etree.XSLT(lxml.etree.parse(
+        pkg_resources.resource_filename(
+            __name__, 'stylesheets/normalize_whitespace.xslt'), parser=parser))
+
+    access_source = lxml.etree.parse(connector[settings['access_source']].data)
+    settings['access_mapping'] = load_access_mapping(access_source)
 
 
 def _parse_args():
@@ -511,15 +507,15 @@ def _parse_args():
 
 def main():
     options = _parse_args()
-    stream = file(options.config_file, 'r')
-    _configure(stream)
-    load_configuration()
-    #_configure_logging()
+    config = yaml.load(file(options.config_file, 'r'))
+    _configure(config)
+    _configure_logging(config)
+    _configure_from_dav_xml()
 
+    settings = zope.component.getUtility(zeit.importer.interfaces.ISettings)
     if not options.input_dir:
         options.input_dir = settings['k4_export_dir']
         log.info('No input directory given, assuming %s', options.input_dir)
-
     try:
         log.info('Start import of %s to %s', options.input_dir,
                  settings['import_root'])
