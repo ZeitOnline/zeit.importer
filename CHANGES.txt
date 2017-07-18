@@ -1,7 +1,7 @@
 zeit.importer changes
 =================
 
-1.4.8 (unreleased)
+1.4.8 (2017-07-18)
 ------------------
 
 - BUG-751: Change config file format to YAML instead of INI
