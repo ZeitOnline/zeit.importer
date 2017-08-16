@@ -220,6 +220,18 @@ class K4ImportTest(zeit.importer.testing.TestCase):
         self.assertEquals(
             'http://xml.zeit.de/Trump-Kasten', boxes_return.keys()[0])
 
+    def test_process_boxes_should_ignore_errors(self):
+        articles = {
+            "http://xml.zeit.de/Trump": (
+                self._get_doc(filename='Trump.xml'), 'Trump')}
+        boxes = {'http://xml.zeit.de/Trump-Kasten': (
+            self._get_doc(filename='Trump-Kasten.xml'), 'Trump')}
+        extract = 'zeit.importer.k4import.extract_and_move_xml_elements'
+        with mock.patch(extract) as extract:
+            extract.side_effect = RuntimeError('provoked')
+            # assertNothingRaised
+            zeit.importer.k4import.process_boxes(boxes, articles)
+
     def test_put_content(self):
         articles = {
             "http://xml.zeit.de/Trump": (

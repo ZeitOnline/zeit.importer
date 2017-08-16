@@ -254,13 +254,18 @@ def process_boxes(boxes, articles):
 
         log.info('Process box %s for %s', box_id, article_id)
         # Extract coordinates and add to article
-        extract_and_move_xml_elements(
-            box_xml.find("//Frame"), article.find('//Frames')[0])
+        try:
+            extract_and_move_xml_elements(
+                box_xml.find("//Frame"), article.find('//Frames')[0])
 
-        new_box = lxml.etree.Element("box")
-        article.find('//body').append(new_box)
-        extract_and_move_xml_elements(
-            box_xml.find("//body").getchildren(), new_box)
+            new_box = lxml.etree.Element("box")
+            article.find('//body').append(new_box)
+            extract_and_move_xml_elements(
+                box_xml.find("//body").getchildren(), new_box)
+        except:
+            log.error('Error processing box %s for %s', box_id, article_id,
+                      exc_info=True)
+            continue
     return no_corresponding_article
 
 
