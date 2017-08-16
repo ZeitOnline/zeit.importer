@@ -4,7 +4,7 @@ zeit.importer changes
 1.4.9 (unreleased)
 ------------------
 
-- IMPROVEMENT: Remove ini style config
+- BUG-774: Skip errors when processing boxes
 
 
 1.4.8 (2017-07-18)

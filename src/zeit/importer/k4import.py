@@ -3,7 +3,6 @@ from zeit.connector.resource import Resource
 from zeit.importer.article import Article
 from zeit.importer.highres import ImageHash
 from zeit.importer.interfaces import DOC_NS, PRINT_NS
-import ConfigParser
 import StringIO
 import datetime
 import logging
@@ -14,13 +13,14 @@ import os
 import pkg_resources
 import re
 import shutil
+import sys
 import unicodedata
 import urlparse
+import yaml
 import zeit.connector.connector
 import zeit.connector.interfaces
 import zeit.importer.interfaces
 import zope.component
-import yaml
 
 
 log = logging.getLogger(__name__)
@@ -96,6 +96,7 @@ def run_dir(input_dir, product_id_in):
     k4_files = os.listdir(input_dir)
     boxes = {}
     articles = {}
+    error_occurred = False
 
     for (k4_filename, k4_filepath) in [
             (f, os.path.join(input_dir, f)) for f in k4_files]:
@@ -208,7 +209,8 @@ def run_dir(input_dir, product_id_in):
             log.info('Done importing %s', cname)
 
         except Exception:
-            log.error('Error', exc_info=True)
+            log.error('Error importing %s', k4_filename, exc_info=True)
+            error_occurred = True
             continue
 
     unintegrated_boxes = process_boxes(boxes, articles)
@@ -221,6 +223,8 @@ def run_dir(input_dir, product_id_in):
         copyExportToArchive(input_dir)
     else:
         log.warning('No documents to import found in %s', input_dir)
+
+    return not error_occurred
 
 
 def put_content(resources):
@@ -254,13 +258,18 @@ def process_boxes(boxes, articles):
 
         log.info('Process box %s for %s', box_id, article_id)
         # Extract coordinates and add to article
-        extract_and_move_xml_elements(
-            box_xml.find("//Frame"), article.find('//Frames')[0])
+        try:
+            extract_and_move_xml_elements(
+                box_xml.find("//Frame"), article.find('//Frames')[0])
 
-        new_box = lxml.etree.Element("box")
-        article.find('//body').append(new_box)
-        extract_and_move_xml_elements(
-            box_xml.find("//body").getchildren(), new_box)
+            new_box = lxml.etree.Element("box")
+            article.find('//body').append(new_box)
+            extract_and_move_xml_elements(
+                box_xml.find("//body").getchildren(), new_box)
+        except:
+            log.error('Error processing box %s for %s', box_id, article_id,
+                      exc_info=True)
+            continue
     return no_corresponding_article
 
 
@@ -519,7 +528,8 @@ def main():
     try:
         log.info('Start import of %s to %s', options.input_dir,
                  settings['import_root'])
-        run_dir(options.input_dir, options.product_id)
+        success = run_dir(options.input_dir, options.product_id)
+        sys.exit(0 if success else 2)
     except Exception:
-        log.error('Error', exc_info=True)
-        raise
+        log.error('Uncaught exception', exc_info=True)
+        raise  # will exit with status 1
