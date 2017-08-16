@@ -1,7 +1,7 @@
 zeit.importer changes
 =================
 
-1.4.9 (unreleased)
+1.4.9 (2017-08-16)
 ------------------
 
 - BUG-774: Skip errors when processing boxes
