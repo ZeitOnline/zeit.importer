@@ -399,11 +399,6 @@ def create_img_xml(xml, name):
                                    name='type')
     meta_type.text = 'image-group'
     img_group.append(meta_type)
-    img_alt = lxml.etree.Element('attribute',
-                                 ns='http://namespaces.zeit.de/CMS/image',
-                                 name='alt')
-    img_alt.text = xml.find('/HEADER/DESCRIPTION').get('value')
-    img_group.append(img_alt)
     img_caption = lxml.etree.Element('attribute',
                                      ns='http://namespaces.zeit.de/CMS/image',
                                      name='caption')

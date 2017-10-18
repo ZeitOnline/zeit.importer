@@ -302,11 +302,10 @@ class K4ImportTest(zeit.importer.testing.TestCase):
         self.assertEquals(zon_img_xml.tag, 'image-group')
         attributes = zon_img_xml.findall('attribute')
         self.assertEquals(attributes[0].text, 'image-group')
-        self.assertEquals(attributes[1].text[0:18], u'Familie mit Martin')
-        self.assertEquals(attributes[2].text, 'Bildunterzeile')
-        self.assertEquals(attributes[3].text, 'img-1')
-        self.assertEquals(attributes[4].text, 'Foto: Karin Rocholl')
-        self.assertEquals(attributes[5].text, 'P14D')
+        self.assertEquals(attributes[1].text, 'Bildunterzeile')
+        self.assertEquals(attributes[2].text, 'img-1')
+        self.assertEquals(attributes[3].text, 'Foto: Karin Rocholl')
+        self.assertEquals(attributes[4].text, 'P14D')
 
     def test_get_xml_img_resource(self):
         article = self._get_doc('Walser.xml')
