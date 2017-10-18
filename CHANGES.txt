@@ -1,7 +1,7 @@
 zeit.importer changes
 =================
 
-1.4.10 (unreleased)
+1.4.10 (2017-10-18)
 -------------------
 
 - ZON-4113: No longer import ``alt`` attribute for images
