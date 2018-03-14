@@ -2,3 +2,5 @@
 .tox/
 *.pyc
 *.egg-info
+.coverage
+coverage-report/
