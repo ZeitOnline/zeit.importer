@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EXPORT>
+   <HEADER>
+      <id value="66579526"/>
+      <name value="MuM Luxusautos"/>
+      <Autor value=" Lamparter"/>
+      <Datum value=""/>
+      <iPad value="19_rubriken.macher-und-maerkte"/>
+      <Zugang value="loginpflichtig"/>
+      <SAPid value="All"/>
+      <PDFid value="All"/>
+      <ObjectID value="66579526"/>
+      <PublicationID value="1367938747371"/>
+      <PublicationName value="Die Zeit"/>
+      <Ressort value="Wirtschaft"/>
+      <RessortID value="44"/>
+      <Ausgabe value="33/18"/>
+      <AusgabeID value="58246369"/>
+      <Erscheinungsdatum value="08/09/2018"/>
+      <Jahr value="2018"/>
+      <Seite-von value="22"/>
+      <Seite-bis value="22"/>
+      <Layoutname value="022_ Wirtschaft 33"/>
+      <LayoutID value="66544523"/>
+      <Type value="Story"/>
+      <Frames>
+         <Frame>
+            <Pagina>22</Pagina>
+            <Spread>0</Spread>
+            <Page>0</Page>
+            <PageWidth>1133.86</PageWidth>
+            <PageHeight>1615.75</PageHeight>
+            <Top>509.56</Top>
+            <Left>41.1</Left>
+            <Width>188.51</Width>
+            <Height>377.38</Height>
+         </Frame>
+      </Frames>
+   </HEADER>
+   <STORY>
+      <p pstyle=" Überschrift 20"
+         cstyle="[No character style]"
+         fname="Zeit Tiemann"
+         fface="Leicht"
+         fsize=""
+         color="">Fette Renditen bei Ferrari und Porsche</p>
+      <p pstyle=" Grundtext ohne Einzug"
+         cstyle="[No character style]"
+         fname="Zeit Garamond Pro"
+         fface=""
+         fsize=""
+         color="">Große Luxusautos bringen die höchsten Renditen, lautet eine alte Regel der Autobranche. Im Prinzip stimme die immer noch, sagt <span cstyle=" Bold" fface="Bold" fname="Zeit Garamond Pro">Ferdinand Dudenhöffer</span>, der Leiter des CAR-Center Automotive Research an der Uni Duisburg-Essen. Aber: »Es geht auch umgekehrt.« Bei CAR haben sie die Gewinne pro Fahrzeug für das erste Halbjahr 2018 ausgerechnet. Mit fast 70.000 Euro pro Sportwagen ist <span cstyle=" Bold" fface="Bold" fname="Zeit Garamond Pro">Ferrari</span> der Beste, die Gewinnmarge liegt damit bei fast 25 Prozent vor Steuern und Zinsen. Zweiter ist <span cstyle=" Bold" fface="Bold" fname="Zeit Garamond Pro">Porsche</span> mit knapp 17.000 Euro pro Fahrzeug (18,4 Prozent). Bei den drei großen deutschen Premiummarken – <span cstyle=" Bold" fface="Bold" fname="Zeit Garamond Pro">Audi, Mercedes-Benz, BMW</span> – bleiben pro Fahrzeug jeweils gut 3000 Euro beim Hersteller hängen. Gut dabei ist auch noch <span cstyle=" Bold" fface="Bold" fname="Zeit Garamond Pro">Volvo Cars</span> mit 2425 Euro. Doch es gibt auch Verlierer unter den Prestigemarken: Bei <span cstyle=" Bold" fface="Bold" fname="Zeit Garamond Pro">Jaguar-Landrover</span> blieben bloß 779 Euro übrig. <span cstyle=" Bold" fface="Bold" fname="Zeit Garamond Pro">Tesla</span> und die noble VW-Tochter <span cstyle=" Bold" fface="Bold" fname="Zeit Garamond Pro">Bentley</span> verloren sogar viel Geld mit jedem Fahrzeug: Pro Auto zahlte der US-Elektroautobauer Tesla fast 11.000 Euro drauf, und jeder verkaufte Bentley brachte dem VW-Konzern nach Dudenhöffers Berechnungen sogar ein Minus von knapp 17.500 Euro ein. Zum Vergleich: Im gesamten Volkswagenkonzern wurden pro Fahrzeug 1757 Euro verdient. dhl</p>
+   </STORY>
+</EXPORT>
