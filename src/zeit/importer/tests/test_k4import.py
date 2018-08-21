@@ -79,6 +79,12 @@ class K4ImportTest(zeit.importer.testing.TestCase):
         product_id = self.settings['product_ids'].get(publication_id)
         self.assertEquals(product_id, 'ZEI')
 
+    def test_pdf_it_should_be_set_correctly(self):
+        doc = self._get_doc('MuM_Luxusautos.xml')
+        pdf_id = doc.getAttributeValue(
+            'http://namespaces.zeit.de/CMS/print', 'pdf_id')
+        assert pdf_id == 'All'
+
     def test_creation_of_import_collections(self):
         k4import.ensure_collection(
             'http://xml.zeit.de/archiv-wf/archiv/ZEI/2009/40/feuilleton')
@@ -241,8 +247,8 @@ class K4ImportTest(zeit.importer.testing.TestCase):
             zeit.connector.interfaces.IConnector)
         res = connector['http://xml.zeit.de/Trump']
         doc = lxml.etree.parse(res.data)
-        self.assertEquals(26, len(doc.xpath('/article/head/attribute')))
-        self.assertEquals(30, len(res.properties))
+        self.assertEquals(27, len(doc.xpath('/article/head/attribute')))
+        self.assertEquals(31, len(res.properties))
 
     def test_access_override(self):
         doc = self._get_doc(filename='access.xml').doc

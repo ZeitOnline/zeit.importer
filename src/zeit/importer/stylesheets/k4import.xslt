@@ -19,6 +19,7 @@
             <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="status">import</attribute>
             <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="ipad_template"><xsl:value-of select="substring-after(//iPad/@value,'_')" /></attribute>
             <attribute ns="http://namespaces.zeit.de/CMS/print" name="article_id"><xsl:value-of select="id/@value" /></attribute>
+            <attribute ns="http://namespaces.zeit.de/CMS/print" name="pdf_id"><xsl:value-of select="PDFid/@value" /></attribute>
 
             <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="importsource">k4</attribute>
             <attribute ns="http://namespaces.zeit.de/CMS/workflow" name="published">no</attribute><!-- noch zu klaren -->
