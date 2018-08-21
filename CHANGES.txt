@@ -1,7 +1,7 @@
 zeit.importer changes
 =================
 
-1.4.11 (unreleased)
+1.4.11 (2018-08-21)
 -------------------
 
 - ZON-4823: Write PDFid into transformed article
