@@ -1,5 +1,4 @@
---index=http://devpi.zeit.de:4040/zeit/default
---trusted-host=devpi.zeit.de
+--index=https://devpi.zeit.de/zeit/default
 
 Pillow == 2.9.0
 lxml == 3.4.1

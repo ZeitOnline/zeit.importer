@@ -24,7 +24,7 @@ Deployment
 ==========
 
 * Egg erstellen mit zest.releaser ``fullrelease``, und nach
-  http://devpi.zeit.de:4040/zeit/default/ hochladen.
+  https://devpi.zeit.de/zeit/default/ hochladen.
 * Zunächst im environment ``zeit-staging`` die Versionsnummer hochziehen und
   mit ``knife environment from file environments/zeit-staging.json`` hochladen.
   Dann chef laufen lassen und Abnahme abwarten.
