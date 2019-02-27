@@ -123,10 +123,10 @@ class K4ImportTest(zeit.importer.testing.TestCase):
             self._get_attr_val(doc, 'workflow', 'importsource'), 'k4')
         self.assertEquals(
             self._get_attr_val(doc, 'print', 'erscheint'),
-            '2009-09-24T06:00:00+00:00')
+            '2009-09-24T07:00:00+00:00')
         self.assertEquals(
             self._get_attr_val(doc, 'document', 'date_first_released'),
-            '2009-09-24T06:00:00+00:00')
+            '2009-09-24T07:00:00+00:00')
         self.assertEquals(
             self._get_attr_val(doc, 'document', 'copyrights'),
             'DIE ZEIT, 24.09.2009 Nr. 40')

@@ -4,7 +4,7 @@
     <xsl:template name="convert_date"><xsl:param name="in"/><xsl:value-of select="substring($in,4,2)"/>.<xsl:value-of select="substring($in,1,2)"/>.<xsl:value-of
             select="substring($in,7,4)"/></xsl:template>
         <xsl:template name="convert_date_iso"><xsl:param name="in"/><xsl:value-of
-            select="substring($in,7,4)"/>-<xsl:value-of select="substring($in,1,2)"/>-<xsl:value-of select="substring($in,4,2)"/>T06:00:00+00:00</xsl:template>
+            select="substring($in,7,4)"/>-<xsl:value-of select="substring($in,1,2)"/>-<xsl:value-of select="substring($in,4,2)"/>T07:00:00+00:00</xsl:template>
 
     <xsl:template match="EXPORT">
         <article>
