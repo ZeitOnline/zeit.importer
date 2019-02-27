@@ -135,8 +135,8 @@
     </xsl:template>
 
     <xsl:template match="HEADER/Erscheinungsdatum">
-        <attribute ns="http://namespaces.zeit.de/CMS/document" name="erscheint">
-            <xsl:call-template name="convert_date">
+        <attribute ns="http://namespaces.zeit.de/CMS/print" name="erscheint">
+            <xsl:call-template name="convert_date_iso">
                 <xsl:with-param name="in" select="@value"/>
             </xsl:call-template>
         </attribute>
