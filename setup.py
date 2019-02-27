@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='zeit.importer',
-    version='1.4.12.dev0',
+    version='1.4.12',
     author='Martin Borho, gocept, Zeit Online',
     author_email='zon-backend@zeit.de',
     url='http://www.zeit.de/',
