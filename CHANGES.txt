@@ -4,7 +4,7 @@ zeit.importer changes
 1.4.12 (unreleased)
 -------------------
 
-- Nothing changed yet.
+- ZON-5107: Update timestamps for print release attributes
 
 
 1.4.11 (2018-08-21)

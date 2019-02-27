@@ -4,7 +4,7 @@
     <xsl:template name="convert_date"><xsl:param name="in"/><xsl:value-of select="substring($in,4,2)"/>.<xsl:value-of select="substring($in,1,2)"/>.<xsl:value-of
             select="substring($in,7,4)"/></xsl:template>
         <xsl:template name="convert_date_iso"><xsl:param name="in"/><xsl:value-of
-            select="substring($in,7,4)"/>-<xsl:value-of select="substring($in,1,2)"/>-<xsl:value-of select="substring($in,4,2)"/>T06:00:00+00:00</xsl:template>
+            select="substring($in,7,4)"/>-<xsl:value-of select="substring($in,1,2)"/>-<xsl:value-of select="substring($in,4,2)"/>T07:00:00+00:00</xsl:template>
 
     <xsl:template match="EXPORT">
         <article>
@@ -135,8 +135,8 @@
     </xsl:template>
 
     <xsl:template match="HEADER/Erscheinungsdatum">
-        <attribute ns="http://namespaces.zeit.de/CMS/document" name="erscheint">
-            <xsl:call-template name="convert_date">
+        <attribute ns="http://namespaces.zeit.de/CMS/print" name="erscheint">
+            <xsl:call-template name="convert_date_iso">
                 <xsl:with-param name="in" select="@value"/>
             </xsl:call-template>
         </attribute>
