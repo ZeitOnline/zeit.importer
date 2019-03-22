@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -xe
+
+COMMAND=${1:-test-app}
+case $COMMAND in
+    test-app)
+        tox -- --junitxml=report.xml --cov=src --cov-report=html --cov-report=xml
+    ;;
+    *)
+        echo "Unrecognized command: $COMMAND"
+        exit 1
+    ;;
+esac
