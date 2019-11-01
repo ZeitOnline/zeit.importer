@@ -1,6 +1,6 @@
 --index=https://devpi.zeit.de/zeit/default
 
-Pillow == 2.9.0
+Pillow == 6.2.0
 lxml == 3.4.1
 setuptools == 34.3.2
 zeit.connector == 2.10.0
