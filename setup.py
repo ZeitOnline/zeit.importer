@@ -20,7 +20,7 @@ setup(
         'mock',
         'pytz',
         'setuptools',
-        'zeit.connector',
+        'vivi.core',  # actually just zeit.connector
         'zope.component',
         'zope.interface',
     ],
