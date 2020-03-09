@@ -29,7 +29,7 @@ class K4ImportTest(zeit.importer.testing.TestCase):
         k4import._configure(config)
         processed_config = zope.component.getUtility(
             zeit.importer.interfaces.ISettings)
-        self.assertTrue('connector_url' in processed_config.keys())
+        self.assertIn('connector_url', list(processed_config.keys()))
 
     def test_filename_normalization(self):
         norm_1 = k4import.mangleQPSName(
@@ -193,7 +193,7 @@ class K4ImportTest(zeit.importer.testing.TestCase):
         root.append(head)
         root.append(body)
 
-        for x in xrange(1, 5):
+        for x in range(1, 5):
             body.append(Element("foo"))
 
         self.assertEqual(4, len(root.xpath("/article/body/foo")))
@@ -225,7 +225,7 @@ class K4ImportTest(zeit.importer.testing.TestCase):
             self._get_doc(filename='Trump-Kasten.xml'), 'Trump')}
         boxes_return = zeit.importer.k4import.process_boxes(boxes, articles)
         self.assertEqual(
-            'http://xml.zeit.de/Trump-Kasten', boxes_return.keys()[0])
+            'http://xml.zeit.de/Trump-Kasten', list(boxes_return.keys())[0])
 
     def test_process_boxes_should_ignore_errors(self):
         articles = {

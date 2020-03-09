@@ -15,7 +15,8 @@ import re
 import shutil
 import sys
 import unicodedata
-import urlparse
+import six
+import six.moves.urllib.parse
 import yaml
 import zeit.connector.connector
 import zeit.connector.interfaces
@@ -47,7 +48,7 @@ def mangleQPSName(qps_name):
 def ensure_collection(unique_id):
     """If the target collection does not exist, it will be created."""
     connector = zope.component.getUtility(zeit.connector.interfaces.IConnector)
-    path = urlparse.urlparse(unique_id).path.split('/')[1:]
+    path = six.moves.urllib.parse.urlparse(unique_id).path.split('/')[1:]
     unique_id = 'http://xml.zeit.de'
     for segment in path:
         unique_id = os.path.join(unique_id, segment)
@@ -174,14 +175,14 @@ def run_dir(input_dir, product_id_in):
                             input_dir, doc, img_base_id):
                         try:
                             lowres_hash = ImageHash(lowres.id, lowres.data)
-                        except Exception, e:
+                        except Exception as e:
                             log.warning(
                                 'Could not hash %s: %s' % (lowres.id, e))
                         else:
                             highres_hash = lowres_hash.find_match(
                                 highres_images)
                             if highres_hash:
-                                highres.data = file(highres_hash.id)
+                                highres.data = open(highres_hash.id)
                                 connector.add(highres)
                         connector.add(lowres)
                         connector.add(xml_res)
@@ -299,7 +300,7 @@ def create_image_resources(input_dir, doc, img_base_id):
         try:
             vivi_name = elem.get('vivi_name')
             path = _get_path(
-                unicode(os.path.join(input_dir, elem.get('k4_id'))))
+                six.text_type(os.path.join(input_dir, elem.get('k4_id'))))
             img_xml = lxml.etree.parse(path)
             xml_resource = get_xml_img_resource(
                 img_xml, img_base_id, vivi_name)
@@ -368,11 +369,11 @@ def get_prefixed_img_resource(input_dir, img_xml, img_base_id, prefix, name):
     normpath = '/'.join(
         img_xml.find('/HEADER/LowResPath').text.replace(
             '\\', '/').split('/')[1:])
-    path = unicode(os.path.join(input_dir, normpath))
+    path = six.text_type(os.path.join(input_dir, normpath))
     path = _get_path(path)
     name = '%s-%s.jpg' % (prefix, name)
     return Resource(
-        os.path.join(img_base_id, name), name, 'image', file(path),
+        os.path.join(img_base_id, name), name, 'image', open(path),
         contentType='image/jpeg')
 
 
@@ -386,7 +387,7 @@ def hash_highres_dir(year, volume):
             try:
                 fp = os.path.join(path, filename).decode('utf-8')
                 hashes.append(ImageHash(fp, fp))
-            except Exception, e:
+            except Exception as e:
                 log.warning('Hashing error: {}'.format(e))
     return hashes
 
@@ -443,7 +444,7 @@ def _configure(config):
 
 
 def _configure_logging(config):
-    if 'loggers' in config.keys():
+    if 'loggers' in config:
         logging.config.dictConfig(config)
 
 
@@ -511,7 +512,7 @@ def _parse_args():
 
 def main():
     options = _parse_args()
-    config = yaml.load(file(options.config_file, 'r'))
+    config = yaml.load(open(options.config_file, 'r'))
     _configure(config)
     _configure_logging(config)
     _configure_from_dav_xml()
