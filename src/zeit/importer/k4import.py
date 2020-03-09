@@ -38,8 +38,8 @@ def mangleQPSName(qps_name):
     qps_name = qps_name.replace("&", "")
     qps_name = qps_name.replace("?", "")
     qps_name = qps_name.strip('_- ')
-    cname = re.compile('[\ \_.:;#+*/\']').sub('-', qps_name)
-    cname = re.compile('[^A-Za-z0-9\-]').sub('', cname)
+    cname = re.compile(r'[\ \_.:;#+*/\']').sub('-', qps_name)
+    cname = re.compile(r'[^A-Za-z0-9\-]').sub('', cname)
     cname = re.compile('-+').sub('-', cname)
     return cname
 
@@ -266,7 +266,7 @@ def process_boxes(boxes, articles):
             article.find('//body').append(new_box)
             extract_and_move_xml_elements(
                 box_xml.find("//body").getchildren(), new_box)
-        except:
+        except Exception:
             log.error('Error processing box %s for %s', box_id, article_id,
                       exc_info=True)
             continue
@@ -387,7 +387,7 @@ def hash_highres_dir(year, volume):
                 fp = os.path.join(path, filename).decode('utf-8')
                 hashes.append(ImageHash(fp, fp))
             except Exception, e:
-                log.warn('Hashing error: {}'.format(e.message))
+                log.warning('Hashing error: {}'.format(e))
     return hashes
 
 

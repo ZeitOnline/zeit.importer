@@ -31,12 +31,12 @@ def getConnector():
         connector.add(zeit.connector.resource.Resource(
             'http://xml.zeit.de/forms/%s' % name, name,
             'text', pkg_resources.resource_stream(
-                __name__, '/testdocs/ipool/%s' % name),
+                __name__, 'testdocs/ipool/%s' % name),
             contentType='text/xml'))
     connector.add(zeit.connector.resource.Resource(
         settings['access_source'], 'access_source',
         'text', pkg_resources.resource_stream(
-            __name__, '/testdocs/ipool/access.xml'),
+            __name__, 'testdocs/ipool/access.xml'),
         contentType='text/xml'))
     return connector
 

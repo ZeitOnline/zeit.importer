@@ -149,7 +149,7 @@ class K4ImportTest(zeit.importer.testing.TestCase):
 
     def test_change_pub_id_ressort_to_different_pup_id(self):
         doc = Article(pkg_resources.resource_filename(
-            'zeit.importer', '/testdocs/AufmarschAtom.xml'))
+            'zeit.importer', 'testdocs/AufmarschAtom.xml'))
         doc_id = doc.get_product_id(None, 'uninteresting-k4-filename')
         self.assertEquals(doc_id, 'ZESA')
 
@@ -285,9 +285,9 @@ class K4ImportTest(zeit.importer.testing.TestCase):
 
     def test_get_prefixed_img_resource(self):
         xml = lxml.etree.parse(pkg_resources.resource_filename(
-            'zeit.importer', '/testdocs/img_47210154_Walser.xml'))
+            'zeit.importer', 'testdocs/img_47210154_Walser.xml'))
         res = k4import.get_prefixed_img_resource(
-            pkg_resources.resource_filename('zeit.importer', '/testdocs/'),
+            pkg_resources.resource_filename('zeit.importer', 'testdocs/'),
             xml, 'http://xml.zeit.de/base-id', 'prefix', 'img-1')
         self.assertEquals(
             'http://xml.zeit.de/base-id/prefix-img-1.jpg',
@@ -295,14 +295,14 @@ class K4ImportTest(zeit.importer.testing.TestCase):
 
         file_path = pkg_resources.resource_filename(
             'zeit.importer',
-            '/testdocs/preview/47210/Familie '
+            'testdocs/preview/47210/Familie '
             'Walser01b___30x40__AUGEN_47210154.jpg')
         self.assertEquals(len(res.data.read()), os.stat(file_path).st_size)
 
     def test_create_img_xml(self):
         article = self._get_doc('Walser.xml')
         input_dir = pkg_resources.resource_filename(
-            'zeit.importer', '/testdocs/')
+            'zeit.importer', 'testdocs/')
         elem = article.doc.xpath('/article/head/zon-image')[0]
         img_xml = lxml.etree.parse('%s%s' % (input_dir, elem.get('k4_id')))
         zon_img_xml = k4import.create_img_xml(img_xml, 'img-1')
@@ -317,7 +317,7 @@ class K4ImportTest(zeit.importer.testing.TestCase):
     def test_get_xml_img_resource(self):
         article = self._get_doc('Walser.xml')
         input_dir = pkg_resources.resource_filename(
-            'zeit.importer', '/testdocs/')
+            'zeit.importer', 'testdocs/')
         elem = article.doc.xpath('/article/head/zon-image')[0]
         img_xml = lxml.etree.parse('%s%s' % (input_dir, elem.get('k4_id')))
         res = k4import.get_xml_img_resource(
@@ -339,7 +339,7 @@ class K4ImportTest(zeit.importer.testing.TestCase):
         'zeit.importer.k4import.copyExportToArchive', return_value=None)
     def test_import_should_process_images(self, copy_function):
         input_dir = pkg_resources.resource_filename(
-            'zeit.importer', '/testdocs/')
+            'zeit.importer', 'testdocs/')
         k4import.run_dir(input_dir, 'ZEI')
         col_id = (
             'http://xml.zeit.de/archiv-wf/archiv/'
