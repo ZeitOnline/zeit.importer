@@ -3,8 +3,8 @@ from lxml.etree import Element
 from zeit.importer import k4import
 from zeit.importer.article import Article
 from zeit.importer.article import sanitizeDoc
+from unittest import mock
 import lxml.etree
-import mock
 import os
 import pkg_resources
 import zeit.importer.testing

@@ -19,6 +19,10 @@ pytest == 4.6.9
 atomicwrites == 1.3.0
 attrs == 17.4.0
 execnet == 1.6.1
+importlib-metadata == 0.23
+more-itertools == 5.0.0
+packaging == 20.3
+zipp == 0.6.0
 py == 1.8.1
 pluggy == 0.13.1
 pytest-cov == 2.8.1
@@ -26,27 +30,10 @@ cov-core == 1.15.0
 coverage == 4.5.4
 pytest-flake8 == 1.0.4
 flake8 == 3.7.7
+entrypoints == 0.3
 mccabe == 0.6.1
 pyflakes == 2.1.1
 pycodestyle == 2.5.0
-
-# pytest py2-only
-mock == 3.0.5
-configparser == 4.0.2
-contextlib2 == 0.6.0.post1
-enum34 == 1.1.6
-entrypoints == 0.3
-funcsigs == 1.0.2
-functools32 == 3.2.3.post2
-importlib-metadata == 0.23
-more-itertools == 5.0.0
-packaging == 20.3
-pathlib2 == 2.3.5
-pyparsing == 2.4.6
-scandir == 1.10.0
-typing == 3.7.4.1
-wcwidth == 0.1.8
-zipp == 0.6.0
 
 # zeit.connector
 ZConfig == 3.4.0

@@ -3,8 +3,8 @@ from zeit.connector.resource import Resource
 from zeit.importer.article import Article
 from zeit.importer.highres import ImageHash
 from zeit.importer.interfaces import DOC_NS, PRINT_NS
-import StringIO
 import datetime
+import io
 import logging
 import logging.config
 import lxml.etree
@@ -15,8 +15,7 @@ import re
 import shutil
 import sys
 import unicodedata
-import six
-import six.moves.urllib.parse
+import urllib.parse
 import yaml
 import zeit.connector.connector
 import zeit.connector.interfaces
@@ -48,7 +47,7 @@ def mangleQPSName(qps_name):
 def ensure_collection(unique_id):
     """If the target collection does not exist, it will be created."""
     connector = zope.component.getUtility(zeit.connector.interfaces.IConnector)
-    path = six.moves.urllib.parse.urlparse(unique_id).path.split('/')[1:]
+    path = urllib.parse.urlparse(unique_id).path.split('/')[1:]
     unique_id = 'http://xml.zeit.de'
     for segment in path:
         unique_id = os.path.join(unique_id, segment)
@@ -57,7 +56,7 @@ def ensure_collection(unique_id):
         except KeyError:
             name = os.path.basename(unique_id)
             res = Resource(unique_id, name, 'collection',
-                           StringIO.StringIO(''))
+                           io.StringIO(''))
             connector.add(res)
             log.debug('Created collection %s', unique_id)
     return unique_id
@@ -233,7 +232,7 @@ def put_content(resources):
     for unique_id in resources.keys():
         doc, cname = resources[unique_id]
         res = Resource(
-            unique_id, cname, 'article', StringIO.StringIO(doc.to_string()),
+            unique_id, cname, 'article', io.StringIO(doc.to_string()),
             contentType='text/xml')
         for prop in doc.metadata:
             prop_val = re.sub(r'\&', ' + ', prop[2])
@@ -300,7 +299,7 @@ def create_image_resources(input_dir, doc, img_base_id):
         try:
             vivi_name = elem.get('vivi_name')
             path = _get_path(
-                six.text_type(os.path.join(input_dir, elem.get('k4_id'))))
+                os.path.join(input_dir, elem.get('k4_id')))
             img_xml = lxml.etree.parse(path)
             xml_resource = get_xml_img_resource(
                 img_xml, img_base_id, vivi_name)
@@ -362,14 +361,14 @@ def get_xml_img_resource(img_xml, img_base_id, name):
     xml = create_img_xml(img_xml, name)
     return Resource(
         os.path.join(img_base_id, name), name, 'image-xml',
-        StringIO.StringIO(lxml.etree.tostring(xml)), contentType='text/xml')
+        io.StringIO(lxml.etree.tostring(xml)), contentType='text/xml')
 
 
 def get_prefixed_img_resource(input_dir, img_xml, img_base_id, prefix, name):
     normpath = '/'.join(
         img_xml.find('/HEADER/LowResPath').text.replace(
             '\\', '/').split('/')[1:])
-    path = six.text_type(os.path.join(input_dir, normpath))
+    path = os.path.join(input_dir, normpath)
     path = _get_path(path)
     name = '%s-%s.jpg' % (prefix, name)
     return Resource(
