@@ -32,14 +32,13 @@ class K4ImportTest(zeit.importer.testing.TestCase):
         self.assertIn('connector_url', list(processed_config.keys()))
 
     def test_filename_normalization(self):
-        norm_1 = k4import.mangleQPSName(
-            'Streitgespr‰ch_Vitakasten'.decode('utf-8'))
+        norm_1 = k4import.mangleQPSName('Streitgespr‰ch_Vitakasten')
         self.assertEqual(norm_1, 'Streitgespraech-Vitakasten')
-        norm_2 = k4import.mangleQPSName('Kˆpfe der Zeit'.decode('utf-8'))
+        norm_2 = k4import.mangleQPSName('Kˆpfe der Zeit')
         self.assertEqual(norm_2, 'Koepfe-der-Zeit')
-        norm_3 = k4import.mangleQPSName('÷-Scharinger'.decode('utf-8'))
+        norm_3 = k4import.mangleQPSName('÷-Scharinger')
         self.assertEqual(norm_3, 'Oe-Scharinger')
-        norm_4 = k4import.mangleQPSName('HfjS_Portr‰t'.decode('utf-8'))
+        norm_4 = k4import.mangleQPSName('HfjS_Portr‰t')
         self.assertEqual(norm_4, 'HfjS-Portraet')
 
     def test_sanatize_doc(self):
@@ -181,7 +180,7 @@ class K4ImportTest(zeit.importer.testing.TestCase):
         self.assertEqual(xpath[7].text,
                          ('This is text, with too much whitespace, '
                           'which should be normalized and trimmed.'))
-        self.assertEqual(lxml.etree.tostring(xpath[8]), (
+        self.assertEqual(lxml.etree.tostring(xpath[8], encoding='unicode'), (
             '<p xmlns:f=\"http://namespaces.zeit.de/functions\">This is text, '
             '<strong> with too much whitespace, </strong> which cannot be '
             'trimmed.</p> '))
@@ -325,7 +324,7 @@ class K4ImportTest(zeit.importer.testing.TestCase):
         self.assertEqual(res.id, 'http://xml.zeit.de/base-id/img-1')
         self.assertEqual(
             '<image-group><attribute name="type" ns="',
-            res.data.read()[0:40])
+            res.data.read().decode('utf-8')[0:40])
 
     def test_zon_image_should_reference_uniqueId(self):
         article = self._get_doc('Walser.xml')

@@ -27,7 +27,6 @@ log = logging.getLogger(__name__)
 
 
 def mangleQPSName(qps_name):
-    qps_name = qps_name.encode('utf-8')
     qps_name = qps_name.replace("ƒ", "Ae")  # Ä
     qps_name = qps_name.replace("‹", "Ue")  # Ü
     qps_name = qps_name.replace("÷", "Oe")  # Ö
@@ -55,8 +54,7 @@ def ensure_collection(unique_id):
             connector[unique_id]
         except KeyError:
             name = os.path.basename(unique_id)
-            res = Resource(unique_id, name, 'collection',
-                           io.StringIO(''))
+            res = Resource(unique_id, name, 'collection', io.BytesIO(b''))
             connector.add(res)
             log.debug('Created collection %s', unique_id)
     return unique_id
@@ -181,7 +179,7 @@ def run_dir(input_dir, product_id_in):
                             highres_hash = lowres_hash.find_match(
                                 highres_images)
                             if highres_hash:
-                                highres.data = open(highres_hash.id)
+                                highres.data = open(highres_hash.id, 'rb')
                                 connector.add(highres)
                         connector.add(lowres)
                         connector.add(xml_res)
@@ -232,7 +230,8 @@ def put_content(resources):
     for unique_id in resources.keys():
         doc, cname = resources[unique_id]
         res = Resource(
-            unique_id, cname, 'article', io.StringIO(doc.to_string()),
+            unique_id, cname, 'article',
+            io.BytesIO(doc.to_string().encode('utf-8')),
             contentType='text/xml')
         for prop in doc.metadata:
             prop_val = re.sub(r'\&', ' + ', prop[2])
@@ -361,7 +360,8 @@ def get_xml_img_resource(img_xml, img_base_id, name):
     xml = create_img_xml(img_xml, name)
     return Resource(
         os.path.join(img_base_id, name), name, 'image-xml',
-        io.StringIO(lxml.etree.tostring(xml)), contentType='text/xml')
+        io.BytesIO(lxml.etree.tostring(xml, encoding='utf-8')),
+        contentType='text/xml')
 
 
 def get_prefixed_img_resource(input_dir, img_xml, img_base_id, prefix, name):
@@ -372,7 +372,7 @@ def get_prefixed_img_resource(input_dir, img_xml, img_base_id, prefix, name):
     path = _get_path(path)
     name = '%s-%s.jpg' % (prefix, name)
     return Resource(
-        os.path.join(img_base_id, name), name, 'image', open(path),
+        os.path.join(img_base_id, name), name, 'image', open(path, 'rb'),
         contentType='image/jpeg')
 
 
@@ -384,7 +384,7 @@ def hash_highres_dir(year, volume):
     for path, _, files in os.walk(directory):
         for filename in files:
             try:
-                fp = os.path.join(path, filename).decode('utf-8')
+                fp = os.path.join(path, filename)
                 hashes.append(ImageHash(fp, fp))
             except Exception as e:
                 log.warning('Hashing error: {}'.format(e))

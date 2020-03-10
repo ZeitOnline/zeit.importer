@@ -175,7 +175,7 @@ class Article(object):
     def to_string(self):
         indent(self.doc.getroot())
         xml = lxml.etree.tostring(
-            self.doc, encoding="utf-8", xml_declaration=True)
+            self.doc, encoding="utf-8", xml_declaration=True).decode('utf-8')
         xml = sanitizeDoc(xml)  # <p>V</p> etc
         return xml
 
