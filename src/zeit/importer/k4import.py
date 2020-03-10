@@ -528,3 +528,7 @@ def main():
     except Exception:
         log.error('Uncaught exception', exc_info=True)
         raise  # will exit with status 1
+
+
+if __name__ == '__main__':
+    main()
