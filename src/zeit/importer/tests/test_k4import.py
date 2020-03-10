@@ -34,50 +34,50 @@ class K4ImportTest(zeit.importer.testing.TestCase):
     def test_filename_normalization(self):
         norm_1 = k4import.mangleQPSName(
             'Streitgespr‰ch_Vitakasten'.decode('utf-8'))
-        self.assertEquals(norm_1, 'Streitgespraech-Vitakasten')
+        self.assertEqual(norm_1, 'Streitgespraech-Vitakasten')
         norm_2 = k4import.mangleQPSName('Kˆpfe der Zeit'.decode('utf-8'))
-        self.assertEquals(norm_2, 'Koepfe-der-Zeit')
+        self.assertEqual(norm_2, 'Koepfe-der-Zeit')
         norm_3 = k4import.mangleQPSName('÷-Scharinger'.decode('utf-8'))
-        self.assertEquals(norm_3, 'Oe-Scharinger')
+        self.assertEqual(norm_3, 'Oe-Scharinger')
         norm_4 = k4import.mangleQPSName('HfjS_Portr‰t'.decode('utf-8'))
-        self.assertEquals(norm_4, 'HfjS-Portraet')
+        self.assertEqual(norm_4, 'HfjS-Portraet')
 
     def test_sanatize_doc(self):
         xml = "<p>E</p>\r\n<p>in Test"
-        self.assertEquals(sanitizeDoc(xml), '<p>Ein Test')
+        self.assertEqual(sanitizeDoc(xml), '<p>Ein Test')
 
     def test_article_is_loaded(self):
         doc = self._get_doc()
         val = doc.doc.xpath("//attribute[@ns='http://namespaces.zeit.de/CMS/" +
                             "workflow' and @name='status']")[0].text
-        self.assertEquals(val, 'import')
-        self.assertEquals(doc.metadata[0],
-                          ('http://namespaces.zeit.de/CMS/workflow',
-                              'status', 'import'))
+        self.assertEqual(val, 'import')
+        self.assertEqual(
+            doc.metadata[0],
+            ('http://namespaces.zeit.de/CMS/workflow', 'status', 'import'))
 
     def test_single_value_from_metadata(self):
         doc = self._get_doc()
         jobname = doc.getAttributeValue(
             'http://namespaces.zeit.de/CMS/document', 'jobname')
-        self.assertEquals(jobname, u'Sp\u2030te Flucht 89')
+        self.assertEqual(jobname, u'Sp\u2030te Flucht 89')
 
     def test_product_ids_dach(self):
         doc = self._get_doc()
-        self.assertEquals(doc.get_product_id(None, 'A-Test'), 'ZEOE')
-        self.assertEquals(doc.get_product_id(None, 'A_Test'), 'ZEOE')
-        self.assertEquals(doc.get_product_id(None, 'CH-Teäst'), 'ZECH')
-        self.assertEquals(doc.get_product_id(None, 'CH_Teäst'), 'ZECH')
-        self.assertEquals(doc.get_product_id(None, 'ACH-Test'), 'ZEI')
-        self.assertEquals(doc.get_product_id(None, 'ACH_Test'), 'ZEI')
-        self.assertEquals(doc.get_product_id(None, 'S-Test'), 'ZESA')
-        self.assertEquals(doc.get_product_id(None, 'S_Test'), 'ZESA')
+        self.assertEqual(doc.get_product_id(None, 'A-Test'), 'ZEOE')
+        self.assertEqual(doc.get_product_id(None, 'A_Test'), 'ZEOE')
+        self.assertEqual(doc.get_product_id(None, 'CH-Teäst'), 'ZECH')
+        self.assertEqual(doc.get_product_id(None, 'CH_Teäst'), 'ZECH')
+        self.assertEqual(doc.get_product_id(None, 'ACH-Test'), 'ZEI')
+        self.assertEqual(doc.get_product_id(None, 'ACH_Test'), 'ZEI')
+        self.assertEqual(doc.get_product_id(None, 'S-Test'), 'ZESA')
+        self.assertEqual(doc.get_product_id(None, 'S_Test'), 'ZESA')
 
     def test_publication_id(self):
         doc = self._get_doc()
         publication_id = doc.getAttributeValue(
             'http://namespaces.zeit.de/CMS/print', 'publication-id')
         product_id = self.settings['product_ids'].get(publication_id)
-        self.assertEquals(product_id, 'ZEI')
+        self.assertEqual(product_id, 'ZEI')
 
     def test_pdf_it_should_be_set_correctly(self):
         doc = self._get_doc('MuM_Luxusautos.xml')
@@ -90,7 +90,7 @@ class K4ImportTest(zeit.importer.testing.TestCase):
             'http://xml.zeit.de/archiv-wf/archiv/ZEI/2009/40/feuilleton')
         res_type = self.connector[(
             'http://xml.zeit.de/archiv-wf/archiv/ZEI/2009/40/feuilleton')].type
-        self.assertEquals(res_type, 'collection')
+        self.assertEqual(res_type, 'collection')
 
     def _get_attr_val(self, doc, ns, name):
         xpath = ('//head/attribute[@ns="http://namespaces.zeit.de/CMS/{}" '
@@ -113,75 +113,75 @@ class K4ImportTest(zeit.importer.testing.TestCase):
             'http://namespaces.zeit.de/CMS/document', 'jobname')
         cname = k4import.mangleQPSName(jobname)
         doc.addAttributesToDoc(product_id, year, volume, cname)
-        self.assertEquals(
+        self.assertEqual(
             self._get_attr_val(doc, 'workflow', 'status'), 'import')
-        self.assertEquals(
+        self.assertEqual(
             self._get_attr_val(doc, 'workflow', 'ipad_template'), None)
-        self.assertEquals(
+        self.assertEqual(
             self._get_attr_val(doc, 'print', 'article_id'), '254475')
-        self.assertEquals(
+        self.assertEqual(
             self._get_attr_val(doc, 'workflow', 'importsource'), 'k4')
-        self.assertEquals(
+        self.assertEqual(
             self._get_attr_val(doc, 'print', 'erscheint'),
             '2009-09-24T07:00:00+00:00')
-        self.assertEquals(
+        self.assertEqual(
             self._get_attr_val(doc, 'document', 'date_first_released'),
             '2009-09-24T07:00:00+00:00')
-        self.assertEquals(
+        self.assertEqual(
             self._get_attr_val(doc, 'document', 'copyrights'),
             'DIE ZEIT, 24.09.2009 Nr. 40')
-        self.assertEquals(
+        self.assertEqual(
             self._get_attr_val(doc, 'document', 'page'), '55-55')
-        self.assertEquals(
+        self.assertEqual(
             self._get_attr_val(doc, 'document', 'ressort'), 'Kultur')
-        self.assertEquals(
+        self.assertEqual(
             self._get_attr_val(doc, 'print', 'ressort'), 'Feuilleton')
-        self.assertEquals(
+        self.assertEqual(
             self._get_attr_val(doc, 'workflow', 'id'),
             'ZEI-2009-40-Spaete-Flucht-89')
-        self.assertEquals(
+        self.assertEqual(
             self._get_attr_val(doc, 'workflow', 'running-volume'),
             'ZEI-2009-40')
-        self.assertEquals(
+        self.assertEqual(
             self._get_attr_val(doc, 'workflow', 'product-id'), 'ZEI')
-        self.assertEquals(
+        self.assertEqual(
             self._get_attr_val(doc, 'document', 'export_cds'), 'no')
 
     def test_change_pub_id_ressort_to_different_pup_id(self):
         doc = Article(pkg_resources.resource_filename(
             'zeit.importer', 'testdocs/AufmarschAtom.xml'))
         doc_id = doc.get_product_id(None, 'uninteresting-k4-filename')
-        self.assertEquals(doc_id, 'ZESA')
+        self.assertEqual(doc_id, 'ZESA')
 
     def test_normalize_whitespace(self):
         text = zeit.importer.article.normalize_and_strip_whitespace(object(), (
             ['this ', '  is a ', 'test\n  foo ba  foo ']))
-        self.assertEquals(text[0], 'this')
-        self.assertEquals(text[1], 'is a')
-        self.assertEquals(text[2], 'test foo ba foo')
+        self.assertEqual(text[0], 'this')
+        self.assertEqual(text[1], 'is a')
+        self.assertEqual(text[2], 'test foo ba foo')
         doc = self._get_doc(filename='whitespace.xml')
         xpath = doc.doc.xpath('//p')
-        self.assertEquals(xpath[0].text, u'Stra\xdfburg')
-        self.assertEquals(xpath[1].text, 'Test some whitespace. Is OK!')
-        self.assertEquals(xpath[2].text, 'This should be normalized')
-        self.assertEquals(xpath[3].text, 'foo')
+        self.assertEqual(xpath[0].text, u'Stra\xdfburg')
+        self.assertEqual(xpath[1].text, 'Test some whitespace. Is OK!')
+        self.assertEqual(xpath[2].text, 'This should be normalized')
+        self.assertEqual(xpath[3].text, 'foo')
 
     def test_normalize_whitespace_with_mixed_content(self):
         doc = self._get_doc(filename='whitespace.xml')
         xpath = doc.doc.xpath('//p')
-        self.assertEquals(xpath[4].text,
-                          ('This is text, which should '
+        self.assertEqual(xpath[4].text,
+                         ('This is text, which should '
                           'not be trimmed incorrectly.'))
-        self.assertEquals(xpath[5].text,
-                          ('This is text, which should '
+        self.assertEqual(xpath[5].text,
+                         ('This is text, which should '
                           'not be trimmed incorrectly. But normalized.'))
-        self.assertEquals(xpath[6].text,
-                          ('This is text, with mixed content but we can '
-                           'do trimming at the end.'))
-        self.assertEquals(xpath[7].text,
-                          ('This is text, with too much whitespace, '
-                           'which should be normalized and trimmed.'))
-        self.assertEquals(lxml.etree.tostring(xpath[8]), (
+        self.assertEqual(xpath[6].text,
+                         ('This is text, with mixed content but we can '
+                          'do trimming at the end.'))
+        self.assertEqual(xpath[7].text,
+                         ('This is text, with too much whitespace, '
+                          'which should be normalized and trimmed.'))
+        self.assertEqual(lxml.etree.tostring(xpath[8]), (
             '<p xmlns:f=\"http://namespaces.zeit.de/functions\">This is text, '
             '<strong> with too much whitespace, </strong> which cannot be '
             'trimmed.</p> '))
@@ -196,14 +196,14 @@ class K4ImportTest(zeit.importer.testing.TestCase):
         for x in xrange(1, 5):
             body.append(Element("foo"))
 
-        self.assertEquals(4, len(root.xpath("/article/body/foo")))
+        self.assertEqual(4, len(root.xpath("/article/body/foo")))
 
         root_2 = Element("root")
         zeit.importer.k4import.extract_and_move_xml_elements(
             root.xpath("//foo"), root_2)
 
-        self.assertEquals(4, len(root_2.xpath("/root/foo")))
-        self.assertEquals(0, len(root.xpath("/article/body/foo")))
+        self.assertEqual(4, len(root_2.xpath("/root/foo")))
+        self.assertEqual(0, len(root.xpath("/article/body/foo")))
 
     def test_process_boxes(self):
         articles = {
@@ -213,9 +213,9 @@ class K4ImportTest(zeit.importer.testing.TestCase):
             self._get_doc(filename='Trump-Kasten.xml'), 'Trump')}
         box_xml = boxes['http://xml.zeit.de/Trump-Kasten'][0].doc
         zeit.importer.k4import.process_boxes(boxes, articles)
-        self.assertEquals(0, len(box_xml.xpath('//p')))
+        self.assertEqual(0, len(box_xml.xpath('//p')))
         article = articles['http://xml.zeit.de/Trump'][0].doc
-        self.assertEquals(1, len(article.xpath('/article/body/box')))
+        self.assertEqual(1, len(article.xpath('/article/body/box')))
 
     def test_process_not_corresponding_boxes(self):
         articles = {
@@ -224,7 +224,7 @@ class K4ImportTest(zeit.importer.testing.TestCase):
         boxes = {'http://xml.zeit.de/Trump-Kasten': (
             self._get_doc(filename='Trump-Kasten.xml'), 'Trump')}
         boxes_return = zeit.importer.k4import.process_boxes(boxes, articles)
-        self.assertEquals(
+        self.assertEqual(
             'http://xml.zeit.de/Trump-Kasten', boxes_return.keys()[0])
 
     def test_process_boxes_should_ignore_errors(self):
@@ -248,40 +248,40 @@ class K4ImportTest(zeit.importer.testing.TestCase):
             zeit.connector.interfaces.IConnector)
         res = connector['http://xml.zeit.de/Trump']
         doc = lxml.etree.parse(res.data)
-        self.assertEquals(27, len(doc.xpath('/article/head/attribute')))
-        self.assertEquals(31, len(res.properties))
+        self.assertEqual(27, len(doc.xpath('/article/head/attribute')))
+        self.assertEqual(31, len(res.properties))
 
     def test_access_override(self):
         doc = self._get_doc(filename='access.xml').doc
         val = doc.xpath("//attribute[@name='access']")[0].text
-        self.assertEquals("registration", val)
+        self.assertEqual("registration", val)
 
         del self.settings['access_override_value']
         zeit.importer.k4import._configure_from_dav_xml()
         doc = self._get_doc(filename='access.xml').doc
         val = doc.xpath("//attribute[@name='access']")[0].text
-        self.assertEquals("free", val)
+        self.assertEqual("free", val)
         self.settings['access_override_value'] = 'registration'
 
     def test_access_mapping(self):
         del self.settings['access_override_value']
         zeit.importer.k4import._configure_from_dav_xml()
         access = zeit.importer.article.map_access
-        self.assertEquals(['registration'],
-                          access(object(), ['loginpflichtig']))
-        self.assertEquals(['abo'],
-                          access(object(), ['abopflichtig']))
-        self.assertEquals(['free'],
-                          access(object(), ['frei']))
-        self.assertEquals(['__skip_import__'],
-                          access(object(), ['something']))
+        self.assertEqual(
+            ['registration'], access(object(), ['loginpflichtig']))
+        self.assertEqual(
+            ['abo'], access(object(), ['abopflichtig']))
+        self.assertEqual(
+            ['free'], access(object(), ['frei']))
+        self.assertEqual(
+            ['__skip_import__'], access(object(), ['something']))
         self.settings['access_override_value'] = 'registration'
 
     def test_create_image_reference(self):
         article = self._get_doc('Walser.xml')
         zon_images = article.doc.xpath('/article/head/zon-image')
-        self.assertEquals(zon_images[0].get('vivi_name'), 'img-1')
-        self.assertEquals(len(zon_images), 1)
+        self.assertEqual(zon_images[0].get('vivi_name'), 'img-1')
+        self.assertEqual(len(zon_images), 1)
 
     def test_get_prefixed_img_resource(self):
         xml = lxml.etree.parse(pkg_resources.resource_filename(
@@ -289,7 +289,7 @@ class K4ImportTest(zeit.importer.testing.TestCase):
         res = k4import.get_prefixed_img_resource(
             pkg_resources.resource_filename('zeit.importer', 'testdocs/'),
             xml, 'http://xml.zeit.de/base-id', 'prefix', 'img-1')
-        self.assertEquals(
+        self.assertEqual(
             'http://xml.zeit.de/base-id/prefix-img-1.jpg',
             res.id)
 
@@ -297,7 +297,7 @@ class K4ImportTest(zeit.importer.testing.TestCase):
             'zeit.importer',
             'testdocs/preview/47210/Familie '
             'Walser01b___30x40__AUGEN_47210154.jpg')
-        self.assertEquals(len(res.data.read()), os.stat(file_path).st_size)
+        self.assertEqual(len(res.data.read()), os.stat(file_path).st_size)
 
     def test_create_img_xml(self):
         article = self._get_doc('Walser.xml')
@@ -306,13 +306,13 @@ class K4ImportTest(zeit.importer.testing.TestCase):
         elem = article.doc.xpath('/article/head/zon-image')[0]
         img_xml = lxml.etree.parse('%s%s' % (input_dir, elem.get('k4_id')))
         zon_img_xml = k4import.create_img_xml(img_xml, 'img-1')
-        self.assertEquals(zon_img_xml.tag, 'image-group')
+        self.assertEqual(zon_img_xml.tag, 'image-group')
         attributes = zon_img_xml.findall('attribute')
-        self.assertEquals(attributes[0].text, 'image-group')
-        self.assertEquals(attributes[1].text, 'Bildunterzeile')
-        self.assertEquals(attributes[2].text, 'img-1')
-        self.assertEquals(attributes[3].text, 'Foto: Karin Rocholl')
-        self.assertEquals(attributes[4].text, 'P14D')
+        self.assertEqual(attributes[0].text, 'image-group')
+        self.assertEqual(attributes[1].text, 'Bildunterzeile')
+        self.assertEqual(attributes[2].text, 'img-1')
+        self.assertEqual(attributes[3].text, 'Foto: Karin Rocholl')
+        self.assertEqual(attributes[4].text, 'P14D')
 
     def test_get_xml_img_resource(self):
         article = self._get_doc('Walser.xml')
@@ -322,8 +322,8 @@ class K4ImportTest(zeit.importer.testing.TestCase):
         img_xml = lxml.etree.parse('%s%s' % (input_dir, elem.get('k4_id')))
         res = k4import.get_xml_img_resource(
             img_xml, 'http://xml.zeit.de/base-id', 'img-1')
-        self.assertEquals(res.id, 'http://xml.zeit.de/base-id/img-1')
-        self.assertEquals(
+        self.assertEqual(res.id, 'http://xml.zeit.de/base-id/img-1')
+        self.assertEqual(
             '<image-group><attribute name="type" ns="',
             res.data.read()[0:40])
 
@@ -333,7 +333,7 @@ class K4ImportTest(zeit.importer.testing.TestCase):
             article,
             "http://xml.zeit.de/test")
         url = article.doc.xpath('/article/head/zon-image')[0].get("uniqueId")
-        self.assertEquals(url, "http://xml.zeit.de/test/img-1")
+        self.assertEqual(url, "http://xml.zeit.de/test/img-1")
 
     @mock.patch(
         'zeit.importer.k4import.copyExportToArchive', return_value=None)
@@ -345,9 +345,9 @@ class K4ImportTest(zeit.importer.testing.TestCase):
             'http://xml.zeit.de/archiv-wf/archiv/'
             'ZEI/2017/13/zon-images/Walser')
         resources = list(self.connector.listCollection(col_id))
-        self.assertEquals(u'img-1', resources[0][0])
-        self.assertEquals(u'master-img-1.jpg', resources[1][0])
-        self.assertEquals(u'preview-img-1.jpg', resources[2][0])
+        self.assertEqual(u'img-1', resources[0][0])
+        self.assertEqual(u'master-img-1.jpg', resources[1][0])
+        self.assertEqual(u'preview-img-1.jpg', resources[2][0])
 
     def test_get_path_should_fail_with_specific_exception(self):
         with self.assertRaises(zeit.importer.k4import.FileNotFoundException):
