@@ -511,7 +511,7 @@ def _parse_args():
 
 def main():
     options = _parse_args()
-    config = yaml.load(open(options.config_file, 'r'))
+    config = yaml.safe_load(open(options.config_file, 'r'))
     _configure(config)
     _configure_logging(config)
     _configure_from_dav_xml()
