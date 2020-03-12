@@ -10,9 +10,9 @@ class HighresTest(zeit.importer.testing.TestCase):
         fp = io.BytesIO()
         Image.new('1', (1, 1)).save(fp, 'jpeg')
         hash_ = ImageHash('foobar', fp)
-        self.assertEquals(hash_.size, self.settings['highres_sample_size'])
-        self.assertEquals(hash_.cutoff, self.settings['highres_diff_cutoff'])
-        self.assertEquals(hash_.id, 'foobar')
+        self.assertEqual(hash_.size, self.settings['highres_sample_size'])
+        self.assertEqual(hash_.cutoff, self.settings['highres_diff_cutoff'])
+        self.assertEqual(hash_.id, 'foobar')
 
     def test_imagehash_calculates_plausible_hash_values(self):
         fp = io.BytesIO()
@@ -21,9 +21,9 @@ class HighresTest(zeit.importer.testing.TestCase):
         image = image.resize((4, 4))
         image.save(fp, 'jpeg')
         hash_ = ImageHash('', fp)
-        self.assertEquals(hash_['average_hash'], 'CC77')
-        self.assertEquals(hash_['dhash'], '05C1')
-        self.assertEquals(hash_['dhash_vertical'], '083A')
+        self.assertEqual(hash_['average_hash'], 'CC77')
+        self.assertEqual(hash_['dhash'], '05C1')
+        self.assertEqual(hash_['dhash_vertical'], '083A')
 
     def test_imagehash_finds_plausible_matches(self):
         hashes = []
@@ -42,4 +42,4 @@ class HighresTest(zeit.importer.testing.TestCase):
             hashes.append(hash_)
         master = hashes.pop(0)
         match = master.find_match(hashes)
-        self.assertEquals(match.id, 2)
+        self.assertEqual(match.id, 2)

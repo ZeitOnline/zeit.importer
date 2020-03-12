@@ -36,6 +36,6 @@ handlers:
     stream: ext://sys.stdout
   logfile:
     class: logging.FileHandler
-    args: ('/srv/k4/deployment/log/k4import.log',)
+    filename: '/srv/k4/deployment/log/k4import.log'
     level: NOTSET
     formatter: generic

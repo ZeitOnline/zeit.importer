@@ -10,12 +10,12 @@ import zope.component
 
 
 log = logging.getLogger(__name__)
-p_pattern = re.compile('<p>([a-z0-9])</p>\s*<p>', re.M | re.I)  # <p>V</p>
+p_pattern = re.compile(r'<p>([a-z0-9])</p>\s*<p>', re.M | re.I)  # <p>V</p>
 
 
 def sanitizeDoc(xml):
     """Cleans the doc from dirty k4markup."""
-    xml = p_pattern.sub('<p>\\1', xml)
+    xml = p_pattern.sub(r'<p>\1', xml)
     return xml
 
 
@@ -36,7 +36,7 @@ def indent(elem, level=0):
 
 
 def _normalize_whitespace(text):
-    return re.sub("\s+", " ", text)
+    return re.sub(r'\s+', ' ', text)
 
 
 def normalize_whitespace(context, text):
@@ -107,7 +107,7 @@ class Article(object):
         try:
             return [m[2] for m in self.metadata
                     if m[0] == ns and m[1] == name][0]
-        except:
+        except Exception:
             return None
 
     def get_product_id(self, product_id_in, filename):
@@ -175,7 +175,7 @@ class Article(object):
     def to_string(self):
         indent(self.doc.getroot())
         xml = lxml.etree.tostring(
-            self.doc, encoding="utf-8", xml_declaration=True)
+            self.doc, encoding="utf-8", xml_declaration=True).decode('utf-8')
         xml = sanitizeDoc(xml)  # <p>V</p> etc
         return xml
 

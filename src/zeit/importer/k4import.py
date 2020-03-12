@@ -3,8 +3,8 @@ from zeit.connector.resource import Resource
 from zeit.importer.article import Article
 from zeit.importer.highres import ImageHash
 from zeit.importer.interfaces import DOC_NS, PRINT_NS
-import StringIO
 import datetime
+import io
 import logging
 import logging.config
 import lxml.etree
@@ -15,7 +15,7 @@ import re
 import shutil
 import sys
 import unicodedata
-import urlparse
+import urllib.parse
 import yaml
 import zeit.connector.connector
 import zeit.connector.interfaces
@@ -27,7 +27,6 @@ log = logging.getLogger(__name__)
 
 
 def mangleQPSName(qps_name):
-    qps_name = qps_name.encode('utf-8')
     qps_name = qps_name.replace("ƒ", "Ae")  # Ä
     qps_name = qps_name.replace("‹", "Ue")  # Ü
     qps_name = qps_name.replace("÷", "Oe")  # Ö
@@ -38,8 +37,8 @@ def mangleQPSName(qps_name):
     qps_name = qps_name.replace("&", "")
     qps_name = qps_name.replace("?", "")
     qps_name = qps_name.strip('_- ')
-    cname = re.compile('[\ \_.:;#+*/\']').sub('-', qps_name)
-    cname = re.compile('[^A-Za-z0-9\-]').sub('', cname)
+    cname = re.compile(r'[\ \_.:;#+*/\']').sub('-', qps_name)
+    cname = re.compile(r'[^A-Za-z0-9\-]').sub('', cname)
     cname = re.compile('-+').sub('-', cname)
     return cname
 
@@ -47,7 +46,7 @@ def mangleQPSName(qps_name):
 def ensure_collection(unique_id):
     """If the target collection does not exist, it will be created."""
     connector = zope.component.getUtility(zeit.connector.interfaces.IConnector)
-    path = urlparse.urlparse(unique_id).path.split('/')[1:]
+    path = urllib.parse.urlparse(unique_id).path.split('/')[1:]
     unique_id = 'http://xml.zeit.de'
     for segment in path:
         unique_id = os.path.join(unique_id, segment)
@@ -55,8 +54,7 @@ def ensure_collection(unique_id):
             connector[unique_id]
         except KeyError:
             name = os.path.basename(unique_id)
-            res = Resource(unique_id, name, 'collection',
-                           StringIO.StringIO(''))
+            res = Resource(unique_id, name, 'collection', io.BytesIO(b''))
             connector.add(res)
             log.debug('Created collection %s', unique_id)
     return unique_id
@@ -174,14 +172,14 @@ def run_dir(input_dir, product_id_in):
                             input_dir, doc, img_base_id):
                         try:
                             lowres_hash = ImageHash(lowres.id, lowres.data)
-                        except Exception, e:
+                        except Exception as e:
                             log.warning(
                                 'Could not hash %s: %s' % (lowres.id, e))
                         else:
                             highres_hash = lowres_hash.find_match(
                                 highres_images)
                             if highres_hash:
-                                highres.data = file(highres_hash.id)
+                                highres.data = open(highres_hash.id, 'rb')
                                 connector.add(highres)
                         connector.add(lowres)
                         connector.add(xml_res)
@@ -232,7 +230,8 @@ def put_content(resources):
     for unique_id in resources.keys():
         doc, cname = resources[unique_id]
         res = Resource(
-            unique_id, cname, 'article', StringIO.StringIO(doc.to_string()),
+            unique_id, cname, 'article',
+            io.BytesIO(doc.to_string().encode('utf-8')),
             contentType='text/xml')
         for prop in doc.metadata:
             prop_val = re.sub(r'\&', ' + ', prop[2])
@@ -266,7 +265,7 @@ def process_boxes(boxes, articles):
             article.find('//body').append(new_box)
             extract_and_move_xml_elements(
                 box_xml.find("//body").getchildren(), new_box)
-        except:
+        except Exception:
             log.error('Error processing box %s for %s', box_id, article_id,
                       exc_info=True)
             continue
@@ -299,7 +298,7 @@ def create_image_resources(input_dir, doc, img_base_id):
         try:
             vivi_name = elem.get('vivi_name')
             path = _get_path(
-                unicode(os.path.join(input_dir, elem.get('k4_id'))))
+                os.path.join(input_dir, elem.get('k4_id')))
             img_xml = lxml.etree.parse(path)
             xml_resource = get_xml_img_resource(
                 img_xml, img_base_id, vivi_name)
@@ -361,18 +360,19 @@ def get_xml_img_resource(img_xml, img_base_id, name):
     xml = create_img_xml(img_xml, name)
     return Resource(
         os.path.join(img_base_id, name), name, 'image-xml',
-        StringIO.StringIO(lxml.etree.tostring(xml)), contentType='text/xml')
+        io.BytesIO(lxml.etree.tostring(xml, encoding='utf-8')),
+        contentType='text/xml')
 
 
 def get_prefixed_img_resource(input_dir, img_xml, img_base_id, prefix, name):
     normpath = '/'.join(
         img_xml.find('/HEADER/LowResPath').text.replace(
             '\\', '/').split('/')[1:])
-    path = unicode(os.path.join(input_dir, normpath))
+    path = os.path.join(input_dir, normpath)
     path = _get_path(path)
     name = '%s-%s.jpg' % (prefix, name)
     return Resource(
-        os.path.join(img_base_id, name), name, 'image', file(path),
+        os.path.join(img_base_id, name), name, 'image', open(path, 'rb'),
         contentType='image/jpeg')
 
 
@@ -384,10 +384,10 @@ def hash_highres_dir(year, volume):
     for path, _, files in os.walk(directory):
         for filename in files:
             try:
-                fp = os.path.join(path, filename).decode('utf-8')
+                fp = os.path.join(path, filename)
                 hashes.append(ImageHash(fp, fp))
-            except Exception, e:
-                log.warn('Hashing error: {}'.format(e.message))
+            except Exception as e:
+                log.warning('Hashing error: {}'.format(e))
     return hashes
 
 
@@ -443,7 +443,7 @@ def _configure(config):
 
 
 def _configure_logging(config):
-    if 'loggers' in config.keys():
+    if 'loggers' in config:
         logging.config.dictConfig(config)
 
 
@@ -511,7 +511,7 @@ def _parse_args():
 
 def main():
     options = _parse_args()
-    config = yaml.load(file(options.config_file, 'r'))
+    config = yaml.safe_load(open(options.config_file, 'r'))
     _configure(config)
     _configure_logging(config)
     _configure_from_dav_xml()
@@ -528,3 +528,7 @@ def main():
     except Exception:
         log.error('Uncaught exception', exc_info=True)
         raise  # will exit with status 1
+
+
+if __name__ == '__main__':
+    main()
