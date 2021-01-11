@@ -322,9 +322,8 @@ class K4ImportTest(zeit.importer.testing.TestCase):
         res = k4import.get_xml_img_resource(
             img_xml, 'http://xml.zeit.de/base-id', 'img-1')
         self.assertEqual(res.id, 'http://xml.zeit.de/base-id/img-1')
-        self.assertEqual(
-            '<image-group><attribute name="type" ns="',
-            res.data.read().decode('utf-8')[0:40])
+        self.assertIn(
+            '<image-group><attribute', res.data.read().decode('utf-8'))
 
     def test_zon_image_should_reference_uniqueId(self):
         article = self._get_doc('Walser.xml')
