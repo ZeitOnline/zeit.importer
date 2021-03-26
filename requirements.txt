@@ -1,7 +1,7 @@
 --index=https://devpi.zeit.de/zeit/default
 
 Pillow == 6.2.2
-lxml == 4.6.2
+lxml == 4.6.3
 setuptools == 42.0.2
 vivi.core == 4.26.3
 zope.component == 4.5
