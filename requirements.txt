@@ -23,7 +23,7 @@ importlib-metadata == 0.23
 more-itertools == 5.0.0
 packaging == 20.3
 zipp == 0.6.0
-py == 1.8.1
+py == 1.10.0
 pluggy == 0.13.1
 pytest-cov == 2.8.1
 cov-core == 1.15.0
