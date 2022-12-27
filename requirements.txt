@@ -2,7 +2,7 @@
 
 Pillow == 6.2.2
 lxml == 4.6.5
-setuptools == 42.0.2
+setuptools == 65.5.1
 vivi.core == 4.26.3
 zope.component == 4.5
 zope.deferredimport == 4.3
